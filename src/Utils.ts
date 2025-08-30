@@ -58,3 +58,18 @@ export const drawBounds = (gameObject: Container, color = 0xffffff * Math.random
     gameObject.addChild(gr);
     return gr;
 };
+
+export const randomInt = (min: number, max: number): number => {
+    const mi = Math.ceil(min);
+    const ma = Math.floor(max);
+    return Math.floor(Math.random() * (ma - mi + 1)) + mi;
+};
+
+export const shuffle = (arr: any[]): void => {
+    for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = randomInt(0, i);
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+};

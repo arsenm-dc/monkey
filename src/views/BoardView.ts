@@ -16,6 +16,7 @@ const speeds = {
     mediumTrees: 1,
     smallTrees: 1.1,
     fog: 1.4,
+    smallFrontTrees: 1.6,
 };
 
 const cloudYRange = [120, 800];
@@ -31,6 +32,7 @@ export class BoardView extends Container {
     private mediumTrees: MediumTree[] = [];
     private smallTrees: SmallTree[] = [];
     private fog: TilingSprite;
+    private smallFrontTrees: TilingSprite;
 
     constructor() {
         super();
@@ -52,6 +54,7 @@ export class BoardView extends Container {
         // this.updateMediumTrees(dt);
         // this.updateSmallTrees(dt);
         // this.updateFog(dt);
+        this.updateSmallFrontTrees(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -69,6 +72,7 @@ export class BoardView extends Container {
         this.buildMediumTrees();
         this.buildSmallTrees();
         this.buildFog();
+        this.buildSmallFrontTrees();
     }
 
     private buildSky(): void {
@@ -179,6 +183,14 @@ export class BoardView extends Container {
         this.addChild(this.fog);
     }
 
+    private buildSmallFrontTrees(): void {
+        const texture = Texture.from('tree_5_1.png');
+        this.smallFrontTrees = new TilingSprite(texture, texture.width, texture.height);
+        this.smallFrontTrees.y = this.height - this.smallFrontTrees.height;
+        this.smallFrontTrees.name = 'smallFrontTrees';
+        this.addChild(this.smallFrontTrees);
+    }
+
     private updateLargeTrees(dt: number): void {
         this.largeTrees.forEach((c, i) => {
             c.x -= speeds.largeTrees * dt;
@@ -256,5 +268,9 @@ export class BoardView extends Container {
 
     private updateFog(dt): void {
         this.fog.tilePosition.x -= speeds.fog * dt;
+    }
+
+    private updateSmallFrontTrees(dt): void {
+        this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
     }
 }

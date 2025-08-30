@@ -2,6 +2,7 @@ import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite, skyConfig } from '../configs/spriteConfig';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { randomInt } from '../Utils';
+import { StaticBuildings } from './StaticBuildings';
 
 const speeds = {
     clouds: 0.2,
@@ -16,6 +17,7 @@ export class BoardView extends Container {
     private clouds: Cloud[] = [];
     private bkgBuildings: TilingSprite;
     private bkgTrees: TilingSprite;
+    private staticBuildings: StaticBuildings;
 
     constructor() {
         super();
@@ -39,6 +41,7 @@ export class BoardView extends Container {
         this.buildClouds();
         this.buildBkgBuildings();
         this.buildBkgTrees();
+        this.buildStaticBuildings();
     }
 
     private buildSky(): void {
@@ -76,6 +79,13 @@ export class BoardView extends Container {
         this.bkgTrees.y = this.height - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.addChild(this.bkgTrees);
+    }
+
+    private buildStaticBuildings(): void {
+        this.staticBuildings = new StaticBuildings();
+        this.staticBuildings.name = 'staticBuildings';
+        this.staticBuildings.position.set(400, 1875);
+        this.addChild(this.staticBuildings);
     }
 
     private updateClouds(dt: number): void {

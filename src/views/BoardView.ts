@@ -28,7 +28,7 @@ export class BoardView extends Container {
 
     private buildSky(): void {
         const texture = Texture.from('sky.png');
-        const sky = new TilingSprite(texture, 4000, 2000);
+        const sky = new TilingSprite(texture, 2048, 1890);
         this.addChild(sky);
 
         // const texture2 = Texture.from('stars.png');

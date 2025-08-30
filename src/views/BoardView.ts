@@ -3,6 +3,7 @@ import { makeSprite, skyConfig } from '../configs/spriteConfig';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
+import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { randomInt } from '../Utils';
 import { StaticBuildings } from './StaticBuildings';
 
@@ -11,8 +12,9 @@ const speeds = {
     bkgBuildings: 0.3,
     bkgTrees: 0.5,
     largeTrees: 0.8,
-    smallTrees: 0.9,
-    mediumTrees: 20,
+    smallForegroundTrees: 0.9,
+    mediumTrees: 1,
+    smallTrees: 1.1,
 };
 
 const cloudYRange = [120, 800];
@@ -26,6 +28,7 @@ export class BoardView extends Container {
     private largeTrees: LargeTree[] = [];
     private smallForegroundTrees: TilingSprite;
     private mediumTrees: MediumTree[] = [];
+    private smallTrees: SmallTree[] = [];
 
     constructor() {
         super();
@@ -33,6 +36,8 @@ export class BoardView extends Container {
         CloudPool.init();
         LargeTreePool.init();
         MediumTreePool.init();
+        SmallTreePool.init();
+
         this.build();
     }
 
@@ -43,6 +48,7 @@ export class BoardView extends Container {
         // this.updateLargeTrees(dt);
         // this.updateSmallForegroundTrees(dt);
         // this.updateMediumTrees(dt);
+        // this.updateSmallTrees(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -58,6 +64,7 @@ export class BoardView extends Container {
         this.buildLargeTrees();
         this.buildSmallForegroundTrees();
         this.buildMediumTrees();
+        this.buildSmallTrees();
     }
 
     private buildSky(): void {
@@ -106,13 +113,13 @@ export class BoardView extends Container {
 
     private buildLargeTrees(): void {
         const tree1 = LargeTreePool.getTree(this);
-        tree1.position.set(270, 2000);
+        tree1.position.set(120, 2000);
 
         const tree2 = LargeTreePool.getTree(this);
-        tree2.position.set(1675, 2000);
+        tree2.position.set(1575, 2000);
 
         const tree3 = LargeTreePool.getTree(this);
-        tree3.position.set(3075, 2000);
+        tree3.position.set(2975, 2000);
 
         this.largeTrees.push(tree1, tree2, tree3);
     }
@@ -139,6 +146,25 @@ export class BoardView extends Container {
         tree4.position.set(3275, 2000);
 
         this.mediumTrees.push(tree1, tree2, tree3, tree4);
+    }
+
+    private buildSmallTrees(): void {
+        const tree1 = SmallTreePool.getTree(this);
+        tree1.position.set(0, 2000);
+
+        const tree2 = SmallTreePool.getTree(this);
+        tree2.position.set(700, 2000);
+
+        const tree3 = SmallTreePool.getTree(this);
+        tree3.position.set(1400, 2000);
+
+        const tree4 = SmallTreePool.getTree(this);
+        tree4.position.set(2100, 2000);
+
+        const tree5 = SmallTreePool.getTree(this);
+        tree5.position.set(2800, 2000);
+
+        this.smallTrees.push(tree1, tree2, tree3, tree4, tree5);
     }
 
     private updateLargeTrees(dt: number): void {
@@ -171,6 +197,21 @@ export class BoardView extends Container {
         });
     }
 
+    private updateSmallTrees(dt: number): void {
+        this.smallTrees.forEach((c, i) => {
+            c.x -= speeds.smallTrees * dt;
+
+            if (c.x + c.width / 2 <= 0) {
+                this.smallTrees.splice(i, 1);
+                c.remove();
+
+                const newTree = SmallTreePool.getTree(this);
+                newTree.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, 2000);
+                this.smallTrees.push(newTree);
+            }
+        });
+    }
+
     private updateClouds(dt: number): void {
         this.clouds.forEach((c, i) => {
             c.x -= speeds.clouds * dt;
@@ -198,6 +239,6 @@ export class BoardView extends Container {
     }
 
     private updateSmallForegroundTrees(dt): void {
-        this.smallForegroundTrees.tilePosition.x -= speeds.smallTrees * dt;
+        this.smallForegroundTrees.tilePosition.x -= speeds.smallForegroundTrees * dt;
     }
 }

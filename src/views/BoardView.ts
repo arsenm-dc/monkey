@@ -3,14 +3,19 @@ import { makeSprite, skyConfig } from '../configs/spriteConfig';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { randomInt } from '../Utils';
 
-const cloudSpeed = 0.2;
-const bkgBuildingsSpeed = 0.3;
+const speeds = {
+    clouds: 0.2,
+    bkgBuildings: 0.3,
+    bkgTrees: 0.5,
+};
+
 const cloudYRange = [120, 800];
 
 export class BoardView extends Container {
     private sky: Sprite;
     private clouds: Cloud[] = [];
     private bkgBuildings: TilingSprite;
+    private bkgTrees: TilingSprite;
 
     constructor() {
         super();
@@ -22,6 +27,7 @@ export class BoardView extends Container {
     public update(dt: number): void {
         // this.updateClouds(dt);
         // this.updateBkgBuildings();
+        // this.updateBkgTrees();
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -32,6 +38,7 @@ export class BoardView extends Container {
         this.buildSky();
         this.buildClouds();
         this.buildBkgBuildings();
+        this.buildBkgTrees();
     }
 
     private buildSky(): void {
@@ -63,9 +70,17 @@ export class BoardView extends Container {
         this.addChild(this.bkgBuildings);
     }
 
+    private buildBkgTrees(): void {
+        const texture = Texture.from('bkgTrees.png');
+        this.bkgTrees = new TilingSprite(texture, texture.width, texture.height);
+        this.bkgTrees.y = this.height - this.bkgTrees.height;
+        this.bkgTrees.name = 'bkgTrees';
+        this.addChild(this.bkgTrees);
+    }
+
     private updateClouds(dt: number): void {
         this.clouds.forEach((c, i) => {
-            c.x -= cloudSpeed * dt;
+            c.x -= speeds.clouds * dt;
 
             if (c.x + c.width / 2 <= 0) {
                 this.clouds.splice(i, 1);
@@ -82,6 +97,10 @@ export class BoardView extends Container {
     }
 
     private updateBkgBuildings(): void {
-        this.bkgBuildings.tilePosition.x -= bkgBuildingsSpeed;
+        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings;
+    }
+
+    private updateBkgTrees(): void {
+        this.bkgTrees.tilePosition.x -= speeds.bkgTrees;
     }
 }

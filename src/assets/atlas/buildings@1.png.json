@@ -1,0 +1,327 @@
+{
+  "frames": {
+    "building_13.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 314,
+        "h": 650
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 1,
+        "w": 314,
+        "h": 650
+      },
+      "sourceSize": {
+        "w": 315,
+        "h": 651
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_12.png": {
+      "frame": {
+        "x": 323,
+        "y": 3,
+        "w": 277,
+        "h": 634
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 277,
+        "h": 634
+      },
+      "sourceSize": {
+        "w": 277,
+        "h": 634
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_8.png": {
+      "frame": {
+        "x": 606,
+        "y": 3,
+        "w": 116,
+        "h": 621
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 116,
+        "h": 621
+      },
+      "sourceSize": {
+        "w": 116,
+        "h": 621
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_9.png": {
+      "frame": {
+        "x": 3,
+        "y": 659,
+        "w": 209,
+        "h": 523
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 1,
+        "w": 209,
+        "h": 523
+      },
+      "sourceSize": {
+        "w": 209,
+        "h": 524
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_5.png": {
+      "frame": {
+        "x": 606,
+        "y": 630,
+        "w": 102,
+        "h": 485
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 1,
+        "w": 102,
+        "h": 485
+      },
+      "sourceSize": {
+        "w": 102,
+        "h": 486
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_2.png": {
+      "frame": {
+        "x": 218,
+        "y": 659,
+        "w": 105,
+        "h": 477
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 105,
+        "h": 477
+      },
+      "sourceSize": {
+        "w": 105,
+        "h": 477
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_10.png": {
+      "frame": {
+        "x": 728,
+        "y": 3,
+        "w": 462,
+        "h": 439
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 1,
+        "w": 462,
+        "h": 439
+      },
+      "sourceSize": {
+        "w": 462,
+        "h": 440
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_7.png": {
+      "frame": {
+        "x": 329,
+        "y": 643,
+        "w": 159,
+        "h": 388
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 159,
+        "h": 388
+      },
+      "sourceSize": {
+        "w": 159,
+        "h": 388
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_1.png": {
+      "frame": {
+        "x": 714,
+        "y": 630,
+        "w": 148,
+        "h": 387
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 148,
+        "h": 387
+      },
+      "sourceSize": {
+        "w": 149,
+        "h": 387
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_11.png": {
+      "frame": {
+        "x": 868,
+        "y": 448,
+        "w": 178,
+        "h": 387
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 178,
+        "h": 387
+      },
+      "sourceSize": {
+        "w": 178,
+        "h": 387
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_3.png": {
+      "frame": {
+        "x": 868,
+        "y": 841,
+        "w": 128,
+        "h": 336
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 336
+      },
+      "sourceSize": {
+        "w": 129,
+        "h": 336
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_4.png": {
+      "frame": {
+        "x": 1052,
+        "y": 448,
+        "w": 118,
+        "h": 309
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 118,
+        "h": 309
+      },
+      "sourceSize": {
+        "w": 118,
+        "h": 309
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "building_6.png": {
+      "frame": {
+        "x": 1002,
+        "y": 841,
+        "w": 168,
+        "h": 249
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 168,
+        "h": 249
+      },
+      "sourceSize": {
+        "w": 168,
+        "h": 249
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "buildings.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1193,
+      "h": 1185
+    },
+    "scale": 1
+  }
+}

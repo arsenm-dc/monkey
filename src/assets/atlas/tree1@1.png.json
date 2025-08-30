@@ -1,47 +1,47 @@
 {
   "frames": {
-    "counter-bkg.png": {
+    "tree_1_1.png": {
       "frame": {
         "x": 3,
         "y": 3,
-        "w": 400,
-        "h": 117
+        "w": 970,
+        "h": 1890
       },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 400,
-        "h": 117
+        "w": 970,
+        "h": 1890
       },
       "sourceSize": {
-        "w": 400,
-        "h": 117
+        "w": 970,
+        "h": 1890
       },
       "pivot": {
         "x": 0.5,
         "y": 0.5
       }
     },
-    "bkg.png": {
+    "tree_1_2.png": {
       "frame": {
-        "x": 3,
-        "y": 126,
-        "w": 330,
-        "h": 330
+        "x": 979,
+        "y": 3,
+        "w": 874,
+        "h": 1890
       },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 330,
-        "h": 330
+        "w": 874,
+        "h": 1890
       },
       "sourceSize": {
-        "w": 330,
-        "h": 330
+        "w": 874,
+        "h": 1890
       },
       "pivot": {
         "x": 0.5,
@@ -52,11 +52,11 @@
   "meta": {
     "app": "http://github.com/odrick/free-tex-packer-core",
     "version": "0.3.4",
-    "image": "game-ui.png",
+    "image": "tree1.png",
     "format": "RGBA8888",
     "size": {
-      "w": 406,
-      "h": 459
+      "w": 1856,
+      "h": 1896
     },
     "scale": 1
   }

@@ -1,0 +1,87 @@
+{
+  "frames": {
+    "cloud_1_1.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 1067,
+        "h": 295
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1067,
+        "h": 295
+      },
+      "sourceSize": {
+        "w": 1067,
+        "h": 295
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_1_3.png": {
+      "frame": {
+        "x": 3,
+        "y": 304,
+        "w": 477,
+        "h": 239
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 477,
+        "h": 239
+      },
+      "sourceSize": {
+        "w": 477,
+        "h": 239
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_1_2.png": {
+      "frame": {
+        "x": 486,
+        "y": 304,
+        "w": 340,
+        "h": 115
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 340,
+        "h": 115
+      },
+      "sourceSize": {
+        "w": 340,
+        "h": 115
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "clouds.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1073,
+      "h": 546
+    },
+    "scale": 1
+  }
+}

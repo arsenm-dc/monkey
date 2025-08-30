@@ -46,14 +46,14 @@ export class BoardView extends Container {
     }
 
     public update(dt: number): void {
-        // this.updateClouds(dt);
-        // this.updateBkgBuildings(dt);
-        // this.updateBkgTrees(dt);
-        // this.updateLargeTrees(dt);
-        // this.updateSmallForegroundTrees(dt);
-        // this.updateMediumTrees(dt);
-        // this.updateSmallTrees(dt);
-        // this.updateFog(dt);
+        this.updateClouds(dt);
+        this.updateBkgBuildings(dt);
+        this.updateBkgTrees(dt);
+        this.updateLargeTrees(dt);
+        this.updateSmallForegroundTrees(dt);
+        this.updateMediumTrees(dt);
+        this.updateSmallTrees(dt);
+        this.updateFog(dt);
         this.updateSmallFrontTrees(dt);
     }
 

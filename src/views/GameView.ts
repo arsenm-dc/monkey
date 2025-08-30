@@ -3,9 +3,15 @@ import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { BoardView } from './BoardView';
 
 export class GameView extends PixiGrid {
+    private board: BoardView | null;
+
     constructor() {
         super();
         this.build();
+    }
+
+    public update(dt: number): void {
+        this.board?.update(dt);
     }
 
     public getGridConfig(): ICellConfig {
@@ -17,12 +23,7 @@ export class GameView extends PixiGrid {
     }
 
     private build(): void {
-        const board = new BoardView()
-        board.on('imageClick', () => {
-            console.warn('image click event in game view');
-            
-        })
-
-        this.setChild('board', board)
+        this.board = new BoardView();
+        this.setChild('board', this.board);
     }
 }

@@ -1,9 +1,24 @@
-import { Container, Rectangle, Texture, TilingSprite } from 'pixi.js';
+import { Container, Rectangle, Sprite } from 'pixi.js';
+import { makeSprite, skyConfig } from '../configs/spriteConfig';
+import { Cloud, CloudPool } from '../pools/CloudsPool';
+
+const cloudSpeed = 0.2;
 
 export class BoardView extends Container {
+    private sky: Sprite;
+    private clouds: Cloud[] = [];
+
     constructor() {
         super();
+
+        CloudPool.init();
         this.build();
+    }
+
+    public update(dt: number): void {
+        this.clouds.forEach((c) => {
+            c.x -= cloudSpeed * dt;
+        });
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -12,28 +27,23 @@ export class BoardView extends Container {
 
     private build(): void {
         this.buildSky();
-        // const spin = Assets.cache.get(spines[0].jsonURL).spineData;
-        // const spine: Spine = new Spine(spin);
-
-        // // 'Death start'
-        // // 'Falling'
-        // // 'Falling for death'
-        // // 'Landing'
-        // // 'Swing'
-        // // 'spike death'
-
-        // spine.state.setAnimation(0, 'spike death', true);
-        // this.addChild(spine);
+        this.buildClouds();
     }
 
     private buildSky(): void {
-        const texture = Texture.from('sky.png');
-        const sky = new TilingSprite(texture, 2048, 1890);
-        this.addChild(sky);
+        this.sky = makeSprite(skyConfig());
+        this.addChild(this.sky);
+    }
 
-        // const texture2 = Texture.from('stars.png');
-        // const stars = new TilingSprite(texture2, 1000, 500);
-        // stars.scale.set(3);
-        // this.addChild(stars);
+    private buildClouds(): void {
+        const cloud1 = CloudPool.getCloud(this);
+        cloud1.position.set(200, 300);
+
+        const cloud2 = CloudPool.getCloud(this);
+        cloud2.position.set(700, 600);
+
+        const cloud3 = CloudPool.getCloud(this);
+        cloud3.position.set(1300, 500);
+        this.clouds.push(cloud1, cloud2, cloud3);
     }
 }

@@ -8,6 +8,11 @@ class PixiStage extends Container {
         super();
     }
 
+    public update(dt: number): void {
+        console.log(dt);
+        this.gameView?.update(dt);
+    }
+
     public resize(): void {
         this.gameView?.rebuild();
     }

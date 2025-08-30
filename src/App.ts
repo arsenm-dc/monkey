@@ -80,6 +80,8 @@ class App extends Application {
     private onLoadComplete(): void {
         this.appResize();
         this.stage.start();
+        this.ticker.add((dt) => this.stage.update(dt));
+
         lego.command.execute(mapCommands);
         lego.event.emit(MainGameEvents.MainViewReady);
     }

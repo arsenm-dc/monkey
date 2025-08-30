@@ -27,3 +27,17 @@ declare namespace GlobalMixins {
         click: [string];
     }
 }
+
+type SpriteConfig = {
+    frame: string;
+    atlas?: string;
+    x?: number;
+    y?: number;
+    scaleX?: number;
+    scaleY?: number;
+    anchor?: Point;
+    tint?: number;
+    alpha?: number;
+    rotation?: number;
+    name?: string;
+};

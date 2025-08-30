@@ -1,6 +1,7 @@
 import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite, skyConfig } from '../configs/spriteConfig';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
+import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { randomInt } from '../Utils';
 import { StaticBuildings } from './StaticBuildings';
 
@@ -8,6 +9,7 @@ const speeds = {
     clouds: 0.2,
     bkgBuildings: 0.3,
     bkgTrees: 0.5,
+    largeTrees: 0.8,
 };
 
 const cloudYRange = [120, 800];
@@ -18,18 +20,21 @@ export class BoardView extends Container {
     private bkgBuildings: TilingSprite;
     private bkgTrees: TilingSprite;
     private staticBuildings: StaticBuildings;
+    private largeTrees: LargeTree[] = [];
 
     constructor() {
         super();
 
         CloudPool.init();
+        LargeTreePool.init();
         this.build();
     }
 
     public update(dt: number): void {
         // this.updateClouds(dt);
-        // this.updateBkgBuildings();
-        // this.updateBkgTrees();
+        // this.updateBkgBuildings(dt);
+        // this.updateBkgTrees(dt);
+        // this.updateLargeTrees(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -42,6 +47,7 @@ export class BoardView extends Container {
         this.buildBkgBuildings();
         this.buildBkgTrees();
         this.buildStaticBuildings();
+        this.buildLargeTrees();
     }
 
     private buildSky(): void {
@@ -88,6 +94,34 @@ export class BoardView extends Container {
         this.addChild(this.staticBuildings);
     }
 
+    private buildLargeTrees(): void {
+        const tree1 = LargeTreePool.getTree(this);
+        tree1.position.set(270, 2000);
+
+        const tree2 = LargeTreePool.getTree(this);
+        tree2.position.set(1675, 2000);
+
+        const tree3 = LargeTreePool.getTree(this);
+        tree3.position.set(3075, 2000);
+
+        this.largeTrees.push(tree1, tree2, tree3);
+    }
+
+    private updateLargeTrees(dt: number): void {
+        this.largeTrees.forEach((c, i) => {
+            c.x -= speeds.largeTrees * dt;
+
+            if (c.x + c.width / 2 <= 0) {
+                this.largeTrees.splice(i, 1);
+                c.remove();
+
+                const newTree = LargeTreePool.getTree(this);
+                newTree.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, 2000);
+                this.largeTrees.push(newTree);
+            }
+        });
+    }
+
     private updateClouds(dt: number): void {
         this.clouds.forEach((c, i) => {
             c.x -= speeds.clouds * dt;
@@ -106,11 +140,11 @@ export class BoardView extends Container {
         });
     }
 
-    private updateBkgBuildings(): void {
-        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings;
+    private updateBkgBuildings(dt): void {
+        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings * dt;
     }
 
-    private updateBkgTrees(): void {
-        this.bkgTrees.tilePosition.x -= speeds.bkgTrees;
+    private updateBkgTrees(dt): void {
+        this.bkgTrees.tilePosition.x -= speeds.bkgTrees * dt;
     }
 }

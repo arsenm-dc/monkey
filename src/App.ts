@@ -108,6 +108,7 @@ class App extends Application {
         //@ts-ignore
         const stats = new PixiStatsPlugin(this);
         document.body.appendChild(stats.stats.dom);
+        stats.stats.showPanel(0);
         this.ticker.add(() => stats.stats.update());
     }
 }

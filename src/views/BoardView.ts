@@ -1,14 +1,16 @@
-import { Container, Rectangle, Sprite } from 'pixi.js';
+import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite, skyConfig } from '../configs/spriteConfig';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { randomInt } from '../Utils';
 
-const cloudSpeed = 8;
+const cloudSpeed = 0.2;
+const bkgBuildingsSpeed = 0.3;
 const cloudYRange = [120, 800];
 
 export class BoardView extends Container {
     private sky: Sprite;
     private clouds: Cloud[] = [];
+    private bkgBuildings: TilingSprite;
 
     constructor() {
         super();
@@ -19,6 +21,7 @@ export class BoardView extends Container {
 
     public update(dt: number): void {
         // this.updateClouds(dt);
+        // this.updateBkgBuildings();
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -28,6 +31,7 @@ export class BoardView extends Container {
     private build(): void {
         this.buildSky();
         this.buildClouds();
+        this.buildBkgBuildings();
     }
 
     private buildSky(): void {
@@ -51,6 +55,14 @@ export class BoardView extends Container {
         this.clouds.push(cloud1, cloud2, cloud3, cloud4);
     }
 
+    private buildBkgBuildings(): void {
+        const texture = Texture.from('bkgBuildings.png');
+        this.bkgBuildings = new TilingSprite(texture, texture.width, texture.height);
+        this.bkgBuildings.y = this.height - this.bkgBuildings.height;
+        this.bkgBuildings.name = 'bkgBuildings';
+        this.addChild(this.bkgBuildings);
+    }
+
     private updateClouds(dt: number): void {
         this.clouds.forEach((c, i) => {
             c.x -= cloudSpeed * dt;
@@ -67,5 +79,9 @@ export class BoardView extends Container {
                 this.clouds.push(newCloud);
             }
         });
+    }
+
+    private updateBkgBuildings(): void {
+        this.bkgBuildings.tilePosition.x -= bkgBuildingsSpeed;
     }
 }

@@ -162,7 +162,7 @@ export class BoardView extends Container {
         position.forEach((x) => {
             const tree = LargeTreePool.getTree(this);
             tree.zIndex = zIndex.largeTrees;
-            tree.position.set(120, 2000);
+            tree.position.set(x, 2000);
             this.largeTrees.push(tree);
         });
     }
@@ -181,7 +181,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const tree = MediumTreePool.getTree(this);
             tree.zIndex = zIndex.mediumTrees;
-            tree.position.set(270, 2000);
+            tree.position.set(x, 2000);
             this.mediumTrees.push(tree);
         });
     }
@@ -191,7 +191,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const tree = SmallTreePool.getTree(this);
             tree.zIndex = zIndex.smallTrees;
-            tree.position.set(0, 2000);
+            tree.position.set(x, 2000);
             this.smallTrees.push(tree);
         });
     }

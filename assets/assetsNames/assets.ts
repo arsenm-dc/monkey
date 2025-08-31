@@ -1,0 +1,18 @@
+export const assets: AssetNameAndPath[] = [
+    { name: 'bkgBuildings.png', path: 'assets/uncompressed/bkgBuildings.png' },
+    { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
+    { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
+    { name: 'sky.png', path: 'assets/uncompressed/sky.png' },
+    { name: 'tree_1_1.png', path: 'assets/uncompressed/tree_1_1.png' },
+    { name: 'tree_1_2.png', path: 'assets/uncompressed/tree_1_2.png' },
+    { name: 'tree_2_1.png', path: 'assets/uncompressed/tree_2_1.png' },
+    { name: 'tree_3_1.png', path: 'assets/uncompressed/tree_3_1.png' },
+    { name: 'tree_3_2.png', path: 'assets/uncompressed/tree_3_2.png' },
+    { name: 'tree_3_3.png', path: 'assets/uncompressed/tree_3_3.png' },
+    { name: 'tree_4_1.png', path: 'assets/uncompressed/tree_4_1.png' },
+    { name: 'tree_4_2.png', path: 'assets/uncompressed/tree_4_2.png' },
+    { name: 'tree_4_3.png', path: 'assets/uncompressed/tree_4_3.png' },
+    { name: 'tree_4_4.png', path: 'assets/uncompressed/tree_4_4.png' },
+    { name: 'tree_4_5.png', path: 'assets/uncompressed/tree_4_5.png' },
+    { name: 'tree_5_1.png', path: 'assets/uncompressed/tree_5_1.png' },
+];

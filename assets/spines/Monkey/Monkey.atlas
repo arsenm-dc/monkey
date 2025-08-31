@@ -1,0 +1,187 @@
+
+Monkey.png
+size: 1952,1812
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Camada 1
+  rotate: true
+  xy: 2, 217
+  size: 498, 525
+  orig: 498, 525
+  offset: 0, 0
+  index: -1
+Monkey_arm_left_01_side
+  rotate: false
+  xy: 2, 1103
+  size: 377, 282
+  orig: 377, 282
+  offset: 0, 0
+  index: -1
+Monkey_arm_right_01_side
+  rotate: true
+  xy: 1157, 1007
+  size: 301, 399
+  orig: 301, 399
+  offset: 0, 0
+  index: -1
+Monkey_bag_right_02_side
+  rotate: false
+  xy: 381, 1075
+  size: 774, 264
+  orig: 774, 898
+  offset: 0, 317
+  index: -1
+Monkey_body_right_01_side
+  rotate: true
+  xy: 1056, 2
+  size: 571, 728
+  orig: 571, 728
+  offset: 0, 0
+  index: -1
+Monkey_crown_right_01_side
+  rotate: false
+  xy: 780, 652
+  size: 363, 421
+  orig: 363, 421
+  offset: 0, 0
+  index: -1
+Monkey_fingers_left_01_side
+  rotate: true
+  xy: 1323, 1601
+  size: 209, 248
+  orig: 209, 248
+  offset: 0, 0
+  index: -1
+Monkey_fingers_right_01_side
+  rotate: true
+  xy: 2, 1715
+  size: 95, 141
+  orig: 95, 141
+  offset: 0, 0
+  index: -1
+Monkey_foot_left_01_side
+  rotate: true
+  xy: 295, 1387
+  size: 241, 403
+  orig: 241, 403
+  offset: 0, 0
+  index: -1
+Monkey_foot_right_01_side
+  rotate: false
+  xy: 1064, 1341
+  size: 426, 258
+  orig: 426, 258
+  offset: 0, 0
+  index: -1
+Monkey_forearm_left_01_side
+  rotate: true
+  xy: 959, 1610
+  size: 200, 362
+  orig: 200, 362
+  offset: 0, 0
+  index: -1
+Monkey_forearm_right_01_side
+  rotate: false
+  xy: 1492, 1310
+  size: 410, 275
+  orig: 410, 275
+  offset: 0, 0
+  index: -1
+Monkey_glasses_right_01_side
+  rotate: false
+  xy: 145, 1653
+  size: 289, 157
+  orig: 289, 164
+  offset: 0, 7
+  index: -1
+Monkey_hand_left_01_side
+  rotate: true
+  xy: 436, 1630
+  size: 180, 325
+  orig: 181, 325
+  offset: 0, 0
+  index: -1
+Monkey_hand_leftt_02_side
+  rotate: true
+  xy: 763, 1621
+  size: 189, 194
+  orig: 189, 194
+  offset: 0, 0
+  index: -1
+Monkey_hand_right_01_side
+  rotate: false
+  xy: 2, 1414
+  size: 291, 237
+  orig: 291, 237
+  offset: 0, 0
+  index: -1
+Monkey_hand_right_02_side
+  rotate: false
+  xy: 1573, 1587
+  size: 286, 223
+  orig: 286, 223
+  offset: 0, 0
+  index: -1
+Monkey_head_right_01_side
+  rotate: true
+  xy: 529, 152
+  size: 498, 525
+  orig: 498, 525
+  offset: 0, 0
+  index: -1
+Monkey_hips_right_01_side
+  rotate: false
+  xy: 1558, 1005
+  size: 392, 303
+  orig: 392, 303
+  offset: 0, 0
+  index: -1
+Monkey_leg_left_01_side
+  rotate: true
+  xy: 700, 1367
+  size: 241, 362
+  orig: 241, 362
+  offset: 0, 0
+  index: -1
+Monkey_leg_right_01_side
+  rotate: true
+  xy: 1145, 575
+  size: 428, 508
+  orig: 428, 508
+  offset: 0, 0
+  index: -1
+Monkey_shin_left_01_side
+  rotate: false
+  xy: 365, 717
+  size: 413, 356
+  orig: 413, 356
+  offset: 0, 0
+  index: -1
+Monkey_shin_right_01_side
+  rotate: true
+  xy: 2, 798
+  size: 303, 361
+  orig: 303, 361
+  offset: 0, 0
+  index: -1
+
+Monkey2.png
+size: 1166,1310
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Monkey_bag_right_01_side
+  rotate: false
+  xy: 2, 2
+  size: 1034, 623
+  orig: 1034, 623
+  offset: 0, 0
+  index: -1
+Monkey_bag_right_03_side
+  rotate: false
+  xy: 2, 627
+  size: 1162, 681
+  orig: 1162, 681
+  offset: 0, 0
+  index: -1

@@ -5,7 +5,7 @@ import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
-import { NumbersPool } from '../pools/NumbersPool';
+import { Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { randomInt } from '../Utils';
 import { Monkey } from './Monkey';
@@ -59,6 +59,7 @@ export class BoardView extends Container {
     private fog: TilingSprite;
     private smallFrontTrees: TilingSprite;
 
+    private numbers: Number[] = [];
     private monkey: Monkey;
 
     constructor() {
@@ -315,8 +316,13 @@ export class BoardView extends Container {
     }
 
     private dropMonkey(): void {
-        const y = Math.random() * 300 + 1400;
+        const y = Math.random() * 500 + 1200;
         const duration = (y - monkeyPos.y) * 2.666;
+        const number = NumbersPool.getNumber(this, 'add', 3);
+        number.position.set(2200, y - this.monkey.height);
+        number.zIndex = zIndex.number;
+        this.numbers.push(number);
+
         animate(this.monkey, {
             y,
             ease: 'inCubic',
@@ -324,6 +330,25 @@ export class BoardView extends Container {
             onComplete: () => {
                 this.monkey.swingUp();
                 this.swingUp();
+            },
+        });
+
+        animate(number, {
+            x: monkeyPos.x,
+            duration,
+            ease: 'linear',
+            onComplete: () => {
+                animate(number, {
+                    y: '-=100',
+                    alpha: 0,
+                    duration: 200,
+                    ease: 'linear',
+                    onComplete: () => {
+                        const index = this.numbers.indexOf(number);
+                        this.numbers.splice(index, 1);
+                        number.remove();
+                    },
+                });
             },
         });
     }

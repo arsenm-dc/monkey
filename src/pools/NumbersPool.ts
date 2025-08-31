@@ -33,6 +33,7 @@ export class Number extends Container {
     public remove(): void {
         this._parentContainer?.removeChild(this);
         this._parentContainer = null;
+        this.alpha = 1;
     }
 
     private build(): void {
@@ -45,6 +46,7 @@ export class Number extends Container {
         });
         this.text.anchor.set(0.5, 0.5);
         this.addChild(this.text);
+        this.scale.set(1.5);
     }
 
     private updateTint(): void {

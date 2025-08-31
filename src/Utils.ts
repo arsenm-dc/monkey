@@ -73,3 +73,7 @@ export const shuffle = (arr: any[]): void => {
         arr[j] = temp;
     }
 };
+
+export const sample = (arr: any[]): any => {
+    return arr[Math.floor(Math.random() * arr.length)];
+};

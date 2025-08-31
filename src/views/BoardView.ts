@@ -1,24 +1,25 @@
 import { animate } from 'animejs';
 import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite, skyConfig } from '../configs/spriteConfig';
+import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { randomInt } from '../Utils';
 import { Monkey } from './Monkey';
-import { StaticBuildings } from './StaticBuildings';
 
 const speeds = {
     clouds: 0.2,
     bkgBuildings: 0.3,
     bkgTrees: 0.5,
-    largeTrees: 0.8,
-    smallForegroundTrees: 0.9,
-    mediumTrees: 1,
-    smallTrees: 1.1,
-    fog: 1.4,
-    smallFrontTrees: 1.6,
+    buildings: 0.8,
+    largeTrees: 1,
+    smallForegroundTrees: 1.3,
+    mediumTrees: 2,
+    smallTrees: 2.3,
+    fog: 1.6,
+    smallFrontTrees: 3,
 };
 
 const cloudYRange = [120, 800];
@@ -28,7 +29,7 @@ const zIndex = {
     clouds: 1,
     bkgBuildings: 2,
     bkgTrees: 3,
-    staticBuildings: 4,
+    buildings: 4,
     largeTrees: 5,
     smallForegroundTrees: 6,
     mediumTrees: 7,
@@ -48,7 +49,7 @@ export class BoardView extends Container {
     private clouds: Cloud[] = [];
     private bkgBuildings: TilingSprite;
     private bkgTrees: TilingSprite;
-    private staticBuildings: StaticBuildings;
+    private buildings: Building[] = [];
     private largeTrees: LargeTree[] = [];
     private smallForegroundTrees: TilingSprite;
     private mediumTrees: MediumTree[] = [];
@@ -65,6 +66,7 @@ export class BoardView extends Container {
         LargeTreePool.init();
         MediumTreePool.init();
         SmallTreePool.init();
+        BuildingPool.init();
 
         this.build();
     }
@@ -74,6 +76,7 @@ export class BoardView extends Container {
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
         this.updateLargeTrees(dt);
+        this.updateBuildings(dt);
         this.updateSmallForegroundTrees(dt);
         this.updateMediumTrees(dt);
         this.updateSmallTrees(dt);
@@ -90,7 +93,7 @@ export class BoardView extends Container {
         this.buildClouds();
         this.buildBkgBuildings();
         this.buildBkgTrees();
-        this.buildStaticBuildings();
+        this.buildBuildings();
         this.buildLargeTrees();
         this.buildSmallForegroundTrees();
         this.buildMediumTrees();
@@ -146,12 +149,19 @@ export class BoardView extends Container {
         this.addChild(this.bkgTrees);
     }
 
-    private buildStaticBuildings(): void {
-        this.staticBuildings = new StaticBuildings();
-        this.staticBuildings.name = 'staticBuildings';
-        this.staticBuildings.position.set(400, 1875);
-        this.staticBuildings.zIndex = zIndex.staticBuildings;
-        this.addChild(this.staticBuildings);
+    private buildBuildings(): void {
+        const positions = [
+            400, 1760, 1410, 1665, 1305, 505, 765, 605, 1175, 1035, 1555, 1875, 200, 2000, 2320, 2110, 2420, 2200, 2550,
+            2660, 2790, 2900, 3010,
+        ];
+
+        positions.forEach((x) => {
+            const building = BuildingPool.getBuilding(this);
+            building.zIndex = zIndex.buildings;
+            building.position.set(x, 1875);
+            this.buildings.push(building);
+            this.addChild(building);
+        });
     }
 
     private buildLargeTrees(): void {
@@ -260,6 +270,19 @@ export class BoardView extends Container {
                 const newTree = LargeTreePool.getTree(this);
                 newTree.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, 2000);
                 this.largeTrees.push(newTree);
+            }
+        });
+    }
+
+    private updateBuildings(dt: number): void {
+        this.buildings.forEach((c, i) => {
+            c.x -= speeds.buildings * dt;
+            if (c.x + c.width / 2 <= 0) {
+                this.buildings.splice(i, 1);
+                c.remove();
+                const newBuilding = BuildingPool.getBuilding(this);
+                newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 30 + 100, 1875);
+                this.buildings.push(newBuilding);
             }
         });
     }

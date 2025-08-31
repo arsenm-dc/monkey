@@ -254,6 +254,7 @@ export class BoardView extends Container {
             if (c.x + c.width / 2 <= 0) {
                 this.mediumTrees.splice(i, 1);
                 c.remove();
+
                 const newTree = MediumTreePool.getTree(this);
                 newTree.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, 2000);
                 this.mediumTrees.push(newTree);

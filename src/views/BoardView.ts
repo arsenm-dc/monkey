@@ -1,6 +1,5 @@
 import { animate } from 'animejs';
-import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
-import { makeSprite, skyConfig } from '../configs/spriteConfig';
+import { Container, Rectangle, Texture, TilingSprite } from 'pixi.js';
 import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
@@ -11,6 +10,7 @@ import { randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
 const speeds = {
+    sky: 0.1,
     clouds: 0.2,
     bkgBuildings: 0.3,
     bkgTrees: 0.5,
@@ -42,12 +42,13 @@ const zIndex = {
 };
 
 const monkeyPos = {
-    x: 600,
+    x: 700,
     y: 750,
 };
-
+const WIDTH = 2048;
+const HEIGHT = 1890;
 export class BoardView extends Container {
-    private sky: Sprite;
+    private sky: TilingSprite;
     private clouds: Cloud[] = [];
     private bkgBuildings: TilingSprite;
     private bkgTrees: TilingSprite;
@@ -93,7 +94,7 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
-        return new Rectangle(0, 0, 2048, 1890);
+        return new Rectangle(400, 400, 900, 1450);
     }
 
     private build(): void {
@@ -114,7 +115,9 @@ export class BoardView extends Container {
     }
 
     private buildSky(): void {
-        this.sky = makeSprite(skyConfig());
+        const texture = Texture.from('sky.png');
+        this.sky = new TilingSprite(texture, WIDTH * 2, texture.height);
+        this.sky.x = -WIDTH;
         this.sky.zIndex = zIndex.sky;
         this.addChild(this.sky);
     }
@@ -136,8 +139,9 @@ export class BoardView extends Container {
 
     private buildBkgBuildings(): void {
         const texture = Texture.from('bkgBuildings.png');
-        this.bkgBuildings = new TilingSprite(texture, texture.width, texture.height);
-        this.bkgBuildings.y = this.height - this.bkgBuildings.height;
+        this.bkgBuildings = new TilingSprite(texture, WIDTH * 2, texture.height);
+        this.bkgBuildings.x = -WIDTH;
+        this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = zIndex.bkgBuildings;
         this.addChild(this.bkgBuildings);
@@ -145,8 +149,9 @@ export class BoardView extends Container {
 
     private buildBkgTrees(): void {
         const texture = Texture.from('bkgTrees.png');
-        this.bkgTrees = new TilingSprite(texture, texture.width, texture.height);
-        this.bkgTrees.y = this.height - this.bkgTrees.height;
+        this.bkgTrees = new TilingSprite(texture, WIDTH * 2, texture.height);
+        this.bkgTrees.x = -WIDTH;
+        this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = zIndex.bkgTrees;
         this.addChild(this.bkgTrees);
@@ -178,7 +183,7 @@ export class BoardView extends Container {
     private buildSmallForegroundTrees(): void {
         const texture = Texture.from('tree_2_1.png');
         this.smallForegroundTrees = new TilingSprite(texture, texture.width, texture.height);
-        this.smallForegroundTrees.y = this.height - this.smallForegroundTrees.height;
+        this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = zIndex.smallForegroundTrees;
         this.addChild(this.smallForegroundTrees);
@@ -207,7 +212,7 @@ export class BoardView extends Container {
     private buildFog(): void {
         const texture = Texture.from('fog.png');
         this.fog = new TilingSprite(texture, 2048, texture.height);
-        this.fog.y = this.height - this.fog.height - 40;
+        this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = zIndex.fog;
         this.addChild(this.fog);
@@ -216,7 +221,7 @@ export class BoardView extends Container {
     private buildSmallFrontTrees(): void {
         const texture = Texture.from('tree_5_1.png');
         this.smallFrontTrees = new TilingSprite(texture, 2048, texture.height);
-        this.smallFrontTrees.y = this.height - this.smallFrontTrees.height;
+        this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = zIndex.smallFrontTrees;
         this.addChild(this.smallFrontTrees);
@@ -291,12 +296,16 @@ export class BoardView extends Container {
                 c.remove();
                 const newCloud = CloudPool.getCloud(this);
                 newCloud.position.set(
-                    this.sky.width + newCloud.width / 2 + Math.random() * 400,
+                    WIDTH + newCloud.width / 2 + Math.random() * 400,
                     randomInt(cloudYRange[0], cloudYRange[1]),
                 );
                 this.clouds.push(newCloud);
             }
         });
+    }
+
+    private updateSky(dt): void {
+        this.sky.tilePosition.x -= speeds.sky * dt;
     }
 
     private updateBkgBuildings(dt): void {
@@ -400,7 +409,7 @@ export class BoardView extends Container {
 
     private getNumber(y: number): Number {
         const number = NumbersPool.getNumber(this, sample(['add', 'divide', 'multiply']), randomInt(1, 10));
-        number.position.set(2200, y - this.monkey.height);
+        number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = zIndex.number;
         this.numbers.push(number);
         return number;

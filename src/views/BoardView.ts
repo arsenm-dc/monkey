@@ -1,3 +1,4 @@
+import { animate } from 'animejs';
 import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite, skyConfig } from '../configs/spriteConfig';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
@@ -98,6 +99,7 @@ export class BoardView extends Container {
         this.buildSmallFrontTrees();
 
         this.buildMonkey();
+        this.dropMonkey();
     }
 
     private buildSky(): void {
@@ -328,5 +330,31 @@ export class BoardView extends Container {
 
     private updateSmallFrontTrees(dt): void {
         this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
+    }
+
+    private dropMonkey(): void {
+        const y = Math.random() * 300 + 1400;
+        const duration = (y - monkeyPos.y) * 2.666;
+        animate(this.monkey, {
+            y,
+            ease: 'inCubic',
+            duration,
+            onComplete: () => {
+                this.monkey.swingUp();
+                this.swingUp();
+            },
+        });
+    }
+
+    private swingUp(): void {
+        const duration = (this.monkey.y - 750) * 2.666;
+        animate(this.monkey, {
+            y: 750,
+            ease: 'outCubic',
+            duration,
+            onComplete: () => {
+                this.dropMonkey();
+            },
+        });
     }
 }

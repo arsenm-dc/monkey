@@ -10,6 +10,10 @@ export class Monkey extends Container {
         this.build();
     }
 
+    public swingUp(): void {
+        this.spine.state.setAnimation(0, 'Swing', false);
+    }
+
     private build(): void {
         this.buildSpine();
     }
@@ -18,6 +22,14 @@ export class Monkey extends Container {
         const data = Assets.cache.get(spines[0].jsonURL).spineData;
         this.spine = new Spine(data);
 
+        this.spine.state.addListener({
+            complete: (entry) => {
+                // @ts-ignore
+                if (entry.animation.name === 'Swing') {
+                    this.spine.state.setAnimation(0, 'Falling', true);
+                }
+            },
+        });
         // 'Death start'
         // 'Falling'
         // 'Falling for death'

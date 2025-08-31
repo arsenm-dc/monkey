@@ -7,7 +7,7 @@ import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
 import { Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
-import { randomInt } from '../Utils';
+import { randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
 const speeds = {
@@ -318,10 +318,7 @@ export class BoardView extends Container {
     private dropMonkey(): void {
         const y = Math.random() * 500 + 1200;
         const duration = (y - monkeyPos.y) * 2.666;
-        const number = NumbersPool.getNumber(this, 'add', 3);
-        number.position.set(2200, y - this.monkey.height);
-        number.zIndex = zIndex.number;
-        this.numbers.push(number);
+        const number = this.getNumber(y);
 
         animate(this.monkey, {
             y,
@@ -333,6 +330,22 @@ export class BoardView extends Container {
             },
         });
 
+        this.moveNumber(number, duration);
+    }
+
+    private swingUp(): void {
+        const duration = (this.monkey.y - 750) * 2.666;
+        animate(this.monkey, {
+            y: 750,
+            ease: 'outCubic',
+            duration,
+            onComplete: () => {
+                this.dropMonkey();
+            },
+        });
+    }
+
+    private moveNumber(number: Number, duration: number): void {
         animate(number, {
             x: monkeyPos.x,
             duration,
@@ -353,15 +366,11 @@ export class BoardView extends Container {
         });
     }
 
-    private swingUp(): void {
-        const duration = (this.monkey.y - 750) * 2.666;
-        animate(this.monkey, {
-            y: 750,
-            ease: 'outCubic',
-            duration,
-            onComplete: () => {
-                this.dropMonkey();
-            },
-        });
+    private getNumber(y: number): Number {
+        const number = NumbersPool.getNumber(this, sample(['add', 'divide', 'multiply']), randomInt(1, 10));
+        number.position.set(2200, y - this.monkey.height);
+        number.zIndex = zIndex.number;
+        this.numbers.push(number);
+        return number;
     }
 }

@@ -223,7 +223,7 @@ export class BoardView extends Container {
 
     private buildFog(): void {
         const texture = Texture.from('fog.png');
-        this.fog = new TilingSprite(texture, texture.width, texture.height);
+        this.fog = new TilingSprite(texture, 2048, texture.height);
         this.fog.y = this.height - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = zIndex.fog;
@@ -232,7 +232,7 @@ export class BoardView extends Container {
 
     private buildSmallFrontTrees(): void {
         const texture = Texture.from('tree_5_1.png');
-        this.smallFrontTrees = new TilingSprite(texture, texture.width, texture.height);
+        this.smallFrontTrees = new TilingSprite(texture, 2048, texture.height);
         this.smallFrontTrees.y = this.height - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = zIndex.smallFrontTrees;

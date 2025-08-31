@@ -112,23 +112,18 @@ export class BoardView extends Container {
     }
 
     private buildClouds(): void {
-        const cloud1 = CloudPool.getCloud(this);
-        cloud1.zIndex = zIndex.clouds;
-        cloud1.position.set(200, 300);
-
-        const cloud2 = CloudPool.getCloud(this);
-        cloud2.zIndex = zIndex.clouds;
-        cloud2.position.set(600, 600);
-
-        const cloud3 = CloudPool.getCloud(this);
-        cloud3.zIndex = zIndex.clouds;
-        cloud3.position.set(1300, 250);
-
-        const cloud4 = CloudPool.getCloud(this);
-        cloud4.zIndex = zIndex.clouds;
-        cloud4.position.set(1800, 700);
-
-        this.clouds.push(cloud1, cloud2, cloud3, cloud4);
+        const positions = [
+            { x: 200, y: 300 },
+            { x: 600, y: 600 },
+            { x: 1300, y: 250 },
+            { x: 1800, y: 700 },
+        ];
+        positions.forEach(({ x, y }) => {
+            const cloud = CloudPool.getCloud(this);
+            cloud.zIndex = zIndex.clouds;
+            cloud.position.set(x, y);
+            this.clouds.push(cloud);
+        });
     }
 
     private buildBkgBuildings(): void {
@@ -154,30 +149,22 @@ export class BoardView extends Container {
             400, 1760, 1410, 1665, 1305, 505, 765, 605, 1175, 1035, 1555, 1875, 200, 2000, 2320, 2110, 2420, 2200, 2550,
             2660, 2790, 2900, 3010,
         ];
-
         positions.forEach((x) => {
             const building = BuildingPool.getBuilding(this);
             building.zIndex = zIndex.buildings;
             building.position.set(x, 1875);
             this.buildings.push(building);
-            this.addChild(building);
         });
     }
 
     private buildLargeTrees(): void {
-        const tree1 = LargeTreePool.getTree(this);
-        tree1.zIndex = zIndex.largeTrees;
-        tree1.position.set(120, 2000);
-
-        const tree2 = LargeTreePool.getTree(this);
-        tree2.zIndex = zIndex.largeTrees;
-        tree2.position.set(1575, 2000);
-
-        const tree3 = LargeTreePool.getTree(this);
-        tree3.zIndex = zIndex.largeTrees;
-        tree3.position.set(2975, 2000);
-
-        this.largeTrees.push(tree1, tree2, tree3);
+        const position = [120, 1575, 2975];
+        position.forEach((x) => {
+            const tree = LargeTreePool.getTree(this);
+            tree.zIndex = zIndex.largeTrees;
+            tree.position.set(120, 2000);
+            this.largeTrees.push(tree);
+        });
     }
 
     private buildSmallForegroundTrees(): void {
@@ -190,47 +177,23 @@ export class BoardView extends Container {
     }
 
     private buildMediumTrees(): void {
-        const tree1 = MediumTreePool.getTree(this);
-        tree1.zIndex = zIndex.mediumTrees;
-        tree1.position.set(270, 2000);
-
-        const tree2 = MediumTreePool.getTree(this);
-        tree2.zIndex = zIndex.mediumTrees;
-        tree2.position.set(1275, 2000);
-
-        const tree3 = MediumTreePool.getTree(this);
-        tree3.zIndex = zIndex.mediumTrees;
-        tree3.position.set(2275, 2000);
-
-        const tree4 = MediumTreePool.getTree(this);
-        tree4.zIndex = zIndex.mediumTrees;
-        tree4.position.set(3275, 2000);
-
-        this.mediumTrees.push(tree1, tree2, tree3, tree4);
+        const positions = [270, 1275, 2275, 3275];
+        positions.forEach((x) => {
+            const tree = MediumTreePool.getTree(this);
+            tree.zIndex = zIndex.mediumTrees;
+            tree.position.set(270, 2000);
+            this.mediumTrees.push(tree);
+        });
     }
 
     private buildSmallTrees(): void {
-        const tree1 = SmallTreePool.getTree(this);
-        tree1.zIndex = zIndex.smallTrees;
-        tree1.position.set(0, 2000);
-
-        const tree2 = SmallTreePool.getTree(this);
-        tree2.zIndex = zIndex.smallTrees;
-        tree2.position.set(700, 2000);
-
-        const tree3 = SmallTreePool.getTree(this);
-        tree3.zIndex = zIndex.smallTrees;
-        tree3.position.set(1400, 2000);
-
-        const tree4 = SmallTreePool.getTree(this);
-        tree4.zIndex = zIndex.smallTrees;
-        tree4.position.set(2100, 2000);
-
-        const tree5 = SmallTreePool.getTree(this);
-        tree5.zIndex = zIndex.smallTrees;
-        tree5.position.set(2800, 2000);
-
-        this.smallTrees.push(tree1, tree2, tree3, tree4, tree5);
+        const positions = [0, 700, 1400, 2100, 2800];
+        positions.forEach((x) => {
+            const tree = SmallTreePool.getTree(this);
+            tree.zIndex = zIndex.smallTrees;
+            tree.position.set(0, 2000);
+            this.smallTrees.push(tree);
+        });
     }
 
     private buildFog(): void {
@@ -262,11 +225,9 @@ export class BoardView extends Container {
     private updateLargeTrees(dt: number): void {
         this.largeTrees.forEach((c, i) => {
             c.x -= speeds.largeTrees * dt;
-
             if (c.x + c.width / 2 <= 0) {
                 this.largeTrees.splice(i, 1);
                 c.remove();
-
                 const newTree = LargeTreePool.getTree(this);
                 newTree.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, 2000);
                 this.largeTrees.push(newTree);
@@ -290,11 +251,9 @@ export class BoardView extends Container {
     private updateMediumTrees(dt: number): void {
         this.mediumTrees.forEach((c, i) => {
             c.x -= speeds.mediumTrees * dt;
-
             if (c.x + c.width / 2 <= 0) {
                 this.mediumTrees.splice(i, 1);
                 c.remove();
-
                 const newTree = MediumTreePool.getTree(this);
                 newTree.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, 2000);
                 this.mediumTrees.push(newTree);
@@ -305,11 +264,9 @@ export class BoardView extends Container {
     private updateSmallTrees(dt: number): void {
         this.smallTrees.forEach((c, i) => {
             c.x -= speeds.smallTrees * dt;
-
             if (c.x + c.width / 2 <= 0) {
                 this.smallTrees.splice(i, 1);
                 c.remove();
-
                 const newTree = SmallTreePool.getTree(this);
                 newTree.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, 2000);
                 this.smallTrees.push(newTree);
@@ -320,11 +277,9 @@ export class BoardView extends Container {
     private updateClouds(dt: number): void {
         this.clouds.forEach((c, i) => {
             c.x -= speeds.clouds * dt;
-
             if (c.x + c.width / 2 <= 0) {
                 this.clouds.splice(i, 1);
                 c.remove();
-
                 const newCloud = CloudPool.getCloud(this);
                 newCloud.position.set(
                     this.sky.width + newCloud.width / 2 + Math.random() * 400,

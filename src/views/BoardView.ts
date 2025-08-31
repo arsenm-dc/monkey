@@ -5,6 +5,7 @@ import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
+import { NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { randomInt } from '../Utils';
 import { Monkey } from './Monkey';
@@ -36,7 +37,8 @@ const zIndex = {
     smallTrees: 8,
     fog: 9,
     smallFrontTrees: 10,
-    monkey: 11,
+    number: 11,
+    monkey: 12,
 };
 
 const monkeyPos = {
@@ -67,6 +69,7 @@ export class BoardView extends Container {
         MediumTreePool.init();
         SmallTreePool.init();
         BuildingPool.init();
+        NumbersPool.init();
 
         this.build();
     }

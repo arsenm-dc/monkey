@@ -24,7 +24,7 @@ export class Monkey extends Container {
         // 'Landing'
         // 'Swing'
         // 'spike death'
-        // this.spine.state.setAnimation(0, 'Falling', true);
+        this.spine.state.setAnimation(0, 'Falling', true);
         this.spine.scale.set(0.15);
         this.addChild(this.spine);
     }

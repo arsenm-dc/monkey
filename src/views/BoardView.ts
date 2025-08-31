@@ -37,28 +37,22 @@ const zIndex = {
     monkey: 11,
 };
 
+const monkeyPos = {
+    x: 600,
+    y: 750,
+};
+
 export class BoardView extends Container {
-    private skyContainer = new Container();
     private sky: Sprite;
-    private cloudsContainer = new Container();
     private clouds: Cloud[] = [];
-    private bkgBuildingsContainer = new Container();
     private bkgBuildings: TilingSprite;
-    private bkgTreesContainer = new Container();
     private bkgTrees: TilingSprite;
-    private staticBuildingsContainer = new Container();
     private staticBuildings: StaticBuildings;
-    private largeTreesContainer = new Container();
     private largeTrees: LargeTree[] = [];
-    private smallForegroundTreesContainer = new Container();
     private smallForegroundTrees: TilingSprite;
-    private mediumTreesContainer = new Container();
     private mediumTrees: MediumTree[] = [];
-    private smallTreesContainer = new Container();
     private smallTrees: SmallTree[] = [];
-    private fogContainer = new Container();
     private fog: TilingSprite;
-    private smallFrontTreesContainer = new Container();
     private smallFrontTrees: TilingSprite;
 
     private monkey: Monkey;
@@ -91,7 +85,6 @@ export class BoardView extends Container {
     }
 
     private build(): void {
-        // this.addChild();
         this.buildSky();
         this.buildClouds();
         this.buildBkgBuildings();
@@ -249,7 +242,7 @@ export class BoardView extends Container {
     private buildMonkey(): void {
         this.monkey = new Monkey();
         this.monkey.name = 'monkey';
-        this.monkey.position.set(1000, 1000);
+        this.monkey.position.set(monkeyPos.x, monkeyPos.y);
         this.monkey.zIndex = zIndex.monkey;
         this.addChild(this.monkey);
     }

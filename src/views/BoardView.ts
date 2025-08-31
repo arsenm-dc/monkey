@@ -60,7 +60,10 @@ export class BoardView extends Container {
     private smallFrontTrees: TilingSprite;
 
     private numbers: Number[] = [];
+    private randomNumbers: Number[] = [];
     private monkey: Monkey;
+
+    private isAlive = true;
 
     constructor() {
         super();
@@ -76,6 +79,7 @@ export class BoardView extends Container {
     }
 
     public update(dt: number): void {
+        if (!this.isAlive) return;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -316,21 +320,49 @@ export class BoardView extends Container {
     }
 
     private dropMonkey(): void {
-        const y = Math.random() * 500 + 1200;
-        const duration = (y - monkeyPos.y) * 2.666;
-        const number = this.getNumber(y);
+        const chance = Math.random();
 
-        animate(this.monkey, {
-            y,
-            ease: 'inCubic',
-            duration,
-            onComplete: () => {
-                this.monkey.swingUp();
-                this.swingUp();
-            },
-        });
+        if (chance <= 0.6) {
+            const y = Math.random() * 600 + 1200;
+            const duration = (y - monkeyPos.y) * 2.666;
+            const number = this.getNumber(y);
 
-        this.moveNumber(number, duration);
+            animate(this.monkey, {
+                y,
+                ease: 'inCubic',
+                duration,
+                onComplete: () => {
+                    this.monkey.swingUp();
+                    this.swingUp();
+                },
+            });
+
+            this.moveNumber(number, duration);
+        } else if (chance > 0.6 && chance <= 0.85) {
+            const y = 2400;
+            const duration = (y - monkeyPos.y) * 2.666;
+            this.monkey.fall();
+            animate(this.monkey, {
+                y,
+                ease: 'inCubic',
+                duration,
+                onComplete: () => {
+                    this.isAlive = false;
+                },
+            });
+        } else {
+            const y = 1870;
+            const duration = (y - monkeyPos.y) * 2.666;
+            animate(this.monkey, {
+                y,
+                ease: 'inCubic',
+                duration,
+                onComplete: () => {
+                    this.isAlive = false;
+                    this.monkey.land();
+                },
+            });
+        }
     }
 
     private swingUp(): void {
@@ -354,7 +386,7 @@ export class BoardView extends Container {
                 animate(number, {
                     y: '-=100',
                     alpha: 0,
-                    duration: 200,
+                    duration: 400,
                     ease: 'linear',
                     onComplete: () => {
                         const index = this.numbers.indexOf(number);

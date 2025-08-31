@@ -14,6 +14,14 @@ export class Monkey extends Container {
         this.spine.state.setAnimation(0, 'Swing', false);
     }
 
+    public fall(): void {
+        this.spine.state.setAnimation(0, 'Falling for death', true);
+    }
+
+    public land(): void {
+        this.spine.state.setAnimation(0, 'Landing', false);
+    }
+
     private build(): void {
         this.buildSpine();
     }
@@ -36,6 +44,9 @@ export class Monkey extends Container {
         // 'Landing'
         // 'Swing'
         // 'spike death'
+
+        this.spine.state.data.setMix('Falling', 'Falling for death', 1);
+        this.spine.state.data.setMix('Falling', 'Landing', 1);
         this.spine.state.setAnimation(0, 'Falling', true);
         this.spine.scale.set(0.15);
         this.addChild(this.spine);

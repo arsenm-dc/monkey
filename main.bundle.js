@@ -8272,7 +8272,7 @@ var SHAPES = /* @__PURE__ */ ((SHAPES2) => (SHAPES2[SHAPES2.POLY = 0] = "POLY", 
 //# sourceMappingURL=const.mjs.map
 
 ;// CONCATENATED MODULE: ./node_modules/@pixi/math/lib/Point.mjs
-class Point {
+class Point_Point {
   /**
    * Creates a new `Point`
    * @param {number} [x=0] - position of the point on the x axis
@@ -8286,7 +8286,7 @@ class Point {
    * @returns A clone of this point
    */
   clone() {
-    return new Point(this.x, this.y);
+    return new Point_Point(this.x, this.y);
   }
   /**
    * Copies `x` and `y` from the given point into this point
@@ -8323,7 +8323,7 @@ class Point {
     return this.x = x, this.y = y, this;
   }
 }
-Point.prototype.toString = function() {
+Point_Point.prototype.toString = function() {
   return `[@pixi/math:Point x=${this.x} y=${this.y}]`;
 };
 
@@ -8332,7 +8332,7 @@ Point.prototype.toString = function() {
 ;// CONCATENATED MODULE: ./node_modules/@pixi/math/lib/shapes/Rectangle.mjs
 
 
-const tempPoints = [new Point(), new Point(), new Point(), new Point()];
+const tempPoints = [new Point_Point(), new Point_Point(), new Point_Point(), new Point_Point()];
 class Rectangle {
   /**
    * @param x - The X coordinate of the upper-left corner of the rectangle
@@ -8722,7 +8722,7 @@ class Matrix {
    * @returns {PIXI.Point} The new point, transformed through this matrix
    */
   apply(pos, newPos) {
-    newPos = newPos || new Point();
+    newPos = newPos || new Point_Point();
     const x = pos.x, y = pos.y;
     return newPos.x = this.a * x + this.c * y + this.tx, newPos.y = this.b * x + this.d * y + this.ty, newPos;
   }
@@ -8734,7 +8734,7 @@ class Matrix {
    * @returns {PIXI.Point} The new point, inverse-transformed through this matrix
    */
   applyInverse(pos, newPos) {
-    newPos = newPos || new Point();
+    newPos = newPos || new Point_Point();
     const id = 1 / (this.a * this.d + this.c * -this.b), x = pos.x, y = pos.y;
     return newPos.x = this.d * id * x + -this.c * id * y + (this.ty * this.c - this.tx * this.d) * id, newPos.y = this.a * id * y + -this.b * id * x + (-this.ty * this.a + this.tx * this.b) * id, newPos;
   }
@@ -11248,7 +11248,7 @@ class Texture extends eventemitter3 {
       this._rotate = 2;
     else if (this._rotate % 2 !== 0)
       throw new Error("attempt to use diamond-shaped UVs. If you are sure, set rotation manually");
-    this.defaultAnchor = anchor ? new Point(anchor.x, anchor.y) : new Point(0, 0), this.defaultBorders = borders, this._updateID = 0, this.textureCacheIds = [], baseTexture.valid ? this.noFrame ? baseTexture.valid && this.onBaseTextureUpdated(baseTexture) : this.frame = frame : baseTexture.once("loaded", this.onBaseTextureUpdated, this), this.noFrame && baseTexture.on("update", this.onBaseTextureUpdated, this);
+    this.defaultAnchor = anchor ? new Point_Point(anchor.x, anchor.y) : new Point_Point(0, 0), this.defaultBorders = borders, this._updateID = 0, this.textureCacheIds = [], baseTexture.valid ? this.noFrame ? baseTexture.valid && this.onBaseTextureUpdated(baseTexture) : this.frame = frame : baseTexture.once("loaded", this.onBaseTextureUpdated, this), this.noFrame && baseTexture.on("update", this.onBaseTextureUpdated, this);
   }
   /**
    * Updates this texture on the gpu.
@@ -11759,7 +11759,7 @@ class FilterState {
 
 
 
-const FilterSystem_tempPoints = [new Point(), new Point(), new Point(), new Point()], tempMatrix = new Matrix();
+const FilterSystem_tempPoints = [new Point_Point(), new Point_Point(), new Point_Point(), new Point_Point()], tempMatrix = new Matrix();
 class FilterSystem {
   /**
    * @param renderer - The renderer this System works for.
@@ -17604,7 +17604,7 @@ Object.defineProperties(settings, {
 ;// CONCATENATED MODULE: ./node_modules/@pixi/sprite/lib/Sprite.mjs
 
 
-const tempPoint = new Point(), indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
+const tempPoint = new Point_Point(), indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
 class Sprite extends Container_Container {
   /** @param texture - The texture for this sprite. */
   constructor(texture) {
@@ -17963,7 +17963,7 @@ Container_Container.prototype.getChildByName = function(name, deep) {
 ;// CONCATENATED MODULE: ./node_modules/@pixi/mixin-get-global-position/lib/index.mjs
 
 
-DisplayObject.prototype.getGlobalPosition = function(point = new Point(), skipUpdate = !1) {
+DisplayObject.prototype.getGlobalPosition = function(point = new Point_Point(), skipUpdate = !1) {
   return this.parent ? this.parent.toGlobal(this.position, point, skipUpdate) : (point.x = this.position.x, point.y = this.position.y), point;
 };
 //# sourceMappingURL=index.mjs.map
@@ -19116,7 +19116,7 @@ class DisplacementFilter extends Filter {
       filterMatrix: maskMatrix,
       scale: { x: 1, y: 1 },
       rotation: new Float32Array([1, 0, 0, 1])
-    }), this.maskSprite = sprite, this.maskMatrix = maskMatrix, scale == null && (scale = 20), this.scale = new Point(scale, scale);
+    }), this.maskSprite = sprite, this.maskMatrix = maskMatrix, scale == null && (scale = 20), this.scale = new Point_Point(scale, scale);
   }
   /**
    * Applies the filter.
@@ -19553,7 +19553,7 @@ class FederatedEvent {
    *  within the boundary's jurisdiction.
    */
   constructor(manager) {
-    this.bubbles = !0, this.cancelBubble = !0, this.cancelable = !1, this.composed = !1, this.defaultPrevented = !1, this.eventPhase = FederatedEvent.prototype.NONE, this.propagationStopped = !1, this.propagationImmediatelyStopped = !1, this.layer = new Point(), this.page = new Point(), this.NONE = 0, this.CAPTURING_PHASE = 1, this.AT_TARGET = 2, this.BUBBLING_PHASE = 3, this.manager = manager;
+    this.bubbles = !0, this.cancelBubble = !0, this.cancelable = !1, this.composed = !1, this.defaultPrevented = !1, this.eventPhase = FederatedEvent.prototype.NONE, this.propagationStopped = !1, this.propagationImmediatelyStopped = !1, this.layer = new Point_Point(), this.page = new Point_Point(), this.NONE = 0, this.CAPTURING_PHASE = 1, this.AT_TARGET = 2, this.BUBBLING_PHASE = 3, this.manager = manager;
   }
   /** @readonly */
   get layerX() {
@@ -19632,7 +19632,7 @@ class FederatedEvent {
 
 class FederatedMouseEvent extends FederatedEvent {
   constructor() {
-    super(...arguments), this.client = new Point(), this.movement = new Point(), this.offset = new Point(), this.global = new Point(), this.screen = new Point();
+    super(...arguments), this.client = new Point_Point(), this.movement = new Point_Point(), this.offset = new Point_Point(), this.global = new Point_Point(), this.screen = new Point_Point();
   }
   /** @readonly */
   get clientX() {
@@ -19779,7 +19779,7 @@ FederatedWheelEvent.DOM_DELTA_PAGE = 2;
 
 
 
-const PROPAGATION_LIMIT = 2048, tempHitLocation = new Point(), tempLocalMapping = new Point();
+const PROPAGATION_LIMIT = 2048, tempHitLocation = new Point_Point(), tempLocalMapping = new Point_Point();
 class EventBoundary {
   /**
    * @param rootTarget - The holder of the event boundary.
@@ -24492,7 +24492,7 @@ function buildNonNativeLine(graphicsData, graphicsGeometry) {
   const eps = graphicsGeometry.closePointEps;
   if (points.length === 0)
     return;
-  const style = graphicsData.lineStyle, firstPoint = new Point(points[0], points[1]), lastPoint = new Point(points[points.length - 2], points[points.length - 1]), closedShape = shape.type !== SHAPES.POLY || shape.closeStroke, closedPath = Math.abs(firstPoint.x - lastPoint.x) < eps && Math.abs(firstPoint.y - lastPoint.y) < eps;
+  const style = graphicsData.lineStyle, firstPoint = new Point_Point(points[0], points[1]), lastPoint = new Point_Point(points[points.length - 2], points[points.length - 1]), closedShape = shape.type !== SHAPES.POLY || shape.closeStroke, closedPath = Math.abs(firstPoint.x - lastPoint.x) < eps && Math.abs(firstPoint.y - lastPoint.y) < eps;
   if (closedShape) {
     points = points.slice(), closedPath && (points.pop(), points.pop(), lastPoint.set(points[points.length - 2], points[points.length - 1]));
     const midPointX = (firstPoint.x + lastPoint.x) * 0.5, midPointY = (lastPoint.y + firstPoint.y) * 0.5;
@@ -24857,7 +24857,7 @@ class BatchPart {
 
 
 
-const tmpPoint = new Point(), _GraphicsGeometry = class _GraphicsGeometry2 extends BatchGeometry {
+const tmpPoint = new Point_Point(), _GraphicsGeometry = class _GraphicsGeometry2 extends BatchGeometry {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor() {
     super(), this.closePointEps = 1e-4, this.boundsPadding = 0, this.uvsFloat32 = null, this.indicesUint16 = null, this.batchable = !1, this.points = [], this.colors = [], this.uvs = [], this.indices = [], this.textureIds = [], this.graphicsData = [], this.drawCalls = [], this.batchDirty = -1, this.batches = [], this.dirty = 0, this.cacheDirty = -1, this.clearDirty = 0, this.shapeIndex = 0, this._bounds = new Bounds(), this.boundsDirty = -1;
@@ -25768,7 +25768,7 @@ _Graphics.curves = curves, /**
 * Temporary point to use for containsPoint.
 * @private
 */
-_Graphics._TEMP_POINT = new Point();
+_Graphics._TEMP_POINT = new Point_Point();
 let Graphics_Graphics = _Graphics;
 
 //# sourceMappingURL=Graphics.mjs.map
@@ -25835,7 +25835,7 @@ class MeshBatchUvs {
 
 
 
-const Mesh_tempPoint = new Point(), tempPolygon = new Polygon(), _Mesh = class _Mesh2 extends Container_Container {
+const Mesh_tempPoint = new Point_Point(), tempPolygon = new Polygon(), _Mesh = class _Mesh2 extends Container_Container {
   /**
    * @param geometry - The geometry the mesh will use.
    * @param {PIXI.MeshMaterial} shader - The shader the mesh will use.
@@ -28463,7 +28463,7 @@ class AnimatedSprite extends Sprite {
 ;// CONCATENATED MODULE: ./node_modules/@pixi/sprite-tiling/lib/TilingSprite.mjs
 
 
-const TilingSprite_tempPoint = new Point();
+const TilingSprite_tempPoint = new Point_Point();
 class TilingSprite extends Sprite {
   /**
    * Note: The wrap mode of the texture is forced to REPEAT on render if the size of the texture
@@ -29665,7 +29665,7 @@ const pageMeshDataDefaultPageMeshData = [], pageMeshDataMSDFPageMeshData = [], c
   }
   /** Renders text and updates it when needed. This should only be called if the BitmapFont is regenerated. */
   updateText() {
-    const data = BitmapFont.available[this._fontName], fontSize = this.fontSize, scale = fontSize / data.size, pos = new Point(), chars = [], lineWidths = [], lineSpaces = [], text = this._text.replace(/(?:\r\n|\r)/g, `
+    const data = BitmapFont.available[this._fontName], fontSize = this.fontSize, scale = fontSize / data.size, pos = new Point_Point(), chars = [], lineWidths = [], lineSpaces = [], text = this._text.replace(/(?:\r\n|\r)/g, `
 `) || " ", charsInput = splitTextToCharacters(text), maxWidth = this._maxWidth * data.size / fontSize, pageMeshDataPool = data.distanceFieldType === "none" ? pageMeshDataDefaultPageMeshData : pageMeshDataMSDFPageMeshData;
     let prevCharCode = null, lastLineWidth = 0, maxLineWidth = 0, line = 0, lastBreakPos = -1, lastBreakWidth = 0, spacesRemoved = 0, maxLineHeight = 0, spaceCount = 0;
     for (let i = 0; i < charsInput.length; i++) {
@@ -29684,7 +29684,7 @@ const pageMeshDataDefaultPageMeshData = [], pageMeshDataMSDFPageMeshData = [], c
         line: 0,
         charCode: 0,
         prevSpaces: 0,
-        position: new Point()
+        position: new Point_Point()
       };
       charRenderData.texture = charData.texture, charRenderData.line = line, charRenderData.charCode = charCode, charRenderData.position.x = Math.round(pos.x + charData.xOffset + this._letterSpacing / 2), charRenderData.position.y = Math.round(pos.y + charData.yOffset), charRenderData.prevSpaces = spaceCount, chars.push(charRenderData), lastLineWidth = charRenderData.position.x + Math.max(charData.xAdvance - charData.xOffset, charData.texture.orig.width), pos.x += charData.xAdvance + this._letterSpacing, maxLineHeight = Math.max(maxLineHeight, charData.yOffset + charData.texture.height), prevCharCode = charCode, lastBreakPos !== -1 && maxWidth > 0 && pos.x > maxWidth && (++spacesRemoved, removeItems(chars, 1 + lastBreakPos - spacesRemoved, 1 + i - lastBreakPos), i = lastBreakPos, lastBreakPos = -1, lineWidths.push(lastBreakWidth), lineSpaces.push(chars.length > 0 ? chars[chars.length - 1].prevSpaces : 0), maxLineWidth = Math.max(maxLineWidth, lastBreakWidth), line++, pos.x = 0, pos.y += data.lineHeight, prevCharCode = null, spaceCount = 0);
     }
@@ -30555,7 +30555,7 @@ var CellAlign;
 })(CellAlign || (CellAlign = {}));
 
 ;// CONCATENATED MODULE: ./node_modules/@armathai/grid-core/dist/utils/geom/Point.js
-class Point_Point {
+class geom_Point_Point {
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -30613,7 +30613,7 @@ function fit(d1, d2, scaleType) {
         case CellScale.envelop:
             return internalEnvelop(d1, d2);
         case CellScale.none:
-            return new Point_Point(1, 1);
+            return new geom_Point_Point(1, 1);
         default:
             throw new Error(`Unknown scale type: ${scaleType}`);
     }
@@ -30621,7 +30621,7 @@ function fit(d1, d2, scaleType) {
 function align(dimension, rect, alignType) {
     const { width: w1, height: h1 } = dimension;
     const { x: x2, y: y2, width: w2, height: h2 } = rect;
-    const pos = new Point_Point(x2, y2);
+    const pos = new geom_Point_Point(x2, y2);
     switch (alignType) {
         case CellAlign.center:
             return pos.set(x2 + (w2 - w1) / 2, y2 + (h2 - h1) / 2);
@@ -30651,24 +30651,24 @@ function internalFit(d1, d2) {
     const { width: w1, height: h1 } = d1;
     const { width: w2, height: h2 } = d2;
     const s = Math.min(w2 / w1, h2 / h1);
-    return s < 1 ? new Point_Point(s, s) : new Point_Point(1, 1);
+    return s < 1 ? new geom_Point_Point(s, s) : new geom_Point_Point(1, 1);
 }
 function internalShowAll(d1, d2) {
     const { width: w1, height: h1 } = d1;
     const { width: w2, height: h2 } = d2;
     const s = Math.min(w2 / w1, h2 / h1);
-    return new Point_Point(s, s);
+    return new geom_Point_Point(s, s);
 }
 function internalEnvelop(d1, d2) {
     const { width: w1, height: h1 } = d1;
     const { width: w2, height: h2 } = d2;
     const s = Math.max(w2 / w1, h2 / h1);
-    return new Point_Point(s, s);
+    return new geom_Point_Point(s, s);
 }
 function internalFill(d1, d2) {
     const { width: w1, height: h1 } = d1;
     const { width: w2, height: h2 } = d2;
-    return new Point_Point(w2 / w1, h2 / h1);
+    return new geom_Point_Point(w2 / w1, h2 / h1);
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@armathai/grid-core/dist/cell.js
@@ -30740,7 +30740,7 @@ class Cell {
         return rawAlign || CellAlign.center;
     }
     _getOffset(rawOffset) {
-        return rawOffset ? new Point_Point(rawOffset.x || 0, rawOffset.y || 0) : new Point_Point(0, 0);
+        return rawOffset ? new geom_Point_Point(rawOffset.x || 0, rawOffset.y || 0) : new geom_Point_Point(0, 0);
     }
     _getContents() {
         return [];
@@ -31041,7 +31041,6 @@ const sample = (arr) => {
 ;// CONCATENATED MODULE: ./src/configs/gridConfigs/GameViewGC.ts
 
 
-
 const getGameViewGridConfig = () => {
     return lp(getGameViewGridLandscapeConfig, getGameViewGridPortraitConfig).call(null);
 };
@@ -31054,7 +31053,7 @@ const getGameViewGridLandscapeConfig = () => {
         cells: [
             {
                 name: 'board',
-                scale: CellScale.envelop,
+                scale: CellScale.fit,
                 align: CellAlign.centerBottom,
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
@@ -31070,7 +31069,7 @@ const getGameViewGridPortraitConfig = () => {
         cells: [
             {
                 name: 'board',
-                scale: CellScale.envelop,
+                scale: CellScale.fit,
                 align: CellAlign.centerBottom,
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
@@ -39449,7 +39448,7 @@ const stagger = (val, params = {}) => {
 ;// CONCATENATED MODULE: ./src/configs/spriteConfig.ts
 
 const makeSprite = (config) => {
-    const { frame, atlas = '', x = 0, y = 0, scaleX = 1, scaleY = 1, anchor = new Point(0.5, 0.5), tint = 0xffffff, alpha = 1, rotation = 0, name = '', } = config;
+    const { frame, atlas = '', x = 0, y = 0, scaleX = 1, scaleY = 1, anchor = new Point_Point(0.5, 0.5), tint = 0xffffff, alpha = 1, rotation = 0, name = '', } = config;
     const texture = Texture.from(frame);
     const sprite = new Sprite(texture);
     sprite.position.set(x, y);
@@ -39492,7 +39491,7 @@ class Building extends Container_Container {
         this._parentContainer = null;
     }
     build() {
-        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point(0.5, 1) });
+        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point_Point(0.5, 1) });
         this.addChild(this.sprite);
     }
 }
@@ -39612,7 +39611,7 @@ class LargeTree extends Container_Container {
         this._parentContainer = null;
     }
     build() {
-        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point(0.5, 1) });
+        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point_Point(0.5, 1) });
         this.addChild(this.sprite);
     }
 }
@@ -39665,7 +39664,7 @@ class MediumTree extends Container_Container {
         this._parentContainer = null;
     }
     build() {
-        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point(0.5, 1) });
+        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point_Point(0.5, 1) });
         this.addChild(this.sprite);
     }
 }
@@ -39788,7 +39787,7 @@ class SmallTree extends Container_Container {
         this._parentContainer = null;
     }
     build() {
-        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point(0.5, 1) });
+        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point_Point(0.5, 1) });
         this.addChild(this.sprite);
     }
 }
@@ -64237,8 +64236,8 @@ class Monkey extends Container_Container {
 
 
 
-
 const speeds = {
+    sky: 0.1,
     clouds: 0.2,
     bkgBuildings: 0.3,
     bkgTrees: 0.5,
@@ -64267,9 +64266,11 @@ const BoardView_zIndex = {
     monkey: 12,
 };
 const monkeyPos = {
-    x: 600,
+    x: 700,
     y: 750,
 };
+const WIDTH = 2048;
+const HEIGHT = 1890;
 class BoardView extends Container_Container {
     constructor() {
         super();
@@ -64305,7 +64306,7 @@ class BoardView extends Container_Container {
         this.updateSmallFrontTrees(dt);
     }
     getBounds(skipUpdate, rect) {
-        return new Rectangle(0, 0, 2048, 1890);
+        return new Rectangle(400, 400, 900, 1450);
     }
     build() {
         this.buildSky();
@@ -64323,7 +64324,9 @@ class BoardView extends Container_Container {
         this.dropMonkey();
     }
     buildSky() {
-        this.sky = makeSprite(skyConfig());
+        const texture = Texture.from('sky.png');
+        this.sky = new TilingSprite(texture, WIDTH * 2, texture.height);
+        this.sky.x = -WIDTH;
         this.sky.zIndex = BoardView_zIndex.sky;
         this.addChild(this.sky);
     }
@@ -64343,16 +64346,18 @@ class BoardView extends Container_Container {
     }
     buildBkgBuildings() {
         const texture = Texture.from('bkgBuildings.png');
-        this.bkgBuildings = new TilingSprite(texture, texture.width, texture.height);
-        this.bkgBuildings.y = this.height - this.bkgBuildings.height;
+        this.bkgBuildings = new TilingSprite(texture, WIDTH * 2, texture.height);
+        this.bkgBuildings.x = -WIDTH;
+        this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = BoardView_zIndex.bkgBuildings;
         this.addChild(this.bkgBuildings);
     }
     buildBkgTrees() {
         const texture = Texture.from('bkgTrees.png');
-        this.bkgTrees = new TilingSprite(texture, texture.width, texture.height);
-        this.bkgTrees.y = this.height - this.bkgTrees.height;
+        this.bkgTrees = new TilingSprite(texture, WIDTH * 2, texture.height);
+        this.bkgTrees.x = -WIDTH;
+        this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = BoardView_zIndex.bkgTrees;
         this.addChild(this.bkgTrees);
@@ -64381,7 +64386,7 @@ class BoardView extends Container_Container {
     buildSmallForegroundTrees() {
         const texture = Texture.from('tree_2_1.png');
         this.smallForegroundTrees = new TilingSprite(texture, texture.width, texture.height);
-        this.smallForegroundTrees.y = this.height - this.smallForegroundTrees.height;
+        this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = BoardView_zIndex.smallForegroundTrees;
         this.addChild(this.smallForegroundTrees);
@@ -64407,7 +64412,7 @@ class BoardView extends Container_Container {
     buildFog() {
         const texture = Texture.from('fog.png');
         this.fog = new TilingSprite(texture, 2048, texture.height);
-        this.fog.y = this.height - this.fog.height - 40;
+        this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = BoardView_zIndex.fog;
         this.addChild(this.fog);
@@ -64415,7 +64420,7 @@ class BoardView extends Container_Container {
     buildSmallFrontTrees() {
         const texture = Texture.from('tree_5_1.png');
         this.smallFrontTrees = new TilingSprite(texture, 2048, texture.height);
-        this.smallFrontTrees.y = this.height - this.smallFrontTrees.height;
+        this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = BoardView_zIndex.smallFrontTrees;
         this.addChild(this.smallFrontTrees);
@@ -64482,10 +64487,13 @@ class BoardView extends Container_Container {
                 this.clouds.splice(i, 1);
                 c.remove();
                 const newCloud = CloudPool.getCloud(this);
-                newCloud.position.set(this.sky.width + newCloud.width / 2 + Math.random() * 400, randomInt(cloudYRange[0], cloudYRange[1]));
+                newCloud.position.set(WIDTH + newCloud.width / 2 + Math.random() * 400, randomInt(cloudYRange[0], cloudYRange[1]));
                 this.clouds.push(newCloud);
             }
         });
+    }
+    updateSky(dt) {
+        this.sky.tilePosition.x -= speeds.sky * dt;
     }
     updateBkgBuildings(dt) {
         this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings * dt;
@@ -64579,7 +64587,7 @@ class BoardView extends Container_Container {
     }
     getNumber(y) {
         const number = NumbersPool.getNumber(this, sample(['add', 'divide', 'multiply']), randomInt(1, 10));
-        number.position.set(2200, y - this.monkey.height);
+        number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = BoardView_zIndex.number;
         this.numbers.push(number);
         return number;

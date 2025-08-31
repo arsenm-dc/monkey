@@ -31034,6 +31034,9 @@ const shuffle = (arr) => {
         arr[j] = temp;
     }
 };
+const sample = (arr) => {
+    return arr[Math.floor(Math.random() * arr.length)];
+};
 
 ;// CONCATENATED MODULE: ./src/configs/gridConfigs/GameViewGC.ts
 
@@ -31046,7 +31049,7 @@ const getGameViewGridLandscapeConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
     return {
         name: 'game',
-        debug: { color: 0xd9ff27 },
+        // debug: { color: 0xd9ff27 },
         bounds,
         cells: [
             {
@@ -31062,7 +31065,7 @@ const getGameViewGridPortraitConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
     return {
         name: 'game',
-        debug: { color: 0xd9ff27 },
+        // debug: { color: 0xd9ff27 },
         bounds,
         cells: [
             {
@@ -39691,6 +39694,76 @@ class MediumTreesPool {
     }
 }
 const MediumTreePool = new MediumTreesPool();
+
+;// CONCATENATED MODULE: ./src/pools/NumbersPool.ts
+
+
+class NumbersPool_Number extends Container_Container {
+    constructor() {
+        super();
+        this.build();
+    }
+    get parentContainer() {
+        return this._parentContainer;
+    }
+    get(parentContainer, fn, value) {
+        var _a;
+        this._parentContainer = parentContainer;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+        this.fn = fn;
+        this.value = value;
+        this.text.text = this.getText();
+        this.updateTint();
+    }
+    remove() {
+        var _a;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        this._parentContainer = null;
+        this.alpha = 1;
+    }
+    build() {
+        this.bkg = makeSprite({ frame: 'circle.png' });
+        this.addChild(this.bkg);
+        this.text = new Text('', {
+            fill: 0x000000,
+            fontWeight: '900',
+        });
+        this.text.anchor.set(0.5, 0.5);
+        this.addChild(this.text);
+        this.scale.set(1.5);
+    }
+    updateTint() {
+        this.bkg.tint = this.fn === 'add' ? '0x03cafc' : this.fn === 'divide' ? '0xd6133a' : '0x75d613';
+    }
+    getText() {
+        const sign = this.fn === 'add' ? '+' : this.fn === 'divide' ? '/' : 'x';
+        return `${sign}${this.value}`;
+    }
+}
+class NumberPool {
+    constructor() {
+        this.pool = [];
+    }
+    getNumber(parentContainer, fn, value) {
+        const number = this.pool.find((n) => !n.parentContainer);
+        if (number) {
+            number.get(parentContainer, fn, value);
+            return number;
+        }
+        else {
+            const newNumber = new NumbersPool_Number();
+            this.pool.push(newNumber);
+            newNumber.get(parentContainer, fn, value);
+            return newNumber;
+        }
+    }
+    init() {
+        for (let i = 0; i < 10; i++) {
+            this.pool.push(new NumbersPool_Number());
+        }
+    }
+}
+const NumbersPool = new NumberPool();
 
 ;// CONCATENATED MODULE: ./src/pools/SmallTreesPool.ts
 
@@ -64119,6 +64192,12 @@ class Monkey extends Container_Container {
     swingUp() {
         this.spine.state.setAnimation(0, 'Swing', false);
     }
+    fall() {
+        this.spine.state.setAnimation(0, 'Falling for death', true);
+    }
+    land() {
+        this.spine.state.setAnimation(0, 'Landing', false);
+    }
     build() {
         this.buildSpine();
     }
@@ -64139,6 +64218,8 @@ class Monkey extends Container_Container {
         // 'Landing'
         // 'Swing'
         // 'spike death'
+        this.spine.state.data.setMix('Falling', 'Falling for death', 1);
+        this.spine.state.data.setMix('Falling', 'Landing', 1);
         this.spine.state.setAnimation(0, 'Falling', true);
         this.spine.scale.set(0.15);
         this.addChild(this.spine);
@@ -64146,6 +64227,7 @@ class Monkey extends Container_Container {
 }
 
 ;// CONCATENATED MODULE: ./src/views/BoardView.ts
+
 
 
 
@@ -64181,7 +64263,8 @@ const BoardView_zIndex = {
     smallTrees: 8,
     fog: 9,
     smallFrontTrees: 10,
-    monkey: 11,
+    number: 11,
+    monkey: 12,
 };
 const monkeyPos = {
     x: 600,
@@ -64195,15 +64278,21 @@ class BoardView extends Container_Container {
         this.largeTrees = [];
         this.mediumTrees = [];
         this.smallTrees = [];
+        this.numbers = [];
+        this.randomNumbers = [];
+        this.isAlive = true;
         this.sortableChildren = true;
         CloudPool.init();
         LargeTreePool.init();
         MediumTreePool.init();
         SmallTreePool.init();
         BuildingPool.init();
+        NumbersPool.init();
         this.build();
     }
     update(dt) {
+        if (!this.isAlive)
+            return;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -64414,17 +64503,48 @@ class BoardView extends Container_Container {
         this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
     }
     dropMonkey() {
-        const y = Math.random() * 300 + 1400;
-        const duration = (y - monkeyPos.y) * 2.666;
-        animate(this.monkey, {
-            y,
-            ease: 'inCubic',
-            duration,
-            onComplete: () => {
-                this.monkey.swingUp();
-                this.swingUp();
-            },
-        });
+        const chance = Math.random();
+        if (chance <= 0.6) {
+            const y = Math.random() * 600 + 1200;
+            const duration = (y - monkeyPos.y) * 2.666;
+            const number = this.getNumber(y);
+            animate(this.monkey, {
+                y,
+                ease: 'inCubic',
+                duration,
+                onComplete: () => {
+                    this.monkey.swingUp();
+                    this.swingUp();
+                },
+            });
+            this.moveNumber(number, duration);
+        }
+        else if (chance > 0.6 && chance <= 0.85) {
+            const y = 2400;
+            const duration = (y - monkeyPos.y) * 2.666;
+            this.monkey.fall();
+            animate(this.monkey, {
+                y,
+                ease: 'inCubic',
+                duration,
+                onComplete: () => {
+                    this.isAlive = false;
+                },
+            });
+        }
+        else {
+            const y = 1870;
+            const duration = (y - monkeyPos.y) * 2.666;
+            animate(this.monkey, {
+                y,
+                ease: 'inCubic',
+                duration,
+                onComplete: () => {
+                    this.isAlive = false;
+                    this.monkey.land();
+                },
+            });
+        }
     }
     swingUp() {
         const duration = (this.monkey.y - 750) * 2.666;
@@ -64436,6 +64556,33 @@ class BoardView extends Container_Container {
                 this.dropMonkey();
             },
         });
+    }
+    moveNumber(number, duration) {
+        animate(number, {
+            x: monkeyPos.x,
+            duration,
+            ease: 'linear',
+            onComplete: () => {
+                animate(number, {
+                    y: '-=100',
+                    alpha: 0,
+                    duration: 400,
+                    ease: 'linear',
+                    onComplete: () => {
+                        const index = this.numbers.indexOf(number);
+                        this.numbers.splice(index, 1);
+                        number.remove();
+                    },
+                });
+            },
+        });
+    }
+    getNumber(y) {
+        const number = NumbersPool.getNumber(this, sample(['add', 'divide', 'multiply']), randomInt(1, 10));
+        number.position.set(2200, y - this.monkey.height);
+        number.zIndex = BoardView_zIndex.number;
+        this.numbers.push(number);
+        return number;
     }
 }
 
@@ -64490,6 +64637,7 @@ class PixiStage extends Container_Container {
 const assets = [
     { name: 'bkgBuildings.png', path: 'assets/uncompressed/bkgBuildings.png' },
     { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
+    { name: 'circle.png', path: 'assets/uncompressed/circle.png' },
     { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
     { name: 'sky.png', path: 'assets/uncompressed/sky.png' },
     { name: 'tree_1_1.png', path: 'assets/uncompressed/tree_1_1.png' },

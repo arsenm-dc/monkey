@@ -49,6 +49,9 @@ const monkeyPos = {
 };
 const WIDTH = 2048;
 const HEIGHT = 1890;
+
+const DT = 2;
+
 export class BoardView extends Container {
     private sky: TilingSprite;
     private clouds: Cloud[] = [];
@@ -85,8 +88,9 @@ export class BoardView extends Container {
         NumbersPool.init();
     }
 
-    public update(dt: number): void {
+    public update(d: number): void {
         if (!this.isAlive) return;
+        const dt = d * 3;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -370,7 +374,7 @@ export class BoardView extends Container {
 
         if (chance <= 0.6) {
             const y = Math.random() * 600 + 1200;
-            const duration = (y - monkeyPos.y) * 2.666;
+            const duration = (y - monkeyPos.y) * DT;
             const number = this.getNumber(y);
 
             animate(this.monkey, {
@@ -386,7 +390,7 @@ export class BoardView extends Container {
             this.moveNumber(number, duration);
         } else if (chance > 0.6 && chance <= 0.85) {
             const y = 2400;
-            const duration = (y - monkeyPos.y) * 2.666;
+            const duration = (y - monkeyPos.y) * DT;
             this.monkey.fall();
             animate(this.monkey, {
                 y,
@@ -401,7 +405,7 @@ export class BoardView extends Container {
             });
         } else {
             const y = 1870;
-            const duration = (y - monkeyPos.y) * 2.666;
+            const duration = (y - monkeyPos.y) * DT;
             animate(this.monkey, {
                 y,
                 ease: 'inCubic',
@@ -418,7 +422,7 @@ export class BoardView extends Container {
     }
 
     private swingUp(): void {
-        const duration = (this.monkey.y - 750) * 2.666;
+        const duration = (this.monkey.y - 750) * DT;
         animate(this.monkey, {
             y: 750,
             ease: 'outCubic',

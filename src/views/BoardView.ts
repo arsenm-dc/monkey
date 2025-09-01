@@ -1,11 +1,11 @@
 import { animate } from 'animejs';
-import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
+import { Container, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite } from '../configs/spriteConfig';
 import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
-import { Number, NumbersPool } from '../pools/NumbersPool';
+import { FunctionType, Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { delayRunnable, getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
@@ -76,6 +76,9 @@ export class BoardView extends Container {
     private gameWidth: number;
     private targetX: number;
 
+    private currentValue = 1;
+    private counter: Text;
+
     constructor() {
         super();
         this.sortableChildren = true;
@@ -126,6 +129,7 @@ export class BoardView extends Container {
 
         this.buildMonkey();
         this.buildButton();
+        this.buildCounter();
         // this.dropMonkey();
     }
 
@@ -275,6 +279,17 @@ export class BoardView extends Container {
         this.addChild(this.playButton);
     }
 
+    private buildCounter(): void {
+        this.counter = new Text(this.currentValue, {
+            fill: 0xffffff,
+            fontWeight: '900',
+            fontSize: 48,
+        });
+        this.counter.position.set(1100, 1680);
+        this.counter.zIndex = zIndex.button;
+        this.addChild(this.counter);
+    }
+
     private updateLargeTrees(dt: number): void {
         this.largeTrees.forEach((c, i) => {
             c.x -= speeds.largeTrees * dt;
@@ -369,7 +384,10 @@ export class BoardView extends Container {
     }
 
     private dropMonkey(): void {
-        const chance = Math.random();
+        let chance = Math.random();
+        if (this.currentValue === 1) {
+            chance = Math.random() * 0.55;
+        }
         this.monkey.drop();
 
         if (chance <= 0.6) {
@@ -445,6 +463,9 @@ export class BoardView extends Container {
                     duration: 400,
                     ease: 'linear',
                     onComplete: () => {
+                        const { fn, numberValue } = number;
+                        this.updateCounter(fn, numberValue);
+
                         const index = this.numbers.indexOf(number);
                         this.numbers.splice(index, 1);
                         number.remove();
@@ -455,7 +476,10 @@ export class BoardView extends Container {
     }
 
     private getNumber(y: number): Number {
-        const number = NumbersPool.getNumber(this, sample(['add', 'divide', 'multiply']), randomInt(1, 10));
+        const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
+        const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
+
+        const number = NumbersPool.getNumber(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = zIndex.number;
         this.numbers.push(number);
@@ -470,5 +494,24 @@ export class BoardView extends Container {
         this.playButton.eventMode = 'static';
 
         // clear counter
+        this.currentValue = 1;
+        this.counter.text = `${this.currentValue}`;
+    }
+
+    private updateCounter(fn: FunctionType, numberValue: number): void {
+        switch (fn) {
+            case 'add':
+                this.currentValue += numberValue;
+                break;
+            case 'divide':
+                this.currentValue /= numberValue;
+                break;
+            case 'multiply':
+                this.currentValue *= numberValue;
+            default:
+                break;
+        }
+
+        this.counter.text = `${this.currentValue.toFixed(2)}`;
     }
 }

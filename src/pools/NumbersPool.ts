@@ -7,8 +7,8 @@ export class Number extends Container {
     private _parentContainer: Container | null;
     private text: Text;
     private bkg: Sprite;
-    private fn: FunctionType;
-    private value: number;
+    private _fn: FunctionType;
+    private _value: number;
 
     constructor() {
         super();
@@ -19,12 +19,20 @@ export class Number extends Container {
         return this._parentContainer;
     }
 
+    public get fn(): FunctionType {
+        return this._fn;
+    }
+
+    public get numberValue(): number {
+        return this._value;
+    }
+
     public get(parentContainer: Container, fn: FunctionType, value: number): void {
         this._parentContainer = parentContainer;
         this._parentContainer?.addChild(this);
 
-        this.fn = fn;
-        this.value = value;
+        this._fn = fn;
+        this._value = value;
 
         this.text.text = this.getText();
         this.updateTint();
@@ -50,12 +58,12 @@ export class Number extends Container {
     }
 
     private updateTint(): void {
-        this.bkg.tint = this.fn === 'add' ? '0x03cafc' : this.fn === 'divide' ? '0xd6133a' : '0x75d613';
+        this.bkg.tint = this._fn === 'add' ? '0x03cafc' : this._fn === 'divide' ? '0xd6133a' : '0x75d613';
     }
 
     private getText(): string {
-        const sign = this.fn === 'add' ? '+' : this.fn === 'divide' ? '/' : 'x';
-        return `${sign}${this.value}`;
+        const sign = this._fn === 'add' ? '+' : this._fn === 'divide' ? '/' : 'x';
+        return `${sign}${this._value}`;
     }
 }
 

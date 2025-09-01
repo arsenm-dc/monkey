@@ -1,0 +1,47 @@
+
+naipes.png
+size: 1933,1205
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Diamonds_C0
+  rotate: true
+  xy: 634, 634
+  size: 569, 647
+  orig: 571, 651
+  offset: 1, 3
+  index: -1
+Hearts_D0
+  rotate: false
+  xy: 2, 641
+  size: 630, 562
+  orig: 632, 567
+  offset: 1, 4
+  index: -1
+clubs
+  rotate: true
+  xy: 1283, 609
+  size: 594, 648
+  orig: 598, 651
+  offset: 1, 1
+  index: -1
+spades
+  rotate: true
+  xy: 2, 2
+  size: 630, 649
+  orig: 632, 651
+  offset: 1, 1
+  index: -1
+
+naipes2.png
+size: 1592,1534
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+glow
+  rotate: false
+  xy: 2, 2
+  size: 1588, 1530
+  orig: 1810, 1757
+  offset: 88, 112
+  index: -1

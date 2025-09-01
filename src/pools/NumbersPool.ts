@@ -1,12 +1,12 @@
-import { Container, Sprite, Text } from 'pixi.js';
-import { makeSprite } from '../configs/spriteConfig';
+import { Container, Text } from 'pixi.js';
+import { Naipes } from '../views/Naipes';
 
 export type FunctionType = 'add' | 'multiply' | 'divide';
 
 export class Number extends Container {
     private _parentContainer: Container | null;
     private text: Text;
-    private bkg: Sprite;
+    private bkg: Naipes;
     private _fn: FunctionType;
     private _value: number;
 
@@ -45,20 +45,28 @@ export class Number extends Container {
     }
 
     private build(): void {
-        this.bkg = makeSprite({ frame: 'circle.png' });
+        this.bkg = new Naipes();
         this.addChild(this.bkg);
 
         this.text = new Text('', {
-            fill: 0x000000,
+            fill: 0xffffff,
             fontWeight: '900',
+            fontSize: 32,
         });
         this.text.anchor.set(0.5, 0.5);
+        this.text.y = -40;
         this.addChild(this.text);
         this.scale.set(1.5);
     }
 
     private updateTint(): void {
-        this.bkg.tint = this._fn === 'add' ? '0x03cafc' : this._fn === 'divide' ? '0xd6133a' : '0x75d613';
+        if (this._fn === 'add') {
+            this.bkg.updateSlot('Hearts_D0');
+        } else if (this._fn === 'multiply') {
+            this.bkg.updateSlot('Diamonds_C0');
+        } else {
+            this.bkg.updateSlot(Math.random() > 0.5 ? 'clubs' : 'spades');
+        }
     }
 
     private getText(): string {

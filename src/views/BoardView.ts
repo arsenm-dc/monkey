@@ -135,8 +135,8 @@ export class BoardView extends Container {
 
     private buildSky(): void {
         const texture = Texture.from('sky.png');
-        this.sky = new TilingSprite(texture, this.gameWidth, texture.height);
-        this.sky.x = -this.gameWidth / 4;
+        this.sky = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.sky.x = -this.gameWidth / 5;
         this.sky.zIndex = zIndex.sky;
         this.addChild(this.sky);
     }

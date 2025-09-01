@@ -5,6 +5,10 @@ export const lp = (l, p) => {
     return w > h ? l : p;
 };
 
+export const getGameBounds = () => {
+    return { width: document.body.clientWidth, height: document.body.clientHeight };
+};
+
 export const fitDimension = (
     dim: { width: number; height: number },
     minRatio: number,

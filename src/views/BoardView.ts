@@ -6,7 +6,7 @@ import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
 import { Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
-import { randomInt, sample } from '../Utils';
+import { getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
 const speeds = {
@@ -66,21 +66,24 @@ export class BoardView extends Container {
 
     private isAlive = true;
 
+    private gameWidth: number;
+    private targetX: number;
+
     constructor() {
         super();
         this.sortableChildren = true;
+
         CloudPool.init();
         LargeTreePool.init();
         MediumTreePool.init();
         SmallTreePool.init();
         BuildingPool.init();
         NumbersPool.init();
-
-        this.build();
     }
 
-    public update(dt: number): void {
+    public update(d: number): void {
         if (!this.isAlive) return;
+        const dt = d * 4;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -97,7 +100,11 @@ export class BoardView extends Container {
         return new Rectangle(400, 400, 900, 1450);
     }
 
-    private build(): void {
+    public build(): void {
+        const { width, height } = getGameBounds();
+
+        this.gameWidth = width * (1 / this.scale.x);
+        this.targetX = -this.gameWidth / 4;
         this.buildSky();
         this.buildClouds();
         this.buildBkgBuildings();
@@ -112,12 +119,14 @@ export class BoardView extends Container {
 
         this.buildMonkey();
         this.dropMonkey();
+
+        // drawBounds(this);
     }
 
     private buildSky(): void {
         const texture = Texture.from('sky.png');
-        this.sky = new TilingSprite(texture, WIDTH * 2, texture.height);
-        this.sky.x = -WIDTH;
+        this.sky = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.sky.x = -this.gameWidth / 4;
         this.sky.zIndex = zIndex.sky;
         this.addChild(this.sky);
     }
@@ -128,6 +137,7 @@ export class BoardView extends Container {
             { x: 600, y: 600 },
             { x: 1300, y: 250 },
             { x: 1800, y: 700 },
+            { x: 2300, y: 500 },
         ];
         positions.forEach(({ x, y }) => {
             const cloud = CloudPool.getCloud(this);
@@ -139,8 +149,8 @@ export class BoardView extends Container {
 
     private buildBkgBuildings(): void {
         const texture = Texture.from('bkgBuildings.png');
-        this.bkgBuildings = new TilingSprite(texture, WIDTH * 2, texture.height);
-        this.bkgBuildings.x = -WIDTH;
+        this.bkgBuildings = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.bkgBuildings.x = -this.gameWidth / 4;
         this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = zIndex.bkgBuildings;
@@ -149,8 +159,8 @@ export class BoardView extends Container {
 
     private buildBkgTrees(): void {
         const texture = Texture.from('bkgTrees.png');
-        this.bkgTrees = new TilingSprite(texture, WIDTH * 2, texture.height);
-        this.bkgTrees.x = -WIDTH;
+        this.bkgTrees = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.bkgTrees.x = -this.gameWidth / 4;
         this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = zIndex.bkgTrees;
@@ -160,7 +170,7 @@ export class BoardView extends Container {
     private buildBuildings(): void {
         const positions = [
             400, 1760, 1410, 1665, 1305, 505, 765, 605, 1175, 1035, 1555, 1875, 200, 2000, 2320, 2110, 2420, 2200, 2550,
-            2660, 2790, 2900, 3010,
+            2660, 2790, 2900, 3010, 3130, 3210, 3340, 3470, 3600, 3730, 3860,
         ];
         positions.forEach((x) => {
             const building = BuildingPool.getBuilding(this);
@@ -171,7 +181,7 @@ export class BoardView extends Container {
     }
 
     private buildLargeTrees(): void {
-        const position = [120, 1575, 2975];
+        const position = [120, 1575, 2975, 4400];
         position.forEach((x) => {
             const tree = LargeTreePool.getTree(this);
             tree.zIndex = zIndex.largeTrees;
@@ -182,7 +192,8 @@ export class BoardView extends Container {
 
     private buildSmallForegroundTrees(): void {
         const texture = Texture.from('tree_2_1.png');
-        this.smallForegroundTrees = new TilingSprite(texture, texture.width, texture.height);
+        this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.smallForegroundTrees.x = -this.gameWidth / 4;
         this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = zIndex.smallForegroundTrees;
@@ -190,7 +201,7 @@ export class BoardView extends Container {
     }
 
     private buildMediumTrees(): void {
-        const positions = [270, 1275, 2275, 3275];
+        const positions = [270, 1275, 2275, 3275, 4275];
         positions.forEach((x) => {
             const tree = MediumTreePool.getTree(this);
             tree.zIndex = zIndex.mediumTrees;
@@ -200,7 +211,7 @@ export class BoardView extends Container {
     }
 
     private buildSmallTrees(): void {
-        const positions = [0, 700, 1400, 2100, 2800];
+        const positions = [0, 700, 1400, 2100, 2800, 3500];
         positions.forEach((x) => {
             const tree = SmallTreePool.getTree(this);
             tree.zIndex = zIndex.smallTrees;
@@ -211,7 +222,8 @@ export class BoardView extends Container {
 
     private buildFog(): void {
         const texture = Texture.from('fog.png');
-        this.fog = new TilingSprite(texture, 2048, texture.height);
+        this.fog = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.fog.x = -this.gameWidth / 4;
         this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = zIndex.fog;
@@ -220,7 +232,8 @@ export class BoardView extends Container {
 
     private buildSmallFrontTrees(): void {
         const texture = Texture.from('tree_5_1.png');
-        this.smallFrontTrees = new TilingSprite(texture, 2048, texture.height);
+        this.smallFrontTrees = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.smallFrontTrees.x = -this.gameWidth / 4;
         this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = zIndex.smallFrontTrees;
@@ -238,7 +251,7 @@ export class BoardView extends Container {
     private updateLargeTrees(dt: number): void {
         this.largeTrees.forEach((c, i) => {
             c.x -= speeds.largeTrees * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.largeTrees.splice(i, 1);
                 c.remove();
                 const newTree = LargeTreePool.getTree(this);
@@ -251,7 +264,7 @@ export class BoardView extends Container {
     private updateBuildings(dt: number): void {
         this.buildings.forEach((c, i) => {
             c.x -= speeds.buildings * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.buildings.splice(i, 1);
                 c.remove();
                 const newBuilding = BuildingPool.getBuilding(this);
@@ -264,7 +277,7 @@ export class BoardView extends Container {
     private updateMediumTrees(dt: number): void {
         this.mediumTrees.forEach((c, i) => {
             c.x -= speeds.mediumTrees * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.mediumTrees.splice(i, 1);
                 c.remove();
 
@@ -278,7 +291,7 @@ export class BoardView extends Container {
     private updateSmallTrees(dt: number): void {
         this.smallTrees.forEach((c, i) => {
             c.x -= speeds.smallTrees * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.smallTrees.splice(i, 1);
                 c.remove();
                 const newTree = SmallTreePool.getTree(this);
@@ -291,7 +304,7 @@ export class BoardView extends Container {
     private updateClouds(dt: number): void {
         this.clouds.forEach((c, i) => {
             c.x -= speeds.clouds * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.clouds.splice(i, 1);
                 c.remove();
                 const newCloud = CloudPool.getCloud(this);

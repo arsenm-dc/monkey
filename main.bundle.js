@@ -30975,6 +30975,9 @@ const lp = (l, p) => {
     const { clientWidth: w, clientHeight: h } = document.body;
     return w > h ? l : p;
 };
+const getGameBounds = () => {
+    return { width: document.body.clientWidth, height: document.body.clientHeight };
+};
 const fitDimension = (dim, minRatio, maxRatio) => {
     const ratioW = dim.width / dim.height;
     const ratioH = dim.height / dim.width;
@@ -39693,129 +39696,6 @@ class MediumTreesPool {
     }
 }
 const MediumTreePool = new MediumTreesPool();
-
-;// CONCATENATED MODULE: ./src/pools/NumbersPool.ts
-
-
-class NumbersPool_Number extends Container_Container {
-    constructor() {
-        super();
-        this.build();
-    }
-    get parentContainer() {
-        return this._parentContainer;
-    }
-    get(parentContainer, fn, value) {
-        var _a;
-        this._parentContainer = parentContainer;
-        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
-        this.fn = fn;
-        this.value = value;
-        this.text.text = this.getText();
-        this.updateTint();
-    }
-    remove() {
-        var _a;
-        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
-        this._parentContainer = null;
-        this.alpha = 1;
-    }
-    build() {
-        this.bkg = makeSprite({ frame: 'circle.png' });
-        this.addChild(this.bkg);
-        this.text = new Text('', {
-            fill: 0x000000,
-            fontWeight: '900',
-        });
-        this.text.anchor.set(0.5, 0.5);
-        this.addChild(this.text);
-        this.scale.set(1.5);
-    }
-    updateTint() {
-        this.bkg.tint = this.fn === 'add' ? '0x03cafc' : this.fn === 'divide' ? '0xd6133a' : '0x75d613';
-    }
-    getText() {
-        const sign = this.fn === 'add' ? '+' : this.fn === 'divide' ? '/' : 'x';
-        return `${sign}${this.value}`;
-    }
-}
-class NumberPool {
-    constructor() {
-        this.pool = [];
-    }
-    getNumber(parentContainer, fn, value) {
-        const number = this.pool.find((n) => !n.parentContainer);
-        if (number) {
-            number.get(parentContainer, fn, value);
-            return number;
-        }
-        else {
-            const newNumber = new NumbersPool_Number();
-            this.pool.push(newNumber);
-            newNumber.get(parentContainer, fn, value);
-            return newNumber;
-        }
-    }
-    init() {
-        for (let i = 0; i < 10; i++) {
-            this.pool.push(new NumbersPool_Number());
-        }
-    }
-}
-const NumbersPool = new NumberPool();
-
-;// CONCATENATED MODULE: ./src/pools/SmallTreesPool.ts
-
-
-class SmallTree extends Container_Container {
-    constructor(textureName) {
-        super();
-        this.textureName = textureName;
-        this.build();
-    }
-    get parentContainer() {
-        return this._parentContainer;
-    }
-    get(parentContainer) {
-        var _a;
-        this._parentContainer = parentContainer;
-        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
-    }
-    remove() {
-        var _a;
-        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
-        this._parentContainer = null;
-    }
-    build() {
-        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point_Point(0.5, 1) });
-        this.addChild(this.sprite);
-    }
-}
-class SmallTreesPool {
-    constructor() {
-        this.pool = [];
-        this.textures = ['tree_4_1.png', 'tree_4_2.png', 'tree_4_3.png', 'tree_4_4.png', 'tree_4_5.png'];
-    }
-    getTree(parentContainer) {
-        const tree = this.pool.find((c) => !c.parentContainer);
-        if (tree) {
-            tree.get(parentContainer);
-            return tree;
-        }
-        else {
-            const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newTree = new SmallTree(texture);
-            this.pool.push(newTree);
-            return newTree;
-        }
-    }
-    init() {
-        for (let i = 0; i < 3; i++) {
-            this.textures.forEach((t) => this.pool.push(new SmallTree(t)));
-        }
-    }
-}
-const SmallTreePool = new SmallTreesPool();
 
 ;// CONCATENATED MODULE: ./node_modules/@pixi-spine/base/lib/core/AttachmentType.mjs
 var AttachmentType_AttachmentType = /* @__PURE__ */ ((AttachmentType2) => {
@@ -64177,7 +64057,184 @@ const spines = [
         atlasURL: 'assets/spines/Monkey/Monkey.atlas',
         preMultipliedAlpha: true,
     },
+    {
+        key: 'naipes',
+        jsonURL: 'assets/spines/naipes/naipes.json',
+        atlasURL: 'assets/spines/naipes/naipes.atlas',
+        preMultipliedAlpha: true,
+    },
 ];
+
+;// CONCATENATED MODULE: ./src/views/Naipes.ts
+
+
+
+class Naipes extends Container_Container {
+    constructor() {
+        super();
+        this.build();
+    }
+    spin() {
+        this.spine.state.setAnimation(0, 'Spin', false);
+    }
+    updateSlot(slotName) {
+        const index = this.spine.skeleton.findSlotIndex(slotName);
+        if (index !== -1) {
+            this.spine.slotContainers.forEach((c, i) => {
+                c.renderable = i === index || i === 0;
+            });
+        }
+    }
+    build() {
+        this.buildSpine();
+    }
+    buildSpine() {
+        const data = Assets.cache.get(spines[1].jsonURL).spineData;
+        this.spine = new loader_uni_lib_Spine_Spine(data);
+        // 'Spin'
+        this.spine.scale.set(0.15);
+        this.addChild(this.spine);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/pools/NumbersPool.ts
+
+
+class NumbersPool_Number extends Container_Container {
+    constructor() {
+        super();
+        this.build();
+    }
+    get parentContainer() {
+        return this._parentContainer;
+    }
+    get fn() {
+        return this._fn;
+    }
+    get numberValue() {
+        return this._value;
+    }
+    get(parentContainer, fn, value) {
+        var _a;
+        this._parentContainer = parentContainer;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+        this._fn = fn;
+        this._value = value;
+        this.text.text = this.getText();
+        this.updateTint();
+    }
+    remove() {
+        var _a;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        this._parentContainer = null;
+        this.alpha = 1;
+    }
+    build() {
+        this.bkg = new Naipes();
+        this.addChild(this.bkg);
+        this.text = new Text('', {
+            fill: 0xffffff,
+            fontWeight: '900',
+            fontSize: 32,
+        });
+        this.text.anchor.set(0.5, 0.5);
+        this.text.y = -40;
+        this.addChild(this.text);
+        this.scale.set(1.5);
+    }
+    updateTint() {
+        if (this._fn === 'add') {
+            this.bkg.updateSlot('Hearts_D0');
+        }
+        else if (this._fn === 'multiply') {
+            this.bkg.updateSlot('Diamonds_C0');
+        }
+        else {
+            this.bkg.updateSlot(Math.random() > 0.5 ? 'clubs' : 'spades');
+        }
+    }
+    getText() {
+        const sign = this._fn === 'add' ? '+' : this._fn === 'divide' ? '/' : 'x';
+        return `${sign}${this._value}`;
+    }
+}
+class NumberPool {
+    constructor() {
+        this.pool = [];
+    }
+    getNumber(parentContainer, fn, value) {
+        const number = this.pool.find((n) => !n.parentContainer);
+        if (number) {
+            number.get(parentContainer, fn, value);
+            return number;
+        }
+        else {
+            const newNumber = new NumbersPool_Number();
+            this.pool.push(newNumber);
+            newNumber.get(parentContainer, fn, value);
+            return newNumber;
+        }
+    }
+    init() {
+        for (let i = 0; i < 10; i++) {
+            this.pool.push(new NumbersPool_Number());
+        }
+    }
+}
+const NumbersPool = new NumberPool();
+
+;// CONCATENATED MODULE: ./src/pools/SmallTreesPool.ts
+
+
+class SmallTree extends Container_Container {
+    constructor(textureName) {
+        super();
+        this.textureName = textureName;
+        this.build();
+    }
+    get parentContainer() {
+        return this._parentContainer;
+    }
+    get(parentContainer) {
+        var _a;
+        this._parentContainer = parentContainer;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+    }
+    remove() {
+        var _a;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        this._parentContainer = null;
+    }
+    build() {
+        this.sprite = makeSprite({ frame: this.textureName, anchor: new Point_Point(0.5, 1) });
+        this.addChild(this.sprite);
+    }
+}
+class SmallTreesPool {
+    constructor() {
+        this.pool = [];
+        this.textures = ['tree_4_1.png', 'tree_4_2.png', 'tree_4_3.png', 'tree_4_4.png', 'tree_4_5.png'];
+    }
+    getTree(parentContainer) {
+        const tree = this.pool.find((c) => !c.parentContainer);
+        if (tree) {
+            tree.get(parentContainer);
+            return tree;
+        }
+        else {
+            const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
+            const newTree = new SmallTree(texture);
+            this.pool.push(newTree);
+            return newTree;
+        }
+    }
+    init() {
+        for (let i = 0; i < 3; i++) {
+            this.textures.forEach((t) => this.pool.push(new SmallTree(t)));
+        }
+    }
+}
+const SmallTreePool = new SmallTreesPool();
 
 ;// CONCATENATED MODULE: ./src/views/Monkey.ts
 
@@ -64188,6 +64245,9 @@ class Monkey extends Container_Container {
         super();
         this.build();
     }
+    setActive(value) {
+        this.spine.state.timeScale = value ? 1 : 0;
+    }
     swingUp() {
         this.spine.state.setAnimation(0, 'Swing', false);
     }
@@ -64196,6 +64256,9 @@ class Monkey extends Container_Container {
     }
     land() {
         this.spine.state.setAnimation(0, 'Landing', false);
+    }
+    drop() {
+        this.spine.state.setAnimation(0, 'Falling', false);
     }
     build() {
         this.buildSpine();
@@ -64219,13 +64282,14 @@ class Monkey extends Container_Container {
         // 'spike death'
         this.spine.state.data.setMix('Falling', 'Falling for death', 1);
         this.spine.state.data.setMix('Falling', 'Landing', 1);
-        this.spine.state.setAnimation(0, 'Falling', true);
+        this.spine.state.setAnimation(0, 'Swing', true);
         this.spine.scale.set(0.15);
         this.addChild(this.spine);
     }
 }
 
 ;// CONCATENATED MODULE: ./src/views/BoardView.ts
+
 
 
 
@@ -64264,6 +64328,7 @@ const BoardView_zIndex = {
     smallFrontTrees: 10,
     number: 11,
     monkey: 12,
+    button: 100,
 };
 const monkeyPos = {
     x: 700,
@@ -64271,6 +64336,7 @@ const monkeyPos = {
 };
 const WIDTH = 2048;
 const HEIGHT = 1890;
+const DT = 2;
 class BoardView extends Container_Container {
     constructor() {
         super();
@@ -64281,7 +64347,8 @@ class BoardView extends Container_Container {
         this.smallTrees = [];
         this.numbers = [];
         this.randomNumbers = [];
-        this.isAlive = true;
+        this.isAlive = false;
+        this.currentValue = 1;
         this.sortableChildren = true;
         CloudPool.init();
         LargeTreePool.init();
@@ -64289,11 +64356,11 @@ class BoardView extends Container_Container {
         SmallTreePool.init();
         BuildingPool.init();
         NumbersPool.init();
-        this.build();
     }
-    update(dt) {
+    update(d) {
         if (!this.isAlive)
             return;
+        const dt = d * 3;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -64309,6 +64376,9 @@ class BoardView extends Container_Container {
         return new Rectangle(400, 400, 900, 1450);
     }
     build() {
+        const { width, height } = getGameBounds();
+        this.gameWidth = width * (1 / this.scale.x);
+        this.targetX = -this.gameWidth / 4;
         this.buildSky();
         this.buildClouds();
         this.buildBkgBuildings();
@@ -64321,12 +64391,14 @@ class BoardView extends Container_Container {
         this.buildFog();
         this.buildSmallFrontTrees();
         this.buildMonkey();
-        this.dropMonkey();
+        this.buildButton();
+        this.buildCounter();
+        // this.dropMonkey();
     }
     buildSky() {
         const texture = Texture.from('sky.png');
-        this.sky = new TilingSprite(texture, WIDTH * 2, texture.height);
-        this.sky.x = -WIDTH;
+        this.sky = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.sky.x = -this.gameWidth / 5;
         this.sky.zIndex = BoardView_zIndex.sky;
         this.addChild(this.sky);
     }
@@ -64336,6 +64408,7 @@ class BoardView extends Container_Container {
             { x: 600, y: 600 },
             { x: 1300, y: 250 },
             { x: 1800, y: 700 },
+            { x: 2300, y: 500 },
         ];
         positions.forEach(({ x, y }) => {
             const cloud = CloudPool.getCloud(this);
@@ -64346,8 +64419,8 @@ class BoardView extends Container_Container {
     }
     buildBkgBuildings() {
         const texture = Texture.from('bkgBuildings.png');
-        this.bkgBuildings = new TilingSprite(texture, WIDTH * 2, texture.height);
-        this.bkgBuildings.x = -WIDTH;
+        this.bkgBuildings = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.bkgBuildings.x = -this.gameWidth / 4;
         this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = BoardView_zIndex.bkgBuildings;
@@ -64355,8 +64428,8 @@ class BoardView extends Container_Container {
     }
     buildBkgTrees() {
         const texture = Texture.from('bkgTrees.png');
-        this.bkgTrees = new TilingSprite(texture, WIDTH * 2, texture.height);
-        this.bkgTrees.x = -WIDTH;
+        this.bkgTrees = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.bkgTrees.x = -this.gameWidth / 4;
         this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = BoardView_zIndex.bkgTrees;
@@ -64365,7 +64438,7 @@ class BoardView extends Container_Container {
     buildBuildings() {
         const positions = [
             400, 1760, 1410, 1665, 1305, 505, 765, 605, 1175, 1035, 1555, 1875, 200, 2000, 2320, 2110, 2420, 2200, 2550,
-            2660, 2790, 2900, 3010,
+            2660, 2790, 2900, 3010, 3130, 3210, 3340, 3470, 3600, 3730, 3860,
         ];
         positions.forEach((x) => {
             const building = BuildingPool.getBuilding(this);
@@ -64375,7 +64448,7 @@ class BoardView extends Container_Container {
         });
     }
     buildLargeTrees() {
-        const position = [120, 1575, 2975];
+        const position = [120, 1575, 2975, 4400];
         position.forEach((x) => {
             const tree = LargeTreePool.getTree(this);
             tree.zIndex = BoardView_zIndex.largeTrees;
@@ -64385,14 +64458,15 @@ class BoardView extends Container_Container {
     }
     buildSmallForegroundTrees() {
         const texture = Texture.from('tree_2_1.png');
-        this.smallForegroundTrees = new TilingSprite(texture, texture.width, texture.height);
+        this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.smallForegroundTrees.x = -this.gameWidth / 4;
         this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = BoardView_zIndex.smallForegroundTrees;
         this.addChild(this.smallForegroundTrees);
     }
     buildMediumTrees() {
-        const positions = [270, 1275, 2275, 3275];
+        const positions = [270, 1275, 2275, 3275, 4275];
         positions.forEach((x) => {
             const tree = MediumTreePool.getTree(this);
             tree.zIndex = BoardView_zIndex.mediumTrees;
@@ -64401,7 +64475,7 @@ class BoardView extends Container_Container {
         });
     }
     buildSmallTrees() {
-        const positions = [0, 700, 1400, 2100, 2800];
+        const positions = [0, 700, 1400, 2100, 2800, 3500];
         positions.forEach((x) => {
             const tree = SmallTreePool.getTree(this);
             tree.zIndex = BoardView_zIndex.smallTrees;
@@ -64411,7 +64485,8 @@ class BoardView extends Container_Container {
     }
     buildFog() {
         const texture = Texture.from('fog.png');
-        this.fog = new TilingSprite(texture, 2048, texture.height);
+        this.fog = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.fog.x = -this.gameWidth / 4;
         this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = BoardView_zIndex.fog;
@@ -64419,7 +64494,8 @@ class BoardView extends Container_Container {
     }
     buildSmallFrontTrees() {
         const texture = Texture.from('tree_5_1.png');
-        this.smallFrontTrees = new TilingSprite(texture, 2048, texture.height);
+        this.smallFrontTrees = new TilingSprite(texture, this.gameWidth, texture.height);
+        this.smallFrontTrees.x = -this.gameWidth / 4;
         this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = BoardView_zIndex.smallFrontTrees;
@@ -64430,12 +64506,41 @@ class BoardView extends Container_Container {
         this.monkey.name = 'monkey';
         this.monkey.position.set(monkeyPos.x, monkeyPos.y);
         this.monkey.zIndex = BoardView_zIndex.monkey;
+        this.monkey.setActive(false);
         this.addChild(this.monkey);
+    }
+    buildButton() {
+        this.playButton = makeSprite({
+            frame: 'play.png',
+            name: 'playButton',
+            x: 850,
+            y: 1700,
+        });
+        this.playButton.zIndex = BoardView_zIndex.button;
+        this.playButton.eventMode = 'static';
+        this.playButton.on('pointerdown', () => {
+            this.isAlive = true;
+            this.monkey.setActive(true);
+            this.dropMonkey();
+            this.playButton.visible = false;
+            this.playButton.eventMode = 'none';
+        });
+        this.addChild(this.playButton);
+    }
+    buildCounter() {
+        this.counter = new Text(this.currentValue, {
+            fill: 0xffffff,
+            fontWeight: '900',
+            fontSize: 48,
+        });
+        this.counter.position.set(1100, 1680);
+        this.counter.zIndex = BoardView_zIndex.button;
+        this.addChild(this.counter);
     }
     updateLargeTrees(dt) {
         this.largeTrees.forEach((c, i) => {
             c.x -= speeds.largeTrees * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.largeTrees.splice(i, 1);
                 c.remove();
                 const newTree = LargeTreePool.getTree(this);
@@ -64447,7 +64552,7 @@ class BoardView extends Container_Container {
     updateBuildings(dt) {
         this.buildings.forEach((c, i) => {
             c.x -= speeds.buildings * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.buildings.splice(i, 1);
                 c.remove();
                 const newBuilding = BuildingPool.getBuilding(this);
@@ -64459,7 +64564,7 @@ class BoardView extends Container_Container {
     updateMediumTrees(dt) {
         this.mediumTrees.forEach((c, i) => {
             c.x -= speeds.mediumTrees * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.mediumTrees.splice(i, 1);
                 c.remove();
                 const newTree = MediumTreePool.getTree(this);
@@ -64471,7 +64576,7 @@ class BoardView extends Container_Container {
     updateSmallTrees(dt) {
         this.smallTrees.forEach((c, i) => {
             c.x -= speeds.smallTrees * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.smallTrees.splice(i, 1);
                 c.remove();
                 const newTree = SmallTreePool.getTree(this);
@@ -64483,7 +64588,7 @@ class BoardView extends Container_Container {
     updateClouds(dt) {
         this.clouds.forEach((c, i) => {
             c.x -= speeds.clouds * dt;
-            if (c.x + c.width / 2 <= 0) {
+            if (c.x + c.width / 2 <= this.targetX) {
                 this.clouds.splice(i, 1);
                 c.remove();
                 const newCloud = CloudPool.getCloud(this);
@@ -64511,10 +64616,14 @@ class BoardView extends Container_Container {
         this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
     }
     dropMonkey() {
-        const chance = Math.random();
+        let chance = Math.random();
+        if (this.currentValue === 1) {
+            chance = Math.random() * 0.55;
+        }
+        this.monkey.drop();
         if (chance <= 0.6) {
             const y = Math.random() * 600 + 1200;
-            const duration = (y - monkeyPos.y) * 2.666;
+            const duration = (y - monkeyPos.y) * DT;
             const number = this.getNumber(y);
             animate(this.monkey, {
                 y,
@@ -64529,7 +64638,7 @@ class BoardView extends Container_Container {
         }
         else if (chance > 0.6 && chance <= 0.85) {
             const y = 2400;
-            const duration = (y - monkeyPos.y) * 2.666;
+            const duration = (y - monkeyPos.y) * DT;
             this.monkey.fall();
             animate(this.monkey, {
                 y,
@@ -64537,12 +64646,15 @@ class BoardView extends Container_Container {
                 duration,
                 onComplete: () => {
                     this.isAlive = false;
+                    delayRunnable(2, () => {
+                        this.reset();
+                    });
                 },
             });
         }
         else {
             const y = 1870;
-            const duration = (y - monkeyPos.y) * 2.666;
+            const duration = (y - monkeyPos.y) * DT;
             animate(this.monkey, {
                 y,
                 ease: 'inCubic',
@@ -64550,12 +64662,15 @@ class BoardView extends Container_Container {
                 onComplete: () => {
                     this.isAlive = false;
                     this.monkey.land();
+                    delayRunnable(3, () => {
+                        this.reset();
+                    });
                 },
             });
         }
     }
     swingUp() {
-        const duration = (this.monkey.y - 750) * 2.666;
+        const duration = (this.monkey.y - 750) * DT;
         animate(this.monkey, {
             y: 750,
             ease: 'outCubic',
@@ -64577,6 +64692,8 @@ class BoardView extends Container_Container {
                     duration: 400,
                     ease: 'linear',
                     onComplete: () => {
+                        const { fn, numberValue } = number;
+                        this.updateCounter(fn, numberValue);
                         const index = this.numbers.indexOf(number);
                         this.numbers.splice(index, 1);
                         number.remove();
@@ -64586,11 +64703,38 @@ class BoardView extends Container_Container {
         });
     }
     getNumber(y) {
-        const number = NumbersPool.getNumber(this, sample(['add', 'divide', 'multiply']), randomInt(1, 10));
+        const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
+        const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
+        const number = NumbersPool.getNumber(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = BoardView_zIndex.number;
         this.numbers.push(number);
         return number;
+    }
+    reset() {
+        this.monkey.position.set(monkeyPos.x, monkeyPos.y);
+        this.monkey.drop();
+        this.monkey.setActive(false);
+        this.playButton.visible = true;
+        this.playButton.eventMode = 'static';
+        // clear counter
+        this.currentValue = 1;
+        this.counter.text = `${this.currentValue}`;
+    }
+    updateCounter(fn, numberValue) {
+        switch (fn) {
+            case 'add':
+                this.currentValue += numberValue;
+                break;
+            case 'divide':
+                this.currentValue /= numberValue;
+                break;
+            case 'multiply':
+                this.currentValue *= numberValue;
+            default:
+                break;
+        }
+        this.counter.text = `${this.currentValue.toFixed(2)}`;
     }
 }
 
@@ -64616,6 +64760,7 @@ class GameView extends PixiGrid {
     build() {
         this.board = new BoardView();
         this.setChild('board', this.board);
+        this.board.build();
     }
 }
 
@@ -64647,6 +64792,7 @@ const assets = [
     { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
     { name: 'circle.png', path: 'assets/uncompressed/circle.png' },
     { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
+    { name: 'play.png', path: 'assets/uncompressed/play.png' },
     { name: 'sky.png', path: 'assets/uncompressed/sky.png' },
     { name: 'tree_1_1.png', path: 'assets/uncompressed/tree_1_1.png' },
     { name: 'tree_1_2.png', path: 'assets/uncompressed/tree_1_2.png' },

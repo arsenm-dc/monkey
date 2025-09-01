@@ -10,6 +10,10 @@ export class Monkey extends Container {
         this.build();
     }
 
+    public setActive(value: boolean): void {
+        this.spine.state.timeScale = value ? 1 : 0;
+    }
+
     public swingUp(): void {
         this.spine.state.setAnimation(0, 'Swing', false);
     }
@@ -20,6 +24,10 @@ export class Monkey extends Container {
 
     public land(): void {
         this.spine.state.setAnimation(0, 'Landing', false);
+    }
+
+    public drop(): void {
+        this.spine.state.setAnimation(0, 'Falling', false);
     }
 
     private build(): void {
@@ -47,7 +55,7 @@ export class Monkey extends Container {
 
         this.spine.state.data.setMix('Falling', 'Falling for death', 1);
         this.spine.state.data.setMix('Falling', 'Landing', 1);
-        this.spine.state.setAnimation(0, 'Falling', true);
+        this.spine.state.setAnimation(0, 'Swing', true);
         this.spine.scale.set(0.15);
         this.addChild(this.spine);
     }

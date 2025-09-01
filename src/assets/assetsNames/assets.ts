@@ -3,6 +3,7 @@ export const assets: AssetNameAndPath[] = [
     { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
     { name: 'circle.png', path: 'assets/uncompressed/circle.png' },
     { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
+    { name: 'play.png', path: 'assets/uncompressed/play.png' },
     { name: 'sky.png', path: 'assets/uncompressed/sky.png' },
     { name: 'tree_1_1.png', path: 'assets/uncompressed/tree_1_1.png' },
     { name: 'tree_1_2.png', path: 'assets/uncompressed/tree_1_2.png' },

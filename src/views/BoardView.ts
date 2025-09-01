@@ -1,12 +1,13 @@
 import { animate } from 'animejs';
-import { Container, Rectangle, Texture, TilingSprite } from 'pixi.js';
+import { Container, Rectangle, Sprite, Texture, TilingSprite } from 'pixi.js';
+import { makeSprite } from '../configs/spriteConfig';
 import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
 import { Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
-import { getGameBounds, randomInt, sample } from '../Utils';
+import { delayRunnable, getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
 const speeds = {
@@ -39,6 +40,7 @@ const zIndex = {
     smallFrontTrees: 10,
     number: 11,
     monkey: 12,
+    button: 100,
 };
 
 const monkeyPos = {
@@ -64,7 +66,9 @@ export class BoardView extends Container {
     private randomNumbers: Number[] = [];
     private monkey: Monkey;
 
-    private isAlive = true;
+    private playButton: Sprite;
+
+    private isAlive = false;
 
     private gameWidth: number;
     private targetX: number;
@@ -81,9 +85,8 @@ export class BoardView extends Container {
         NumbersPool.init();
     }
 
-    public update(d: number): void {
+    public update(dt: number): void {
         if (!this.isAlive) return;
-        const dt = d * 4;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -118,9 +121,8 @@ export class BoardView extends Container {
         this.buildSmallFrontTrees();
 
         this.buildMonkey();
-        this.dropMonkey();
-
-        // drawBounds(this);
+        this.buildButton();
+        // this.dropMonkey();
     }
 
     private buildSky(): void {
@@ -245,7 +247,28 @@ export class BoardView extends Container {
         this.monkey.name = 'monkey';
         this.monkey.position.set(monkeyPos.x, monkeyPos.y);
         this.monkey.zIndex = zIndex.monkey;
+        this.monkey.setActive(false);
+
         this.addChild(this.monkey);
+    }
+
+    private buildButton(): void {
+        this.playButton = makeSprite({
+            frame: 'play.png',
+            name: 'playButton',
+            x: 850,
+            y: 1700,
+        });
+        this.playButton.zIndex = zIndex.button;
+        this.playButton.eventMode = 'static';
+        this.playButton.on('pointerdown', () => {
+            this.isAlive = true;
+            this.monkey.setActive(true);
+            this.dropMonkey();
+            this.playButton.visible = false;
+            this.playButton.eventMode = 'none';
+        });
+        this.addChild(this.playButton);
     }
 
     private updateLargeTrees(dt: number): void {
@@ -343,6 +366,7 @@ export class BoardView extends Container {
 
     private dropMonkey(): void {
         const chance = Math.random();
+        this.monkey.drop();
 
         if (chance <= 0.6) {
             const y = Math.random() * 600 + 1200;
@@ -370,6 +394,9 @@ export class BoardView extends Container {
                 duration,
                 onComplete: () => {
                     this.isAlive = false;
+                    delayRunnable(2, () => {
+                        this.reset();
+                    });
                 },
             });
         } else {
@@ -382,6 +409,9 @@ export class BoardView extends Container {
                 onComplete: () => {
                     this.isAlive = false;
                     this.monkey.land();
+                    delayRunnable(3, () => {
+                        this.reset();
+                    });
                 },
             });
         }
@@ -426,5 +456,15 @@ export class BoardView extends Container {
         number.zIndex = zIndex.number;
         this.numbers.push(number);
         return number;
+    }
+
+    private reset(): void {
+        this.monkey.position.set(monkeyPos.x, monkeyPos.y);
+        this.monkey.drop();
+        this.monkey.setActive(false);
+        this.playButton.visible = true;
+        this.playButton.eventMode = 'static';
+
+        // clear counter
     }
 }

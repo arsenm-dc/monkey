@@ -394,7 +394,7 @@ export class BoardView extends Container {
 
     private updateRandomNumbers(dt: number): void {
         this.randomNumbers.forEach((n, i) => {
-            n.x -= speeds.numbers * dt;
+            n.x -= n.speed * dt;
             if (n.x + n.width / 2 <= this.targetX) {
                 this.randomNumbers.splice(i, 1);
                 n.remove();
@@ -514,7 +514,7 @@ export class BoardView extends Container {
             this.moveLand(this.pits[0], duration);
             animate(this.monkey, {
                 y,
-                ease: 'inCubic',
+                ease: 'inQuart',
                 duration,
                 onComplete: () => {
                     this.isAlive = false;

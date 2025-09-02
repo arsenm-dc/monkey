@@ -12,6 +12,8 @@ export class Number extends Container {
     private _fn: FunctionType;
     private _value: number;
 
+    private _speed: number;
+
     constructor() {
         super();
         this.build();
@@ -29,6 +31,10 @@ export class Number extends Container {
         return this._value;
     }
 
+    public get speed(): number {
+        return this._speed;
+    }
+
     public spin(): void {
         this.bkgChips.visible && this.bkgChips.spin();
         this.bkgNaipes.visible && this.bkgNaipes.spin();
@@ -37,6 +43,8 @@ export class Number extends Container {
     public get(parentContainer: Container, fn: FunctionType, value: number): void {
         this._parentContainer = parentContainer;
         this._parentContainer?.addChild(this);
+
+        this._speed = Math.random() + 3;
 
         this._fn = fn;
         this._value = value;

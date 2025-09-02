@@ -1,4 +1,5 @@
 import { Container, Text } from 'pixi.js';
+import { Chips } from '../views/Chips';
 import { Naipes } from '../views/Naipes';
 
 export type FunctionType = 'add' | 'multiply' | 'divide';
@@ -6,7 +7,8 @@ export type FunctionType = 'add' | 'multiply' | 'divide';
 export class Number extends Container {
     private _parentContainer: Container | null;
     private text: Text;
-    private bkg: Naipes;
+    private bkgNaipes: Naipes;
+    private bkgChips: Chips;
     private _fn: FunctionType;
     private _value: number;
 
@@ -27,6 +29,11 @@ export class Number extends Container {
         return this._value;
     }
 
+    public spin(): void {
+        this.bkgChips.visible && this.bkgChips.spin();
+        this.bkgNaipes.visible && this.bkgNaipes.spin();
+    }
+
     public get(parentContainer: Container, fn: FunctionType, value: number): void {
         this._parentContainer = parentContainer;
         this._parentContainer?.addChild(this);
@@ -45,27 +52,36 @@ export class Number extends Container {
     }
 
     private build(): void {
-        this.bkg = new Naipes();
-        this.addChild(this.bkg);
+        this.bkgNaipes = new Naipes();
+        this.bkgNaipes.visible = false;
+        this.addChild(this.bkgNaipes);
+
+        this.bkgChips = new Chips();
+        this.addChild(this.bkgChips);
 
         this.text = new Text('', {
             fill: 0xffffff,
             fontWeight: '900',
-            fontSize: 32,
+            fontSize: 42,
         });
         this.text.anchor.set(0.5, 0.5);
-        this.text.y = -40;
+        this.text.y = -50;
         this.addChild(this.text);
         this.scale.set(1.5);
     }
 
     private updateTint(): void {
         if (this._fn === 'add') {
-            this.bkg.updateSlot('Hearts_D0');
+            this.bkgNaipes.visible = false;
+            this.bkgChips.visible = true;
         } else if (this._fn === 'multiply') {
-            this.bkg.updateSlot('Diamonds_C0');
+            this.bkgChips.visible = false;
+            this.bkgNaipes.visible = true;
+            this.bkgNaipes.updateSlot(Math.random() > 0.5 ? 'Diamonds_C0' : 'Hearts_D0');
         } else {
-            this.bkg.updateSlot(Math.random() > 0.5 ? 'clubs' : 'spades');
+            this.bkgChips.visible = false;
+            this.bkgNaipes.visible = true;
+            this.bkgNaipes.updateSlot('spades');
         }
     }
 

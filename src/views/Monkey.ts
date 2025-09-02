@@ -35,7 +35,9 @@ export class Monkey extends Container {
     }
 
     private buildSpine(): void {
-        const data = Assets.cache.get(spines[0].jsonURL).spineData;
+        const json = spines.find((d) => d.key === 'Monkey')?.jsonURL;
+        if (!json) return;
+        const data = Assets.cache.get(json).spineData;
         this.spine = new Spine(data);
 
         this.spine.state.addListener({

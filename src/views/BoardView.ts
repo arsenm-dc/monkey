@@ -244,11 +244,7 @@ export class BoardView extends Container {
         let x = 2000;
         for (let i = 0; i < 8; i++) {
             x += Math.random() * 200 + 200;
-            const fn = sample(['add', 'divide', 'multiply']);
-            const number = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
-            const forbiddenYs = this.numbers.map((n) => n.y);
-            const y = getRandomY(1000, 1800, forbiddenYs);
-
+            const { fn, number, y } = this.getRandomNumber();
             const n = NumbersPool.getNumber(this, fn, number);
             n.zIndex = zIndex.number;
             n.position.set(x, y);
@@ -403,15 +399,9 @@ export class BoardView extends Container {
                 this.randomNumbers.splice(i, 1);
                 n.remove();
 
-                const fn = sample(['add', 'divide', 'multiply']);
-                const number =
-                    fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
-                const forbiddenYs = this.numbers.map((n) => n.y);
-                const y = getRandomY(1000, 1800, forbiddenYs);
-
+                const { fn, number, y } = this.getRandomNumber();
                 const newNumber = NumbersPool.getNumber(this, fn, number);
-                newNumber.scale.set(0.8 + Math.random() * 0.2);
-
+                newNumber.scale.set(1 + Math.random() * 0.2);
                 newNumber.position.set(this.gameWidth * 1.2 + Math.random() * 400, y);
                 this.randomNumbers.push(newNumber);
             }
@@ -557,6 +547,7 @@ export class BoardView extends Container {
             onComplete: () => {
                 const { fn, numberValue } = number;
                 this.updateCounter(fn, numberValue);
+                number.spin();
                 animate(number, {
                     y: '-=100',
                     alpha: 0,
@@ -588,9 +579,18 @@ export class BoardView extends Container {
         });
     }
 
+    private getRandomNumber(): { fn; number; y } {
+        const fn = sample(['add', 'divide', 'multiply', 'add', 'multiply']);
+        const number = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
+        const forbiddenYs = this.numbers.map((n) => n.y);
+        const y = getRandomY(1000, 1800, forbiddenYs);
+
+        return { fn, number, y };
+    }
+
     private getNumber(y: number): Number {
         const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
-        const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
+        const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
 
         const number = NumbersPool.getNumber(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);

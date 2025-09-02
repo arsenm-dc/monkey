@@ -1,0 +1,318 @@
+
+chips.png
+size: 2027,1635
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Gold00005
+  rotate: true
+  xy: 1326, 354
+  size: 350, 673
+  orig: 352, 675
+  offset: 1, 1
+  index: -1
+Gold00006
+  rotate: true
+  xy: 2, 8
+  size: 350, 673
+  orig: 352, 675
+  offset: 1, 1
+  index: -1
+Gold00007
+  rotate: true
+  xy: 2, 1556
+  size: 77, 671
+  orig: 79, 673
+  offset: 1, 1
+  index: -1
+Gold00008
+  rotate: true
+  xy: 675, 1556
+  size: 77, 671
+  orig: 79, 673
+  offset: 1, 1
+  index: -1
+Gold00009
+  rotate: true
+  xy: 1348, 1556
+  size: 77, 671
+  orig: 79, 673
+  offset: 1, 1
+  index: -1
+Gold00010
+  rotate: true
+  xy: 677, 2
+  size: 350, 673
+  orig: 352, 675
+  offset: 1, 1
+  index: -1
+Gold00011
+  rotate: true
+  xy: 1352, 2
+  size: 350, 673
+  orig: 352, 675
+  offset: 1, 1
+  index: -1
+bronze_00005
+  rotate: true
+  xy: 2, 1052
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+bronze_00006
+  rotate: true
+  xy: 664, 1052
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+bronze_00007
+  rotate: true
+  xy: 2, 1477
+  size: 77, 660
+  orig: 79, 662
+  offset: 1, 1
+  index: -1
+bronze_00008
+  rotate: true
+  xy: 664, 1477
+  size: 77, 660
+  orig: 79, 662
+  offset: 1, 1
+  index: -1
+bronze_00009
+  rotate: true
+  xy: 1326, 1477
+  size: 77, 660
+  orig: 79, 662
+  offset: 1, 1
+  index: -1
+bronze_00010
+  rotate: true
+  xy: 1326, 1052
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+bronze_00011
+  rotate: true
+  xy: 2, 706
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+silver_00005
+  rotate: true
+  xy: 664, 706
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+silver_00006
+  rotate: true
+  xy: 1326, 706
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+silver_00007
+  rotate: true
+  xy: 2, 1398
+  size: 77, 660
+  orig: 79, 662
+  offset: 1, 1
+  index: -1
+silver_00008
+  rotate: true
+  xy: 664, 1398
+  size: 77, 660
+  orig: 79, 662
+  offset: 1, 1
+  index: -1
+silver_00009
+  rotate: true
+  xy: 1326, 1398
+  size: 77, 660
+  orig: 79, 662
+  offset: 1, 1
+  index: -1
+silver_00010
+  rotate: true
+  xy: 2, 360
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+silver_00011
+  rotate: true
+  xy: 664, 360
+  size: 344, 660
+  orig: 346, 662
+  offset: 1, 1
+  index: -1
+
+chips2.png
+size: 2005,1602
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Gold00003
+  rotate: true
+  xy: 1330, 2
+  size: 538, 673
+  orig: 541, 675
+  offset: 1, 1
+  index: -1
+bronze_00003
+  rotate: true
+  xy: 2, 1072
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+bronze_00004
+  rotate: true
+  xy: 666, 1072
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+bronze_00012
+  rotate: true
+  xy: 1330, 1072
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+bronze_00013
+  rotate: true
+  xy: 2, 542
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+silver_00003
+  rotate: true
+  xy: 666, 542
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+silver_00004
+  rotate: true
+  xy: 1330, 542
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+silver_00012
+  rotate: true
+  xy: 2, 12
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+silver_00013
+  rotate: true
+  xy: 666, 12
+  size: 528, 662
+  orig: 530, 664
+  offset: 1, 1
+  index: -1
+
+chips3.png
+size: 2027,1871
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Gold00004
+  rotate: true
+  xy: 2, 1331
+  size: 538, 673
+  orig: 541, 675
+  offset: 1, 1
+  index: -1
+Gold00012
+  rotate: true
+  xy: 677, 1330
+  size: 539, 673
+  orig: 541, 675
+  offset: 1, 1
+  index: -1
+Gold00013
+  rotate: true
+  xy: 1352, 1330
+  size: 539, 673
+  orig: 541, 675
+  offset: 1, 1
+  index: -1
+bronze_00000
+  rotate: false
+  xy: 2, 667
+  size: 662, 662
+  orig: 664, 664
+  offset: 1, 1
+  index: -1
+bronze_00001
+  rotate: false
+  xy: 666, 666
+  size: 662, 662
+  orig: 664, 664
+  offset: 1, 1
+  index: -1
+bronze_00002
+  rotate: false
+  xy: 1330, 666
+  size: 662, 662
+  orig: 664, 664
+  offset: 1, 1
+  index: -1
+silver_00000
+  rotate: false
+  xy: 2, 3
+  size: 662, 662
+  orig: 664, 664
+  offset: 1, 1
+  index: -1
+silver_00001
+  rotate: false
+  xy: 666, 2
+  size: 662, 662
+  orig: 664, 664
+  offset: 1, 1
+  index: -1
+silver_00002
+  rotate: false
+  xy: 1330, 2
+  size: 662, 662
+  orig: 664, 664
+  offset: 1, 1
+  index: -1
+
+chips4.png
+size: 2027,680
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Gold00000
+  rotate: true
+  xy: 2, 2
+  size: 676, 673
+  orig: 678, 675
+  offset: 1, 1
+  index: -1
+Gold00001
+  rotate: true
+  xy: 677, 2
+  size: 676, 673
+  orig: 678, 675
+  offset: 1, 1
+  index: -1
+Gold00002
+  rotate: true
+  xy: 1352, 2
+  size: 676, 673
+  orig: 678, 675
+  offset: 1, 1
+  index: -1

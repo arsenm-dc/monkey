@@ -100,7 +100,7 @@ export class BoardView extends Container {
 
     public update(d: number): void {
         if (!this.isAlive) return;
-        const dt = d * 3;
+        const dt = d * 5;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -555,15 +555,14 @@ export class BoardView extends Container {
             duration,
             ease: 'linear',
             onComplete: () => {
+                const { fn, numberValue } = number;
+                this.updateCounter(fn, numberValue);
                 animate(number, {
                     y: '-=100',
                     alpha: 0,
                     duration: 400,
                     ease: 'linear',
                     onComplete: () => {
-                        const { fn, numberValue } = number;
-                        this.updateCounter(fn, numberValue);
-
                         const index = this.numbers.indexOf(number);
                         this.numbers.splice(index, 1);
                         number.remove();

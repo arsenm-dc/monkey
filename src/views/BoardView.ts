@@ -1,5 +1,5 @@
 import { animate } from 'animejs';
-import { Container, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
+import { Container, Point, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
 import { makeSprite } from '../configs/spriteConfig';
 import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
@@ -21,6 +21,7 @@ const speeds = {
     mediumTrees: 2,
     smallTrees: 2.3,
     fog: 1.6,
+    ground: 2.5,
     smallFrontTrees: 3,
     numbers: 3.5,
 };
@@ -39,9 +40,12 @@ const zIndex = {
     smallTrees: 8,
     fog: 9,
     smallFrontTrees: 10,
-    number: 11,
-    monkey: 12,
-    button: 100,
+    ground: 90,
+    number: 95,
+    pit1: 100,
+    monkey: 101,
+    pit2: 102,
+    button: 1000,
 };
 
 const monkeyPos = {
@@ -63,7 +67,9 @@ export class BoardView extends Container {
     private smallForegroundTrees: TilingSprite;
     private mediumTrees: MediumTree[] = [];
     private smallTrees: SmallTree[] = [];
+    private pits: Sprite[] = [];
     private fog: TilingSprite;
+    private ground: TilingSprite;
     private smallFrontTrees: TilingSprite;
 
     private numbers: Number[] = [];
@@ -106,6 +112,7 @@ export class BoardView extends Container {
         this.updateFog(dt);
         this.updateSmallFrontTrees(dt);
         this.updateRandomNumbers(dt);
+        this.updateGround(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -128,6 +135,7 @@ export class BoardView extends Container {
         this.buildSmallTrees();
         this.buildFog();
         this.buildSmallFrontTrees();
+        this.buildGround();
 
         this.buildMonkey();
         this.buildButton();
@@ -162,7 +170,7 @@ export class BoardView extends Container {
     private buildBkgBuildings(): void {
         const texture = Texture.from('bkgBuildings.png');
         this.bkgBuildings = new TilingSprite(texture, this.gameWidth, texture.height);
-        this.bkgBuildings.x = -this.gameWidth / 4;
+        // this.bkgBuildings.x = -this.gameWidth / 4;
         this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = zIndex.bkgBuildings;
@@ -172,7 +180,7 @@ export class BoardView extends Container {
     private buildBkgTrees(): void {
         const texture = Texture.from('bkgTrees.png');
         this.bkgTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        this.bkgTrees.x = -this.gameWidth / 4;
+        // this.bkgTrees.x = -this.gameWidth / 4;
         this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = zIndex.bkgTrees;
@@ -205,7 +213,7 @@ export class BoardView extends Container {
     private buildSmallForegroundTrees(): void {
         const texture = Texture.from('tree_2_1.png');
         this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        this.smallForegroundTrees.x = -this.gameWidth / 4;
+        // this.smallForegroundTrees.x = -this.gameWidth / 4;
         this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = zIndex.smallForegroundTrees;
@@ -252,17 +260,27 @@ export class BoardView extends Container {
     private buildFog(): void {
         const texture = Texture.from('fog.png');
         this.fog = new TilingSprite(texture, this.gameWidth, texture.height);
-        this.fog.x = -this.gameWidth / 4;
+        // this.fog.x = -this.gameWidth / 4;
         this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = zIndex.fog;
         this.addChild(this.fog);
     }
 
+    private buildGround(): void {
+        const texture = Texture.from('ground.png');
+        this.ground = new TilingSprite(texture, this.gameWidth, texture.height);
+        // this.fog.x = -this.gameWidth / 4;
+        this.ground.y = HEIGHT - this.ground.height;
+        this.ground.name = 'ground';
+        this.ground.zIndex = zIndex.ground;
+        this.addChild(this.ground);
+    }
+
     private buildSmallFrontTrees(): void {
         const texture = Texture.from('tree_5_1.png');
         this.smallFrontTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        this.smallFrontTrees.x = -this.gameWidth / 4;
+        // this.smallFrontTrees.x = -this.gameWidth / 4;
         this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = zIndex.smallFrontTrees;
@@ -420,6 +438,10 @@ export class BoardView extends Container {
         this.fog.tilePosition.x -= speeds.fog * dt;
     }
 
+    private updateGround(dt): void {
+        this.ground.tilePosition.x -= speeds.ground * dt;
+    }
+
     private updateSmallFrontTrees(dt): void {
         this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
     }
@@ -431,7 +453,7 @@ export class BoardView extends Container {
         }
         this.monkey.drop();
 
-        if (chance <= 0.6) {
+        if (chance <= 0.2) {
             const y = Math.random() * 600 + 1200;
             const duration = (y - monkeyPos.y) * DT;
             const number = this.getNumber(y);
@@ -447,9 +469,32 @@ export class BoardView extends Container {
             });
 
             this.moveNumber(number, duration);
-        } else if (chance > 0.6 && chance <= 0.85) {
+        } else if (chance > 0.4 && chance <= 0.85) {
+            // DIE
             const y = 2400;
             const duration = (y - monkeyPos.y) * DT;
+
+            const pit = makeSprite({
+                frame: 'ground_pit_1.png',
+                anchor: new Point(0.5, 1),
+                x: this.gameWidth * 1.5,
+                y: 1850,
+            });
+            this.addChild(pit);
+            pit.zIndex = zIndex.pit1;
+            this.pits.push(pit);
+
+            const pitFront = makeSprite({
+                frame: 'ground_pit_front_1.png',
+                anchor: new Point(0.5, 1),
+                x: this.gameWidth * 1.5,
+                y: 1870,
+            });
+            this.addChild(pitFront);
+            pitFront.zIndex = zIndex.pit2;
+            this.pits.push(pitFront);
+
+            this.movePit(this.pits, duration);
             this.monkey.fall();
             animate(this.monkey, {
                 y,
@@ -516,6 +561,14 @@ export class BoardView extends Container {
         });
     }
 
+    private movePit(pits: Sprite[], duration: number): void {
+        animate(pits, {
+            x: monkeyPos.x - pits[0].width / 4,
+            duration,
+            ease: 'linear',
+        });
+    }
+
     private getNumber(y: number): Number {
         const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
         const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
@@ -546,6 +599,8 @@ export class BoardView extends Container {
             n.remove();
         });
         this.numbers = [];
+        this.pits.forEach((p) => p.destroy());
+        this.pits = [];
         this.buildRandomNumbers();
     }
 

@@ -22,6 +22,7 @@ const speeds = {
     smallTrees: 2.3,
     fog: 1.6,
     smallFrontTrees: 3,
+    numbers: 3.5,
 };
 
 const cloudYRange = [120, 800];
@@ -104,6 +105,7 @@ export class BoardView extends Container {
         this.updateSmallTrees(dt);
         this.updateFog(dt);
         this.updateSmallFrontTrees(dt);
+        this.updateRandomNumbers(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -130,6 +132,7 @@ export class BoardView extends Container {
         this.buildMonkey();
         this.buildButton();
         this.buildCounter();
+        this.buildRandomNumbers();
     }
 
     private buildSky(): void {
@@ -227,6 +230,23 @@ export class BoardView extends Container {
             tree.position.set(x, 2000);
             this.smallTrees.push(tree);
         });
+    }
+
+    private buildRandomNumbers(): void {
+        let x = 2000;
+        for (let i = 0; i < 8; i++) {
+            x += Math.random() * 200 + 200;
+            const fn = sample(['add', 'divide', 'multiply']);
+            const number = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
+            const forbiddenYs = this.numbers.map((n) => n.y);
+            const y = getRandomY(1000, 1800, forbiddenYs);
+
+            const n = NumbersPool.getNumber(this, fn, number);
+            n.zIndex = zIndex.number;
+            n.position.set(x, y);
+            n.scale.set(0.8 + Math.random() * 0.2);
+            this.randomNumbers.push(n);
+        }
     }
 
     private buildFog(): void {
@@ -354,6 +374,28 @@ export class BoardView extends Container {
                     randomInt(cloudYRange[0], cloudYRange[1]),
                 );
                 this.clouds.push(newCloud);
+            }
+        });
+    }
+
+    private updateRandomNumbers(dt: number): void {
+        this.randomNumbers.forEach((n, i) => {
+            n.x -= speeds.numbers * dt;
+            if (n.x + n.width / 2 <= this.targetX) {
+                this.randomNumbers.splice(i, 1);
+                n.remove();
+
+                const fn = sample(['add', 'divide', 'multiply']);
+                const number =
+                    fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
+                const forbiddenYs = this.numbers.map((n) => n.y);
+                const y = getRandomY(1000, 1800, forbiddenYs);
+
+                const newNumber = NumbersPool.getNumber(this, fn, number);
+                newNumber.scale.set(0.8 + Math.random() * 0.2);
+
+                newNumber.position.set(this.gameWidth * 1.2 + Math.random() * 400, y);
+                this.randomNumbers.push(newNumber);
             }
         });
     }
@@ -495,6 +537,16 @@ export class BoardView extends Container {
         // clear counter
         this.currentValue = 1;
         this.counter.text = `${this.currentValue}`;
+
+        this.randomNumbers.forEach((n) => {
+            n.remove();
+        });
+        this.randomNumbers = [];
+        this.numbers.forEach((n) => {
+            n.remove();
+        });
+        this.numbers = [];
+        this.buildRandomNumbers();
     }
 
     private updateCounter(fn: FunctionType, numberValue: number): void {
@@ -514,3 +566,15 @@ export class BoardView extends Container {
         this.counter.text = `${this.currentValue.toFixed(2)}`;
     }
 }
+
+const getRandomY = (allowedMin: number, allowedMax: number, forbiddenYs: number[], buffer = 10): number => {
+    let y;
+    let isValid = false;
+
+    while (!isValid) {
+        y = Math.floor(Math.random() * (allowedMax - allowedMin + 1)) + allowedMin;
+        isValid = forbiddenYs.every((fy) => Math.abs(y - fy) > buffer);
+    }
+
+    return y;
+};

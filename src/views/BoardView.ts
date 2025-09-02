@@ -112,7 +112,7 @@ export class BoardView extends Container {
         this.updateFog(dt);
         this.updateSmallFrontTrees(dt);
         this.updateRandomNumbers(dt);
-        this.updateGround(dt);
+        // this.updateGround(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -135,7 +135,7 @@ export class BoardView extends Container {
         this.buildSmallTrees();
         this.buildFog();
         this.buildSmallFrontTrees();
-        this.buildGround();
+        // this.buildGround();
 
         this.buildMonkey();
         this.buildButton();
@@ -453,7 +453,7 @@ export class BoardView extends Container {
         }
         this.monkey.drop();
 
-        if (chance <= 0.2) {
+        if (chance <= 0.6) {
             const y = Math.random() * 600 + 1200;
             const duration = (y - monkeyPos.y) * DT;
             const number = this.getNumber(y);
@@ -469,7 +469,7 @@ export class BoardView extends Container {
             });
 
             this.moveNumber(number, duration);
-        } else if (chance > 0.4 && chance <= 0.85) {
+        } else if (chance > 0.6 && chance <= 0.8) {
             // DIE
             const y = 2400;
             const duration = (y - monkeyPos.y) * DT;
@@ -508,8 +508,20 @@ export class BoardView extends Container {
                 },
             });
         } else {
+            // LAND
+
             const y = 1870;
             const duration = (y - monkeyPos.y) * DT;
+
+            const land = makeSprite({
+                frame: 'landing_platform.png',
+                x: this.gameWidth * 1.5,
+                y: 1900,
+            });
+            this.addChild(land);
+            land.zIndex = zIndex.pit1;
+            this.pits.push(land);
+            this.moveLand(this.pits[0], duration);
             animate(this.monkey, {
                 y,
                 ease: 'inCubic',
@@ -564,6 +576,14 @@ export class BoardView extends Container {
     private movePit(pits: Sprite[], duration: number): void {
         animate(pits, {
             x: monkeyPos.x - pits[0].width / 4,
+            duration,
+            ease: 'linear',
+        });
+    }
+
+    private moveLand(land: Sprite, duration: number): void {
+        animate(land, {
+            x: monkeyPos.x,
             duration,
             ease: 'linear',
         });

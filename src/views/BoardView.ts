@@ -7,6 +7,7 @@ import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
 import { FunctionType, Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
+import { Spike, SpikePool } from '../pools/SpikesPool';
 import { delayRunnable, getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
@@ -23,7 +24,6 @@ const speeds = {
     fog: 1.6,
     ground: 2.5,
     smallFrontTrees: 3,
-    numbers: 3.5,
 };
 
 const cloudYRange = [120, 800];
@@ -42,6 +42,7 @@ const zIndex = {
     smallFrontTrees: 10,
     ground: 90,
     number: 95,
+    spikes: 99,
     pit1: 100,
     monkey: 101,
     pit2: 102,
@@ -68,6 +69,7 @@ export class BoardView extends Container {
     private mediumTrees: MediumTree[] = [];
     private smallTrees: SmallTree[] = [];
     private pits: Sprite[] = [];
+    private spikes: Spike[] = [];
     private fog: TilingSprite;
     private ground: TilingSprite;
     private smallFrontTrees: TilingSprite;
@@ -96,6 +98,7 @@ export class BoardView extends Container {
         SmallTreePool.init();
         BuildingPool.init();
         NumbersPool.init();
+        SpikePool.init();
     }
 
     public update(d: number): void {
@@ -112,7 +115,7 @@ export class BoardView extends Container {
         this.updateFog(dt);
         this.updateSmallFrontTrees(dt);
         this.updateRandomNumbers(dt);
-        // this.updateGround(dt);
+        this.updateSpikes(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -135,7 +138,7 @@ export class BoardView extends Container {
         this.buildSmallTrees();
         this.buildFog();
         this.buildSmallFrontTrees();
-        // this.buildGround();
+        this.buildSpikes();
 
         this.buildMonkey();
         this.buildButton();
@@ -237,6 +240,16 @@ export class BoardView extends Container {
             tree.zIndex = zIndex.smallTrees;
             tree.position.set(x, 2000);
             this.smallTrees.push(tree);
+        });
+    }
+
+    private buildSpikes(): void {
+        const positions = [-720, 0, 720, 1440, 2160, 2880, 3600, 4320];
+        positions.forEach((x) => {
+            const tree = SpikePool.getSpike(this);
+            tree.zIndex = zIndex.spikes;
+            tree.position.set(x, 1850);
+            this.spikes.push(tree);
         });
     }
 
@@ -372,6 +385,19 @@ export class BoardView extends Container {
                 const newTree = SmallTreePool.getTree(this);
                 newTree.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, 2000);
                 this.smallTrees.push(newTree);
+            }
+        });
+    }
+
+    private updateSpikes(dt: number): void {
+        this.spikes.forEach((c, i) => {
+            c.x -= speeds.ground * dt;
+            if (c.x + c.width / 2 <= this.targetX) {
+                this.spikes.splice(i, 1);
+                c.remove();
+                const newSpike = SpikePool.getSpike(this);
+                newSpike.position.set(this.spikes[this.spikes.length - 1].x + 720, 1850);
+                this.spikes.push(newSpike);
             }
         });
     }

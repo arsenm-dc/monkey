@@ -1,0 +1,159 @@
+{
+  "frames": {
+    "ground_pit_front_1.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 818,
+        "h": 76
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 818,
+        "h": 76
+      },
+      "sourceSize": {
+        "w": 818,
+        "h": 76
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ground_pit_1.png": {
+      "frame": {
+        "x": 3,
+        "y": 85,
+        "w": 793,
+        "h": 79
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 793,
+        "h": 79
+      },
+      "sourceSize": {
+        "w": 793,
+        "h": 79
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ground_pit_front_2.png": {
+      "frame": {
+        "x": 3,
+        "y": 170,
+        "w": 555,
+        "h": 142
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 555,
+        "h": 142
+      },
+      "sourceSize": {
+        "w": 555,
+        "h": 142
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ground_pit_2.png": {
+      "frame": {
+        "x": 3,
+        "y": 318,
+        "w": 492,
+        "h": 113
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 492,
+        "h": 113
+      },
+      "sourceSize": {
+        "w": 492,
+        "h": 113
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ground_pit_front_3.png": {
+      "frame": {
+        "x": 501,
+        "y": 318,
+        "w": 192,
+        "h": 73
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 192,
+        "h": 73
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 73
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ground_pit_3.png": {
+      "frame": {
+        "x": 564,
+        "y": 170,
+        "w": 172,
+        "h": 71
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 172,
+        "h": 71
+      },
+      "sourceSize": {
+        "w": 172,
+        "h": 71
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "pits.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 824,
+      "h": 434
+    },
+    "scale": 1
+  }
+}

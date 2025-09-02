@@ -130,7 +130,6 @@ export class BoardView extends Container {
         this.buildMonkey();
         this.buildButton();
         this.buildCounter();
-        // this.dropMonkey();
     }
 
     private buildSky(): void {

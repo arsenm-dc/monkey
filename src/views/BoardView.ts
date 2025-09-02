@@ -547,7 +547,6 @@ export class BoardView extends Container {
             onComplete: () => {
                 const { fn, numberValue } = number;
                 this.updateCounter(fn, numberValue);
-                number.spin();
                 animate(number, {
                     y: '-=100',
                     alpha: 0,

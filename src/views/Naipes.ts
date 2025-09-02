@@ -11,7 +11,7 @@ export class Naipes extends Container {
     }
 
     public spin(): void {
-        this.spine.state.setAnimation(0, 'Spin', false);
+        this.spine.state.setAnimation(0, 'Spin', true);
     }
 
     public updateSlot(slotName: string): void {

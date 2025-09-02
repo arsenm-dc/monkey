@@ -11,7 +11,7 @@ export class Chips extends Container {
     }
 
     public spin(): void {
-        this.spine.state.setAnimation(0, 'Chip_Spin', false);
+        this.spine.state.setAnimation(0, 'Chip_Spin', true);
     }
 
     public updateSlot(slotName: string): void {

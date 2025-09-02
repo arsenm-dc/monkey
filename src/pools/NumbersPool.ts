@@ -43,6 +43,7 @@ export class Number extends Container {
 
         this.text.text = this.getText();
         this.updateTint();
+        this.spin();
     }
 
     public remove(): void {

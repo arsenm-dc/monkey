@@ -64058,6 +64058,12 @@ const spines = [
         preMultipliedAlpha: true,
     },
     {
+        key: 'chips',
+        jsonURL: 'assets/spines/chips/chips.json',
+        atlasURL: 'assets/spines/chips/chips.atlas',
+        preMultipliedAlpha: true,
+    },
+    {
         key: 'naipes',
         jsonURL: 'assets/spines/naipes/naipes.json',
         atlasURL: 'assets/spines/naipes/naipes.atlas',
@@ -64065,17 +64071,17 @@ const spines = [
     },
 ];
 
-;// CONCATENATED MODULE: ./src/views/Naipes.ts
+;// CONCATENATED MODULE: ./src/views/Chips.ts
 
 
 
-class Naipes extends Container_Container {
+class Chips extends Container_Container {
     constructor() {
         super();
         this.build();
     }
     spin() {
-        this.spine.state.setAnimation(0, 'Spin', false);
+        this.spine.state.setAnimation(0, 'Chip_Spin', true);
     }
     updateSlot(slotName) {
         const index = this.spine.skeleton.findSlotIndex(slotName);
@@ -64089,7 +64095,47 @@ class Naipes extends Container_Container {
         this.buildSpine();
     }
     buildSpine() {
-        const data = Assets.cache.get(spines[1].jsonURL).spineData;
+        var _a;
+        const json = (_a = spines.find((d) => d.key === 'chips')) === null || _a === void 0 ? void 0 : _a.jsonURL;
+        if (!json)
+            return;
+        const data = Assets.cache.get(json).spineData;
+        this.spine = new loader_uni_lib_Spine_Spine(data);
+        // 'Chip_Spin'
+        this.spine.scale.set(0.15);
+        this.addChild(this.spine);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/views/Naipes.ts
+
+
+
+class Naipes extends Container_Container {
+    constructor() {
+        super();
+        this.build();
+    }
+    spin() {
+        this.spine.state.setAnimation(0, 'Spin', true);
+    }
+    updateSlot(slotName) {
+        const index = this.spine.skeleton.findSlotIndex(slotName);
+        if (index !== -1) {
+            this.spine.slotContainers.forEach((c, i) => {
+                c.renderable = i === index || i === 0;
+            });
+        }
+    }
+    build() {
+        this.buildSpine();
+    }
+    buildSpine() {
+        var _a;
+        const json = (_a = spines.find((d) => d.key === 'naipes')) === null || _a === void 0 ? void 0 : _a.jsonURL;
+        if (!json)
+            return;
+        const data = Assets.cache.get(json).spineData;
         this.spine = new loader_uni_lib_Spine_Spine(data);
         // 'Spin'
         this.spine.scale.set(0.15);
@@ -64098,6 +64144,7 @@ class Naipes extends Container_Container {
 }
 
 ;// CONCATENATED MODULE: ./src/pools/NumbersPool.ts
+
 
 
 class NumbersPool_Number extends Container_Container {
@@ -64114,14 +64161,23 @@ class NumbersPool_Number extends Container_Container {
     get numberValue() {
         return this._value;
     }
+    get speed() {
+        return this._speed;
+    }
+    spin() {
+        this.bkgChips.visible && this.bkgChips.spin();
+        this.bkgNaipes.visible && this.bkgNaipes.spin();
+    }
     get(parentContainer, fn, value) {
         var _a;
         this._parentContainer = parentContainer;
         (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+        this._speed = Math.random() + 3;
         this._fn = fn;
         this._value = value;
         this.text.text = this.getText();
         this.updateTint();
+        this.spin();
     }
     remove() {
         var _a;
@@ -64130,27 +64186,35 @@ class NumbersPool_Number extends Container_Container {
         this.alpha = 1;
     }
     build() {
-        this.bkg = new Naipes();
-        this.addChild(this.bkg);
+        this.bkgNaipes = new Naipes();
+        this.bkgNaipes.visible = false;
+        this.addChild(this.bkgNaipes);
+        this.bkgChips = new Chips();
+        this.addChild(this.bkgChips);
         this.text = new Text('', {
             fill: 0xffffff,
             fontWeight: '900',
-            fontSize: 32,
+            fontSize: 42,
         });
         this.text.anchor.set(0.5, 0.5);
-        this.text.y = -40;
+        this.text.y = -50;
         this.addChild(this.text);
         this.scale.set(1.5);
     }
     updateTint() {
         if (this._fn === 'add') {
-            this.bkg.updateSlot('Hearts_D0');
+            this.bkgNaipes.visible = false;
+            this.bkgChips.visible = true;
         }
         else if (this._fn === 'multiply') {
-            this.bkg.updateSlot('Diamonds_C0');
+            this.bkgChips.visible = false;
+            this.bkgNaipes.visible = true;
+            this.bkgNaipes.updateSlot(Math.random() > 0.5 ? 'Diamonds_C0' : 'Hearts_D0');
         }
         else {
-            this.bkg.updateSlot(Math.random() > 0.5 ? 'clubs' : 'spades');
+            this.bkgChips.visible = false;
+            this.bkgNaipes.visible = true;
+            this.bkgNaipes.updateSlot('spades');
         }
     }
     getText() {
@@ -64236,6 +64300,59 @@ class SmallTreesPool {
 }
 const SmallTreePool = new SmallTreesPool();
 
+;// CONCATENATED MODULE: ./src/pools/SpikesPool.ts
+
+
+class Spike extends Container_Container {
+    constructor(textureName) {
+        super();
+        this.textureName = textureName;
+        this.build();
+    }
+    get parentContainer() {
+        return this._parentContainer;
+    }
+    get(parentContainer) {
+        var _a;
+        this._parentContainer = parentContainer;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+    }
+    remove() {
+        var _a;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        this._parentContainer = null;
+    }
+    build() {
+        this.sprite = makeSprite({ frame: this.textureName });
+        this.addChild(this.sprite);
+    }
+}
+class SpikesPool {
+    constructor() {
+        this.pool = [];
+        this.textures = ['spikes.png'];
+    }
+    getSpike(parentContainer) {
+        const spike = this.pool.find((c) => !c.parentContainer);
+        if (spike) {
+            spike.get(parentContainer);
+            return spike;
+        }
+        else {
+            const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
+            const newSpike = new Spike(texture);
+            this.pool.push(newSpike);
+            return newSpike;
+        }
+    }
+    init() {
+        for (let i = 0; i < 10; i++) {
+            this.textures.forEach((t) => this.pool.push(new Spike(t)));
+        }
+    }
+}
+const SpikePool = new SpikesPool();
+
 ;// CONCATENATED MODULE: ./src/views/Monkey.ts
 
 
@@ -64264,7 +64381,11 @@ class Monkey extends Container_Container {
         this.buildSpine();
     }
     buildSpine() {
-        const data = Assets.cache.get(spines[0].jsonURL).spineData;
+        var _a;
+        const json = (_a = spines.find((d) => d.key === 'Monkey')) === null || _a === void 0 ? void 0 : _a.jsonURL;
+        if (!json)
+            return;
+        const data = Assets.cache.get(json).spineData;
         this.spine = new loader_uni_lib_Spine_Spine(data);
         this.spine.state.addListener({
             complete: (entry) => {
@@ -64300,6 +64421,7 @@ class Monkey extends Container_Container {
 
 
 
+
 const speeds = {
     sky: 0.1,
     clouds: 0.2,
@@ -64313,7 +64435,6 @@ const speeds = {
     fog: 1.6,
     ground: 2.5,
     smallFrontTrees: 3,
-    numbers: 3.5,
 };
 const cloudYRange = [120, 800];
 const BoardView_zIndex = {
@@ -64330,6 +64451,7 @@ const BoardView_zIndex = {
     smallFrontTrees: 10,
     ground: 90,
     number: 95,
+    spikes: 99,
     pit1: 100,
     monkey: 101,
     pit2: 102,
@@ -64351,6 +64473,7 @@ class BoardView extends Container_Container {
         this.mediumTrees = [];
         this.smallTrees = [];
         this.pits = [];
+        this.spikes = [];
         this.numbers = [];
         this.randomNumbers = [];
         this.isAlive = false;
@@ -64362,11 +64485,12 @@ class BoardView extends Container_Container {
         SmallTreePool.init();
         BuildingPool.init();
         NumbersPool.init();
+        SpikePool.init();
     }
     update(d) {
         if (!this.isAlive)
             return;
-        const dt = d * 3;
+        const dt = d * 5;
         this.updateClouds(dt);
         this.updateBkgBuildings(dt);
         this.updateBkgTrees(dt);
@@ -64378,7 +64502,7 @@ class BoardView extends Container_Container {
         this.updateFog(dt);
         this.updateSmallFrontTrees(dt);
         this.updateRandomNumbers(dt);
-        // this.updateGround(dt);
+        this.updateSpikes(dt);
     }
     getBounds(skipUpdate, rect) {
         return new Rectangle(400, 400, 900, 1450);
@@ -64398,7 +64522,7 @@ class BoardView extends Container_Container {
         this.buildSmallTrees();
         this.buildFog();
         this.buildSmallFrontTrees();
-        // this.buildGround();
+        this.buildSpikes();
         this.buildMonkey();
         this.buildButton();
         this.buildCounter();
@@ -64492,14 +64616,20 @@ class BoardView extends Container_Container {
             this.smallTrees.push(tree);
         });
     }
+    buildSpikes() {
+        const positions = [-720, 0, 720, 1440, 2160, 2880, 3600, 4320];
+        positions.forEach((x) => {
+            const tree = SpikePool.getSpike(this);
+            tree.zIndex = BoardView_zIndex.spikes;
+            tree.position.set(x, 1850);
+            this.spikes.push(tree);
+        });
+    }
     buildRandomNumbers() {
         let x = 2000;
         for (let i = 0; i < 8; i++) {
             x += Math.random() * 200 + 200;
-            const fn = sample(['add', 'divide', 'multiply']);
-            const number = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
-            const forbiddenYs = this.numbers.map((n) => n.y);
-            const y = getRandomY(1000, 1800, forbiddenYs);
+            const { fn, number, y } = this.getRandomNumber();
             const n = NumbersPool.getNumber(this, fn, number);
             n.zIndex = BoardView_zIndex.number;
             n.position.set(x, y);
@@ -64618,6 +64748,18 @@ class BoardView extends Container_Container {
             }
         });
     }
+    updateSpikes(dt) {
+        this.spikes.forEach((c, i) => {
+            c.x -= speeds.ground * dt;
+            if (c.x + c.width / 2 <= this.targetX) {
+                this.spikes.splice(i, 1);
+                c.remove();
+                const newSpike = SpikePool.getSpike(this);
+                newSpike.position.set(this.spikes[this.spikes.length - 1].x + 720, 1850);
+                this.spikes.push(newSpike);
+            }
+        });
+    }
     updateClouds(dt) {
         this.clouds.forEach((c, i) => {
             c.x -= speeds.clouds * dt;
@@ -64632,16 +64774,13 @@ class BoardView extends Container_Container {
     }
     updateRandomNumbers(dt) {
         this.randomNumbers.forEach((n, i) => {
-            n.x -= speeds.numbers * dt;
+            n.x -= n.speed * dt;
             if (n.x + n.width / 2 <= this.targetX) {
                 this.randomNumbers.splice(i, 1);
                 n.remove();
-                const fn = sample(['add', 'divide', 'multiply']);
-                const number = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
-                const forbiddenYs = this.numbers.map((n) => n.y);
-                const y = getRandomY(1000, 1800, forbiddenYs);
+                const { fn, number, y } = this.getRandomNumber();
                 const newNumber = NumbersPool.getNumber(this, fn, number);
-                newNumber.scale.set(0.8 + Math.random() * 0.2);
+                newNumber.scale.set(1 + Math.random() * 0.2);
                 newNumber.position.set(this.gameWidth * 1.2 + Math.random() * 400, y);
                 this.randomNumbers.push(newNumber);
             }
@@ -64740,7 +64879,7 @@ class BoardView extends Container_Container {
             this.moveLand(this.pits[0], duration);
             animate(this.monkey, {
                 y,
-                ease: 'inCubic',
+                ease: 'inQuart',
                 duration,
                 onComplete: () => {
                     this.isAlive = false;
@@ -64769,14 +64908,14 @@ class BoardView extends Container_Container {
             duration,
             ease: 'linear',
             onComplete: () => {
+                const { fn, numberValue } = number;
+                this.updateCounter(fn, numberValue);
                 animate(number, {
                     y: '-=100',
                     alpha: 0,
                     duration: 400,
                     ease: 'linear',
                     onComplete: () => {
-                        const { fn, numberValue } = number;
-                        this.updateCounter(fn, numberValue);
                         const index = this.numbers.indexOf(number);
                         this.numbers.splice(index, 1);
                         number.remove();
@@ -64799,9 +64938,16 @@ class BoardView extends Container_Container {
             ease: 'linear',
         });
     }
+    getRandomNumber() {
+        const fn = sample(['add', 'divide', 'multiply', 'add', 'multiply']);
+        const number = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
+        const forbiddenYs = this.numbers.map((n) => n.y);
+        const y = getRandomY(1000, 1800, forbiddenYs);
+        return { fn, number, y };
+    }
     getNumber(y) {
         const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
-        const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? sample([2, 3, 4]) : sample([2, 3, 4, 5]);
+        const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
         const number = NumbersPool.getNumber(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = BoardView_zIndex.number;
@@ -65087,7 +65233,7 @@ var App_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
 class App extends Application {
     constructor() {
         super({
-            backgroundColor: 0xffffff,
+            backgroundColor: 0x280c70,
             backgroundAlpha: 1,
             powerPreference: 'high-performance',
             antialias: true,

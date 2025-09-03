@@ -189,8 +189,8 @@ export class BoardView extends Container {
 
     private buildBuildings(): void {
         const positions = [
-            400, 1760, 1410, 1665, 1305, 505, 765, 605, 1175, 1035, 1555, 1875, 200, 2000, 2320, 2110, 2420, 2200, 2550,
-            2660, 2790, 2900, 3010, 3130, 3210, 3340, 3470, 3600, 3730, 3860,
+            400, 1930, 1610, 1665, 1305, 540, 825, 655, 1305, 1135, 1705, 2090, 200, 2220, 2800, 2350, 2600, 2200, 3000,
+            3090, 3230, 3330, 3480, 3670, 3820, 3970, 4100, 4330, 4550,
         ];
         positions.forEach((x) => {
             const building = BuildingPool.getBuilding(this);
@@ -352,7 +352,7 @@ export class BoardView extends Container {
                 this.buildings.splice(i, 1);
                 c.remove();
                 const newBuilding = BuildingPool.getBuilding(this);
-                newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 30 + 100, 1875);
+                newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150, 1875);
                 this.buildings.push(newBuilding);
             }
         });

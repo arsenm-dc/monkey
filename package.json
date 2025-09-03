@@ -4,8 +4,7 @@
     "description": "Pixi Grid template on TS",
     "main": "index.js",
     "scripts": {
-        "start": "npm run generateAssets && npm run generateEventNames && webpack serve --config webpack/webpack.dev.js",
-        "generateEventNames": "node nodeScripts/GenerateEventNames.js",
+        "start": "npm run generateAssets && webpack serve --config webpack/webpack.dev.js",
         "generateAssets": "node nodeScripts/GenerateAssets.js",
         "build": "webpack --config webpack/webpack.prod.js"
     },

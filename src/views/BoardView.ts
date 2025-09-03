@@ -123,7 +123,7 @@ export class BoardView extends Container {
         const { width } = getGameBounds();
 
         this.gameWidth = width * (1 / this.scale.x);
-        this.targetX = -this.gameWidth / 4;
+        this.targetX = -this.gameWidth / 4 - 200;
         this.buildSky();
         this.buildClouds();
         this.buildBkgBuildings();

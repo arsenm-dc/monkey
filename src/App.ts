@@ -6,7 +6,6 @@ import { fitDimension } from './Utils';
 import { assets } from './assets/assetsNames/assets';
 import { atlases } from './assets/assetsNames/atlas';
 import { spines } from './assets/assetsNames/spines';
-import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
 
@@ -82,7 +81,6 @@ class App extends Application {
         this.stage.start();
         this.ticker.add((dt) => this.stage.update(dt));
 
-        lego.command.execute(mapCommands);
         lego.event.emit(MainGameEvents.MainViewReady);
     }
 
@@ -99,9 +97,6 @@ class App extends Application {
 
     private initLego(): void {
         legoLogger.start(lego, Object.freeze({}));
-        // TODO GAMEINITCOMMAND
-        // lego.command.execute(onGameInitCommand);
-        // lego.event.emit(MainGameEvents.Init);
     }
 
     private initStats(): void {

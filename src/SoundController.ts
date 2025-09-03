@@ -11,10 +11,6 @@ class SoundControl {
         //     this.sounds[name] = new Howl({ src: path });
         // });
     }
-
-    private gameModelUpdate(): void {
-        this.sounds.sound.play();
-    }
 }
 
 const SoundController = new SoundControl();

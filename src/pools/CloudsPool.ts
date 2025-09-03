@@ -35,15 +35,15 @@ class CloudsPool {
     private textures: string[] = ['cloud_1_1.png', 'cloud_1_2.png', 'cloud_1_3.png'];
 
     public get(parentContainer): Cloud {
-        const cloud = this.pool.find((c) => !c.parentContainer);
-        if (cloud) {
-            cloud.get(parentContainer);
-            return cloud;
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         } else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newCloud = new Cloud(texture);
-            this.pool.push(newCloud);
-            return newCloud;
+            const newElement = new Cloud(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
 

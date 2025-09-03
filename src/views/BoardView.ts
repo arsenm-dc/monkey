@@ -14,8 +14,12 @@ import { delayRunnable, getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
 const VINE_Y = 1050;
-
+const VINE_BUSHES_Y = 650;
 const getVineY = () => VINE_Y + Math.random() * 150;
+
+const BUILDINGS_Y = 1875;
+const TREE_Y = 2000;
+const SPIKES_Y = 1850;
 
 const speeds = {
     sky: 0.1,
@@ -213,7 +217,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const building = BuildingPool.get(this);
             building.zIndex = zIndex.buildings;
-            building.position.set(x, 1875);
+            building.position.set(x, BUILDINGS_Y);
             this.buildings.push(building);
         });
     }
@@ -223,7 +227,7 @@ export class BoardView extends Container {
         position.forEach((x) => {
             const tree = LargeTreePool.get(this);
             tree.zIndex = zIndex.largeTrees;
-            tree.position.set(x, 2000);
+            tree.position.set(x, TREE_Y);
             this.largeTrees.push(tree);
         });
     }
@@ -243,7 +247,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const tree = MediumTreePool.get(this);
             tree.zIndex = zIndex.mediumTrees;
-            tree.position.set(x, 2000);
+            tree.position.set(x, TREE_Y);
             this.mediumTrees.push(tree);
         });
     }
@@ -253,7 +257,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const tree = SmallTreePool.get(this);
             tree.zIndex = zIndex.smallTrees;
-            tree.position.set(x, 2000);
+            tree.position.set(x, TREE_Y);
             this.smallTrees.push(tree);
         });
     }
@@ -276,7 +280,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const bush = VineBushPool.get(this);
             bush.zIndex = zIndex.vines;
-            bush.position.set(x, 650);
+            bush.position.set(x, VINE_BUSHES_Y);
             this.vineBushes.push(bush);
         });
     }
@@ -286,7 +290,7 @@ export class BoardView extends Container {
         positions.forEach((x) => {
             const tree = SpikePool.get(this);
             tree.zIndex = zIndex.spikes;
-            tree.position.set(x, 1850);
+            tree.position.set(x, SPIKES_Y);
             this.spikes.push(tree);
         });
     }
@@ -380,7 +384,7 @@ export class BoardView extends Container {
                 this.largeTrees.splice(i, 1);
                 c.remove();
                 const newElement = LargeTreePool.get(this);
-                newElement.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, 2000);
+                newElement.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, TREE_Y);
                 this.largeTrees.push(newElement);
             }
         });
@@ -393,7 +397,10 @@ export class BoardView extends Container {
                 this.buildings.splice(i, 1);
                 c.remove();
                 const newElement = BuildingPool.get(this);
-                newElement.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150, 1875);
+                newElement.position.set(
+                    this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150,
+                    BUILDINGS_Y,
+                );
                 this.buildings.push(newElement);
             }
         });
@@ -407,7 +414,7 @@ export class BoardView extends Container {
                 c.remove();
 
                 const newElement = MediumTreePool.get(this);
-                newElement.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, 2000);
+                newElement.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, TREE_Y);
                 this.mediumTrees.push(newElement);
             }
         });
@@ -420,7 +427,7 @@ export class BoardView extends Container {
                 this.smallTrees.splice(i, 1);
                 c.remove();
                 const newElement = SmallTreePool.get(this);
-                newElement.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, 2000);
+                newElement.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, TREE_Y);
                 this.smallTrees.push(newElement);
             }
         });
@@ -433,7 +440,7 @@ export class BoardView extends Container {
                 this.spikes.splice(i, 1);
                 c.remove();
                 const newElement = SpikePool.get(this);
-                newElement.position.set(this.spikes[this.spikes.length - 1].x + 720, 1850);
+                newElement.position.set(this.spikes[this.spikes.length - 1].x + 720, SPIKES_Y);
                 this.spikes.push(newElement);
             }
         });
@@ -475,7 +482,7 @@ export class BoardView extends Container {
                 this.vineBushes.splice(i, 1);
                 c.remove();
                 const newElement = VineBushPool.get(this);
-                newElement.position.set(this.vineBushes[this.vineBushes.length - 1].x + 600, getVineY());
+                newElement.position.set(this.vineBushes[this.vineBushes.length - 1].x + 600, VINE_BUSHES_Y);
                 this.vineBushes.push(newElement);
             }
         });

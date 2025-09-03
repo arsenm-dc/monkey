@@ -33,7 +33,7 @@ export class Naipes extends Container {
         const data = Assets.cache.get(json).spineData;
         this.spine = new Spine(data);
         // 'Spin'
-        this.spine.scale.set(0.15);
+        this.spine.scale.set(0.2);
         this.addChild(this.spine);
     }
 }

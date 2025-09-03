@@ -467,6 +467,8 @@ export class BoardView extends Container {
             onComplete: () => {
                 this.monkey.swingUp();
                 this.swingUp();
+                const { fn, numberValue } = number;
+                this.monkey.showNumberEffect(fn, numberValue);
             },
         });
 

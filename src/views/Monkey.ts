@@ -1,13 +1,32 @@
+import { animate } from 'animejs';
 import { Spine } from 'pixi-spine';
-import { Assets, Container } from 'pixi.js';
+import { Assets, Container, Text } from 'pixi.js';
 import { spines } from '../assets/assetsNames/spines';
+import { FunctionType, getNumberText } from '../pools/NumbersPool';
 
 export class Monkey extends Container {
     private spine: Spine;
+    private number: Text;
+
     constructor() {
         super();
 
         this.build();
+    }
+
+    public showNumberEffect(fn: FunctionType, value: number): void {
+        this.number.text = getNumberText(fn, value);
+
+        this.number.style.fill = fn === 'divide' ? '0xc90443' : '0x1ab518';
+
+        this.number.y = -270;
+        this.number.alpha = 1;
+        animate(this.number, {
+            y: '-=200',
+            alpha: 0,
+            duration: 800,
+            ease: 'inSine',
+        });
     }
 
     public setActive(value: boolean): void {
@@ -32,6 +51,19 @@ export class Monkey extends Container {
 
     private build(): void {
         this.buildSpine();
+        this.buildNumber();
+    }
+
+    private buildNumber(): void {
+        this.number = new Text('+12', {
+            fill: 0xffffff,
+            fontWeight: '900',
+            fontSize: 48,
+        });
+        this.number.anchor.set(0.5, 0.5);
+        this.number.position.set(-40, -270);
+        this.number.alpha = 0;
+        this.addChild(this.number);
     }
 
     private buildSpine(): void {

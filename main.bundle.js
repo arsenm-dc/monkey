@@ -5554,7 +5554,7 @@ class Logger {
 ;// CONCATENATED MODULE: ./node_modules/@armathai/lego/dist/index.js
 
 
-const dist_lego = new Lego();
+const lego = new Lego();
 const legoLogger = new Logger();
 
 ;// CONCATENATED MODULE: ./node_modules/@armathai/pixi-stats/dist/pixi-stats.esm.js
@@ -64138,7 +64138,7 @@ class Naipes extends Container_Container {
         const data = Assets.cache.get(json).spineData;
         this.spine = new loader_uni_lib_Spine_Spine(data);
         // 'Spin'
-        this.spine.scale.set(0.15);
+        this.spine.scale.set(0.2);
         this.addChild(this.spine);
     }
 }
@@ -64147,6 +64147,11 @@ class Naipes extends Container_Container {
 
 
 
+
+const getNumberText = (fn, value) => {
+    const sign = fn === 'add' ? '+' : fn === 'divide' ? '/' : 'x';
+    return `${sign}${value}`;
+};
 class NumbersPool_Number extends Container_Container {
     constructor() {
         super();
@@ -64175,7 +64180,7 @@ class NumbersPool_Number extends Container_Container {
         this._speed = Math.random() + 3;
         this._fn = fn;
         this._value = value;
-        this.text.text = this.getText();
+        this.text.text = getNumberText(this._fn, this._value);
         this.updateTint();
         this.spin();
     }
@@ -64190,7 +64195,11 @@ class NumbersPool_Number extends Container_Container {
         this.bkgNaipes.visible = false;
         this.addChild(this.bkgNaipes);
         this.bkgChips = new Chips();
+        this.bkgChips.visible = false;
         this.addChild(this.bkgChips);
+        this.bkgEagle = makeSprite({ frame: 'eagle.png' });
+        this.bkgEagle.visible = false;
+        this.addChild(this.bkgEagle);
         this.text = new Text('', {
             fill: 0xffffff,
             fontWeight: '900',
@@ -64203,23 +64212,25 @@ class NumbersPool_Number extends Container_Container {
     }
     updateTint() {
         if (this._fn === 'add') {
+            this.text.visible = true;
             this.bkgNaipes.visible = false;
             this.bkgChips.visible = true;
+            this.bkgEagle.visible = false;
         }
         else if (this._fn === 'multiply') {
+            this.text.visible = true;
             this.bkgChips.visible = false;
+            this.bkgEagle.visible = false;
             this.bkgNaipes.visible = true;
             this.bkgNaipes.updateSlot(Math.random() > 0.5 ? 'Diamonds_C0' : 'Hearts_D0');
         }
         else {
             this.bkgChips.visible = false;
-            this.bkgNaipes.visible = true;
-            this.bkgNaipes.updateSlot('spades');
+            this.bkgNaipes.visible = false;
+            this.bkgEagle.visible = true;
+            this.text.visible = false;
+            // this.bkgNaipes.updateSlot('spades');
         }
-    }
-    getText() {
-        const sign = this._fn === 'add' ? '+' : this._fn === 'divide' ? '/' : 'x';
-        return `${sign}${this._value}`;
     }
 }
 class NumberPool {
@@ -64357,10 +64368,24 @@ const SpikePool = new SpikesPool();
 
 
 
+
+
 class Monkey extends Container_Container {
     constructor() {
         super();
         this.build();
+    }
+    showNumberEffect(fn, value) {
+        this.number.text = getNumberText(fn, value);
+        this.number.style.fill = fn === 'divide' ? '0xc90443' : '0x1ab518';
+        this.number.y = -270;
+        this.number.alpha = 1;
+        animate(this.number, {
+            y: '-=200',
+            alpha: 0,
+            duration: 800,
+            ease: 'inSine',
+        });
     }
     setActive(value) {
         this.spine.state.timeScale = value ? 1 : 0;
@@ -64379,6 +64404,18 @@ class Monkey extends Container_Container {
     }
     build() {
         this.buildSpine();
+        this.buildNumber();
+    }
+    buildNumber() {
+        this.number = new Text('+12', {
+            fill: 0xffffff,
+            fontWeight: '900',
+            fontSize: 48,
+        });
+        this.number.anchor.set(0.5, 0.5);
+        this.number.position.set(-40, -270);
+        this.number.alpha = 0;
+        this.addChild(this.number);
     }
     buildSpine() {
         var _a;
@@ -64490,27 +64527,23 @@ class BoardView extends Container_Container {
     update(d) {
         if (!this.isAlive)
             return;
-        const dt = d * 5;
+        const dt = d * 5; // Control the speed
         this.updateClouds(dt);
-        this.updateBkgBuildings(dt);
-        this.updateBkgTrees(dt);
         this.updateLargeTrees(dt);
         this.updateBuildings(dt);
-        this.updateSmallForegroundTrees(dt);
         this.updateMediumTrees(dt);
         this.updateSmallTrees(dt);
-        this.updateFog(dt);
-        this.updateSmallFrontTrees(dt);
         this.updateRandomNumbers(dt);
         this.updateSpikes(dt);
+        this.updateTileSprites(dt);
     }
     getBounds(skipUpdate, rect) {
         return new Rectangle(400, 400, 900, 1450);
     }
     build() {
-        const { width, height } = getGameBounds();
+        const { width } = getGameBounds();
         this.gameWidth = width * (1 / this.scale.x);
-        this.targetX = -this.gameWidth / 4;
+        this.targetX = -this.gameWidth / 4 - 200;
         this.buildSky();
         this.buildClouds();
         this.buildBkgBuildings();
@@ -64531,7 +64564,7 @@ class BoardView extends Container_Container {
     buildSky() {
         const texture = Texture.from('sky.png');
         this.sky = new TilingSprite(texture, this.gameWidth * 2, texture.height);
-        this.sky.x = -this.gameWidth / 5;
+        this.sky.x = -this.gameWidth / 2;
         this.sky.zIndex = BoardView_zIndex.sky;
         this.addChild(this.sky);
     }
@@ -64552,8 +64585,8 @@ class BoardView extends Container_Container {
     }
     buildBkgBuildings() {
         const texture = Texture.from('bkgBuildings.png');
-        this.bkgBuildings = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.bkgBuildings.x = -this.gameWidth / 4;
+        this.bkgBuildings = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.bkgBuildings.x = -this.gameWidth / 2;
         this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = BoardView_zIndex.bkgBuildings;
@@ -64561,8 +64594,8 @@ class BoardView extends Container_Container {
     }
     buildBkgTrees() {
         const texture = Texture.from('bkgTrees.png');
-        this.bkgTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.bkgTrees.x = -this.gameWidth / 4;
+        this.bkgTrees = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.bkgTrees.x = -this.gameWidth / 2;
         this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = BoardView_zIndex.bkgTrees;
@@ -64570,8 +64603,8 @@ class BoardView extends Container_Container {
     }
     buildBuildings() {
         const positions = [
-            400, 1760, 1410, 1665, 1305, 505, 765, 605, 1175, 1035, 1555, 1875, 200, 2000, 2320, 2110, 2420, 2200, 2550,
-            2660, 2790, 2900, 3010, 3130, 3210, 3340, 3470, 3600, 3730, 3860,
+            400, 1930, 1610, 1665, 1305, 540, 825, 655, 1305, 1135, 1705, 2090, 200, 2220, 2800, 2350, 2600, 2200, 3000,
+            3090, 3230, 3330, 3480, 3670, 3820, 3970, 4100, 4330, 4550,
         ];
         positions.forEach((x) => {
             const building = BuildingPool.getBuilding(this);
@@ -64581,7 +64614,7 @@ class BoardView extends Container_Container {
         });
     }
     buildLargeTrees() {
-        const position = [120, 1575, 2975, 4400];
+        const position = [-1200, 120, 1575, 2975, 4400, 5700];
         position.forEach((x) => {
             const tree = LargeTreePool.getTree(this);
             tree.zIndex = BoardView_zIndex.largeTrees;
@@ -64591,15 +64624,15 @@ class BoardView extends Container_Container {
     }
     buildSmallForegroundTrees() {
         const texture = Texture.from('tree_2_1.png');
-        this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.smallForegroundTrees.x = -this.gameWidth / 4;
+        this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.smallForegroundTrees.x = -this.gameWidth / 2;
         this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = BoardView_zIndex.smallForegroundTrees;
         this.addChild(this.smallForegroundTrees);
     }
     buildMediumTrees() {
-        const positions = [270, 1275, 2275, 3275, 4275];
+        const positions = [-700, 270, 1275, 2275, 3275, 4275, 5300];
         positions.forEach((x) => {
             const tree = MediumTreePool.getTree(this);
             tree.zIndex = BoardView_zIndex.mediumTrees;
@@ -64608,7 +64641,7 @@ class BoardView extends Container_Container {
         });
     }
     buildSmallTrees() {
-        const positions = [0, 700, 1400, 2100, 2800, 3500];
+        const positions = [-700, 0, 700, 1400, 2100, 2800, 3500, 4200];
         positions.forEach((x) => {
             const tree = SmallTreePool.getTree(this);
             tree.zIndex = BoardView_zIndex.smallTrees;
@@ -64633,7 +64666,6 @@ class BoardView extends Container_Container {
             const n = NumbersPool.getNumber(this, fn, number);
             n.zIndex = BoardView_zIndex.number;
             n.position.set(x, y);
-            n.scale.set(0.8 + Math.random() * 0.2);
             this.randomNumbers.push(n);
         }
     }
@@ -64719,7 +64751,7 @@ class BoardView extends Container_Container {
                 this.buildings.splice(i, 1);
                 c.remove();
                 const newBuilding = BuildingPool.getBuilding(this);
-                newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 30 + 100, 1875);
+                newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150, 1875);
                 this.buildings.push(newBuilding);
             }
         });
@@ -64786,26 +64818,13 @@ class BoardView extends Container_Container {
             }
         });
     }
-    updateSky(dt) {
-        this.sky.tilePosition.x -= speeds.sky * dt;
-    }
-    updateBkgBuildings(dt) {
-        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings * dt;
-    }
-    updateBkgTrees(dt) {
-        this.bkgTrees.tilePosition.x -= speeds.bkgTrees * dt;
-    }
-    updateSmallForegroundTrees(dt) {
-        this.smallForegroundTrees.tilePosition.x -= speeds.smallForegroundTrees * dt;
-    }
-    updateFog(dt) {
-        this.fog.tilePosition.x -= speeds.fog * dt;
-    }
-    updateGround(dt) {
-        this.ground.tilePosition.x -= speeds.ground * dt;
-    }
-    updateSmallFrontTrees(dt) {
+    updateTileSprites(dt) {
         this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
+        this.fog.tilePosition.x -= speeds.fog * dt;
+        this.smallForegroundTrees.tilePosition.x -= speeds.smallForegroundTrees * dt;
+        // this.sky.tilePosition.x -= speeds.sky * dt;
+        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings * dt;
+        this.bkgTrees.tilePosition.x -= speeds.bkgTrees * dt;
     }
     dropMonkey() {
         let chance = Math.random();
@@ -64814,82 +64833,93 @@ class BoardView extends Container_Container {
         }
         this.monkey.drop();
         if (chance <= 0.6) {
-            const y = Math.random() * 600 + 1200;
-            const duration = (y - monkeyPos.y) * DT;
-            const number = this.getNumber(y);
-            animate(this.monkey, {
-                y,
-                ease: 'inCubic',
-                duration,
-                onComplete: () => {
-                    this.monkey.swingUp();
-                    this.swingUp();
-                },
-            });
-            this.moveNumber(number, duration);
+            this.reJump();
         }
         else if (chance > 0.6 && chance <= 0.8) {
-            // DIE
-            const y = 2400;
-            const duration = (y - monkeyPos.y) * DT;
-            const pit = makeSprite({
-                frame: 'ground_pit_1.png',
-                anchor: new Point_Point(0.5, 1),
-                x: this.gameWidth * 1.5,
-                y: 1850,
-            });
-            this.addChild(pit);
-            pit.zIndex = BoardView_zIndex.pit1;
-            this.pits.push(pit);
-            const pitFront = makeSprite({
-                frame: 'ground_pit_front_1.png',
-                anchor: new Point_Point(0.5, 1),
-                x: this.gameWidth * 1.5,
-                y: 1870,
-            });
-            this.addChild(pitFront);
-            pitFront.zIndex = BoardView_zIndex.pit2;
-            this.pits.push(pitFront);
-            this.movePit(this.pits, duration);
-            this.monkey.fall();
-            animate(this.monkey, {
-                y,
-                ease: 'inCubic',
-                duration,
-                onComplete: () => {
-                    this.isAlive = false;
-                    delayRunnable(2, () => {
-                        this.reset();
-                    });
-                },
-            });
+            this.fallToDie();
         }
         else {
-            // LAND
-            const y = 1870;
-            const duration = (y - monkeyPos.y) * DT;
-            const land = makeSprite({
-                frame: 'landing_platform.png',
-                x: this.gameWidth * 1.5,
-                y: 1900,
-            });
-            this.addChild(land);
-            land.zIndex = BoardView_zIndex.pit1;
-            this.pits.push(land);
-            this.moveLand(this.pits[0], duration);
-            animate(this.monkey, {
-                y,
-                ease: 'inQuart',
-                duration,
-                onComplete: () => {
-                    this.isAlive = false;
-                    this.monkey.land();
-                    delayRunnable(3, () => {
-                        this.reset();
-                    });
-                },
-            });
+            this.fallToLand();
         }
+    }
+    reJump() {
+        const y = Math.random() * 600 + 1200;
+        const duration = (y - monkeyPos.y) * DT;
+        const number = this.getNumber(y);
+        animate(this.monkey, {
+            y,
+            ease: 'inCubic',
+            duration,
+            onComplete: () => {
+                this.monkey.swingUp();
+                this.swingUp();
+                const { fn, numberValue } = number;
+                this.monkey.showNumberEffect(fn, numberValue);
+            },
+        });
+        this.moveNumber(number, duration);
+    }
+    fallToDie() {
+        // DIE
+        const y = 2400;
+        const duration = (y - monkeyPos.y) * DT;
+        const pit = makeSprite({
+            frame: 'ground_pit_1.png',
+            anchor: new Point_Point(0.5, 1),
+            x: this.gameWidth * 1.5,
+            y: 1850,
+        });
+        this.addChild(pit);
+        pit.zIndex = BoardView_zIndex.pit1;
+        this.pits.push(pit);
+        const pitFront = makeSprite({
+            frame: 'ground_pit_front_1.png',
+            anchor: new Point_Point(0.5, 1),
+            x: this.gameWidth * 1.5,
+            y: 1870,
+        });
+        this.addChild(pitFront);
+        pitFront.zIndex = BoardView_zIndex.pit2;
+        this.pits.push(pitFront);
+        this.movePit(this.pits, duration);
+        this.monkey.fall();
+        animate(this.monkey, {
+            y,
+            ease: 'inCubic',
+            duration,
+            onComplete: () => {
+                this.isAlive = false;
+                delayRunnable(2, () => {
+                    this.reset();
+                });
+            },
+        });
+    }
+    fallToLand() {
+        // LAND
+        const y = 1870;
+        const duration = (y - monkeyPos.y) * DT;
+        const land = makeSprite({
+            frame: 'landing_platform.png',
+            x: this.gameWidth * 1.5,
+            y: 1900,
+        });
+        this.addChild(land);
+        land.zIndex = BoardView_zIndex.pit1;
+        this.pits.push(land);
+        this.moveLand(this.pits[0], duration);
+        animate(this.monkey, {
+            y,
+            ease: 'inQuart',
+            duration,
+            onComplete: () => {
+                this.isAlive = false;
+                this.monkey.land();
+                delayRunnable(3, () => {
+                    this.reset();
+                });
+            },
+        });
     }
     swingUp() {
         const duration = (this.monkey.y - 750) * DT;
@@ -65053,7 +65083,7 @@ class PixiStage extends Container_Container {
 const assets = [
     { name: 'bkgBuildings.png', path: 'assets/uncompressed/bkgBuildings.png' },
     { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
-    { name: 'circle.png', path: 'assets/uncompressed/circle.png' },
+    { name: 'eagle.png', path: 'assets/uncompressed/eagle.png' },
     { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
     { name: 'ground.png', path: 'assets/uncompressed/ground.png' },
     { name: 'play.png', path: 'assets/uncompressed/play.png' },
@@ -65079,121 +65109,6 @@ const atlases = [
     { name: 'pits', json: 'assets/atlas/pits@1.png.json', png: 'assets/atlas/pits.png' },
 ];
 
-;// CONCATENATED MODULE: ./src/events/MainEvents.ts
-const WindowEvent = {
-    Resize: "WindowEventResize",
-    FocusChange: "WindowEventFocusChange",
-};
-const MainGameEvents = {
-    Resize: "MainGameEventsResize",
-    MainViewReady: "MainGameEventsMainViewReady",
-};
-
-;// CONCATENATED MODULE: ./src/models/ObservableModel.ts
-
-const getUUID = (() => {
-    let i = 0;
-    return (name = '') => `${name}${++i}`;
-})();
-class ObservableModel {
-    constructor(name) {
-        this.__name__ = name;
-        this.id = getUUID(this.__name__);
-    }
-    get uuid() {
-        return this.id;
-    }
-    makeObservable(...props) {
-        dist_lego.observe.makeObservable(this, ...props);
-    }
-    createObservable(property, value) {
-        dist_lego.observe.createObservable(this, property, value);
-    }
-    removeObservable(...props) {
-        dist_lego.observe.removeObservable(this, ...props);
-    }
-    initialize(...args) {
-        void args;
-    }
-    destroy() {
-        //
-    }
-}
-
-;// CONCATENATED MODULE: ./src/models/GameModel.ts
-
-var GameState;
-(function (GameState) {
-    GameState[GameState["Unknown"] = 0] = "Unknown";
-})(GameState || (GameState = {}));
-class GameModel extends ObservableModel {
-    constructor() {
-        super('GameModel');
-        this._state = GameState.Unknown;
-        this.makeObservable();
-    }
-    get state() {
-        return this._state;
-    }
-    set state(value) {
-        this._state = value;
-    }
-    init() {
-        this._state = GameState.Unknown;
-    }
-}
-
-;// CONCATENATED MODULE: ./src/models/HeadModel.ts
-
-
-class HeadModel extends ObservableModel {
-    constructor() {
-        super('HeadModel');
-        this._gameModel = null;
-        this.makeObservable();
-    }
-    set gameModel(value) {
-        this._gameModel = value;
-    }
-    get gameModel() {
-        return this._gameModel;
-    }
-    init() {
-        //
-    }
-    initGameModel() {
-        this._gameModel = new GameModel();
-        this._gameModel.init();
-    }
-}
-const Head = new HeadModel();
-/* harmony default export */ const models_HeadModel = (Head);
-
-;// CONCATENATED MODULE: ./src/configs/EventCommandPairs.ts
-
-
-
-const mapCommands = () => {
-    eventCommandPairs.forEach(({ event, command }) => {
-        dist_lego.event.on(event, command);
-    });
-};
-const unMapCommands = () => {
-    eventCommandPairs.forEach(({ event, command }) => {
-        lego.event.off(event, command);
-    });
-};
-const onMainViewReadyCommand = () => {
-    models_HeadModel.init();
-    models_HeadModel.initGameModel();
-};
-const eventCommandPairs = Object.freeze([
-    {
-        event: MainGameEvents.MainViewReady,
-        command: onMainViewReadyCommand,
-    },
-]);
-
 ;// CONCATENATED MODULE: ./src/configs/ScreenSizeConfig.ts
 const ScreenSizeConfig = Object.freeze({
     size: {
@@ -65209,6 +65124,16 @@ const ScreenSizeConfig = Object.freeze({
     },
 });
 
+;// CONCATENATED MODULE: ./src/events/MainEvents.ts
+const WindowEvent = {
+    Resize: "WindowEventResize",
+    FocusChange: "WindowEventFocusChange",
+};
+const MainGameEvents = {
+    Resize: "MainGameEventsResize",
+    MainViewReady: "MainGameEventsMainViewReady",
+};
+
 ;// CONCATENATED MODULE: ./src/App.ts
 var App_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -65219,7 +65144,6 @@ var App_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argu
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
 
 
 
@@ -65262,10 +65186,10 @@ class App extends Application {
         this.resizeCanvas(width, height);
         this.resizeRenderer(width, height);
         this.stage.resize();
-        dist_lego.event.emit(MainGameEvents.Resize);
+        lego.event.emit(MainGameEvents.Resize);
     }
     onFocusChange(focus) {
-        dist_lego.event.emit(WindowEvent.FocusChange, focus);
+        lego.event.emit(WindowEvent.FocusChange, focus);
     }
     loadAssets() {
         return App_awaiter(this, void 0, void 0, function* () {
@@ -65291,8 +65215,7 @@ class App extends Application {
         this.appResize();
         this.stage.start();
         this.ticker.add((dt) => this.stage.update(dt));
-        dist_lego.command.execute(mapCommands);
-        dist_lego.event.emit(MainGameEvents.MainViewReady);
+        lego.event.emit(MainGameEvents.MainViewReady);
     }
     resizeCanvas(width, height) {
         const { style } = this.renderer.view;
@@ -65305,10 +65228,7 @@ class App extends Application {
         this.renderer.resize(width, height);
     }
     initLego() {
-        legoLogger.start(dist_lego, Object.freeze({}));
-        // TODO GAMEINITCOMMAND
-        // lego.command.execute(onGameInitCommand);
-        // lego.event.emit(MainGameEvents.Init);
+        legoLogger.start(lego, Object.freeze({}));
     }
     initStats() {
         //@ts-ignore

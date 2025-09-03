@@ -261,7 +261,6 @@ export class BoardView extends Container {
             const n = NumbersPool.getNumber(this, fn, number);
             n.zIndex = zIndex.number;
             n.position.set(x, y);
-            n.scale.set(0.8 + Math.random() * 0.2);
             this.randomNumbers.push(n);
         }
     }

@@ -1,4 +1,5 @@
-import { Container, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
+import { makeSprite } from '../configs/spriteConfig';
 import { Chips } from '../views/Chips';
 import { Naipes } from '../views/Naipes';
 
@@ -14,6 +15,7 @@ export class Number extends Container {
     private text: Text;
     private bkgNaipes: Naipes;
     private bkgChips: Chips;
+    private bkgEagle: Sprite;
     private _fn: FunctionType;
     private _value: number;
 
@@ -71,7 +73,12 @@ export class Number extends Container {
         this.addChild(this.bkgNaipes);
 
         this.bkgChips = new Chips();
+        this.bkgChips.visible = false;
         this.addChild(this.bkgChips);
+
+        this.bkgEagle = makeSprite({ frame: 'eagle.png' });
+        this.bkgEagle.visible = false;
+        this.addChild(this.bkgEagle);
 
         this.text = new Text('', {
             fill: 0xffffff,
@@ -86,16 +93,22 @@ export class Number extends Container {
 
     private updateTint(): void {
         if (this._fn === 'add') {
+            this.text.visible = true;
             this.bkgNaipes.visible = false;
             this.bkgChips.visible = true;
+            this.bkgEagle.visible = false;
         } else if (this._fn === 'multiply') {
+            this.text.visible = true;
             this.bkgChips.visible = false;
+            this.bkgEagle.visible = false;
             this.bkgNaipes.visible = true;
             this.bkgNaipes.updateSlot(Math.random() > 0.5 ? 'Diamonds_C0' : 'Hearts_D0');
         } else {
             this.bkgChips.visible = false;
-            this.bkgNaipes.visible = true;
-            this.bkgNaipes.updateSlot('spades');
+            this.bkgNaipes.visible = false;
+            this.bkgEagle.visible = true;
+            this.text.visible = false;
+            // this.bkgNaipes.updateSlot('spades');
         }
     }
 }

@@ -146,7 +146,7 @@ export class BoardView extends Container {
     private buildSky(): void {
         const texture = Texture.from('sky.png');
         this.sky = new TilingSprite(texture, this.gameWidth * 2, texture.height);
-        this.sky.x = -this.gameWidth / 5;
+        this.sky.x = -this.gameWidth / 2;
         this.sky.zIndex = zIndex.sky;
         this.addChild(this.sky);
     }
@@ -169,8 +169,8 @@ export class BoardView extends Container {
 
     private buildBkgBuildings(): void {
         const texture = Texture.from('bkgBuildings.png');
-        this.bkgBuildings = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.bkgBuildings.x = -this.gameWidth / 4;
+        this.bkgBuildings = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.bkgBuildings.x = -this.gameWidth / 2;
         this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
         this.bkgBuildings.zIndex = zIndex.bkgBuildings;
@@ -179,8 +179,8 @@ export class BoardView extends Container {
 
     private buildBkgTrees(): void {
         const texture = Texture.from('bkgTrees.png');
-        this.bkgTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.bkgTrees.x = -this.gameWidth / 4;
+        this.bkgTrees = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.bkgTrees.x = -this.gameWidth / 2;
         this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
         this.bkgTrees.zIndex = zIndex.bkgTrees;
@@ -201,7 +201,7 @@ export class BoardView extends Container {
     }
 
     private buildLargeTrees(): void {
-        const position = [120, 1575, 2975, 4400];
+        const position = [-1200, 120, 1575, 2975, 4400, 5700];
         position.forEach((x) => {
             const tree = LargeTreePool.getTree(this);
             tree.zIndex = zIndex.largeTrees;
@@ -212,8 +212,8 @@ export class BoardView extends Container {
 
     private buildSmallForegroundTrees(): void {
         const texture = Texture.from('tree_2_1.png');
-        this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.smallForegroundTrees.x = -this.gameWidth / 4;
+        this.smallForegroundTrees = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.smallForegroundTrees.x = -this.gameWidth / 2;
         this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
         this.smallForegroundTrees.zIndex = zIndex.smallForegroundTrees;
@@ -221,7 +221,7 @@ export class BoardView extends Container {
     }
 
     private buildMediumTrees(): void {
-        const positions = [270, 1275, 2275, 3275, 4275];
+        const positions = [-700, 270, 1275, 2275, 3275, 4275, 5300];
         positions.forEach((x) => {
             const tree = MediumTreePool.getTree(this);
             tree.zIndex = zIndex.mediumTrees;
@@ -231,7 +231,7 @@ export class BoardView extends Container {
     }
 
     private buildSmallTrees(): void {
-        const positions = [0, 700, 1400, 2100, 2800, 3500];
+        const positions = [-700, 0, 700, 1400, 2100, 2800, 3500, 4200];
         positions.forEach((x) => {
             const tree = SmallTreePool.getTree(this);
             tree.zIndex = zIndex.smallTrees;

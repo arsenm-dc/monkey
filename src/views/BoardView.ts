@@ -103,19 +103,16 @@ export class BoardView extends Container {
 
     public update(d: number): void {
         if (!this.isAlive) return;
-        const dt = d * 5;
+        const dt = d * 5; // Control the speed
         this.updateClouds(dt);
-        this.updateBkgBuildings(dt);
-        this.updateBkgTrees(dt);
         this.updateLargeTrees(dt);
         this.updateBuildings(dt);
-        this.updateSmallForegroundTrees(dt);
         this.updateMediumTrees(dt);
         this.updateSmallTrees(dt);
-        this.updateFog(dt);
-        this.updateSmallFrontTrees(dt);
         this.updateRandomNumbers(dt);
         this.updateSpikes(dt);
+
+        this.updateTileSprites(dt);
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
@@ -123,7 +120,7 @@ export class BoardView extends Container {
     }
 
     public build(): void {
-        const { width, height } = getGameBounds();
+        const { width } = getGameBounds();
 
         this.gameWidth = width * (1 / this.scale.x);
         this.targetX = -this.gameWidth / 4;
@@ -433,32 +430,13 @@ export class BoardView extends Container {
         });
     }
 
-    private updateSky(dt): void {
-        this.sky.tilePosition.x -= speeds.sky * dt;
-    }
-
-    private updateBkgBuildings(dt): void {
-        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings * dt;
-    }
-
-    private updateBkgTrees(dt): void {
-        this.bkgTrees.tilePosition.x -= speeds.bkgTrees * dt;
-    }
-
-    private updateSmallForegroundTrees(dt): void {
-        this.smallForegroundTrees.tilePosition.x -= speeds.smallForegroundTrees * dt;
-    }
-
-    private updateFog(dt): void {
-        this.fog.tilePosition.x -= speeds.fog * dt;
-    }
-
-    private updateGround(dt): void {
-        this.ground.tilePosition.x -= speeds.ground * dt;
-    }
-
-    private updateSmallFrontTrees(dt): void {
+    private updateTileSprites(dt): void {
         this.smallFrontTrees.tilePosition.x -= speeds.fog * dt;
+        this.fog.tilePosition.x -= speeds.fog * dt;
+        this.smallForegroundTrees.tilePosition.x -= speeds.smallForegroundTrees * dt;
+        // this.sky.tilePosition.x -= speeds.sky * dt;
+        this.bkgBuildings.tilePosition.x -= speeds.bkgBuildings * dt;
+        this.bkgTrees.tilePosition.x -= speeds.bkgTrees * dt;
     }
 
     private dropMonkey(): void {
@@ -469,87 +447,99 @@ export class BoardView extends Container {
         this.monkey.drop();
 
         if (chance <= 0.6) {
-            const y = Math.random() * 600 + 1200;
-            const duration = (y - monkeyPos.y) * DT;
-            const number = this.getNumber(y);
-
-            animate(this.monkey, {
-                y,
-                ease: 'inCubic',
-                duration,
-                onComplete: () => {
-                    this.monkey.swingUp();
-                    this.swingUp();
-                },
-            });
-
-            this.moveNumber(number, duration);
+            this.reJump();
         } else if (chance > 0.6 && chance <= 0.8) {
-            // DIE
-            const y = 2400;
-            const duration = (y - monkeyPos.y) * DT;
-
-            const pit = makeSprite({
-                frame: 'ground_pit_1.png',
-                anchor: new Point(0.5, 1),
-                x: this.gameWidth * 1.5,
-                y: 1850,
-            });
-            this.addChild(pit);
-            pit.zIndex = zIndex.pit1;
-            this.pits.push(pit);
-
-            const pitFront = makeSprite({
-                frame: 'ground_pit_front_1.png',
-                anchor: new Point(0.5, 1),
-                x: this.gameWidth * 1.5,
-                y: 1870,
-            });
-            this.addChild(pitFront);
-            pitFront.zIndex = zIndex.pit2;
-            this.pits.push(pitFront);
-
-            this.movePit(this.pits, duration);
-            this.monkey.fall();
-            animate(this.monkey, {
-                y,
-                ease: 'inCubic',
-                duration,
-                onComplete: () => {
-                    this.isAlive = false;
-                    delayRunnable(2, () => {
-                        this.reset();
-                    });
-                },
-            });
+            this.fallToDie();
         } else {
-            // LAND
-
-            const y = 1870;
-            const duration = (y - monkeyPos.y) * DT;
-
-            const land = makeSprite({
-                frame: 'landing_platform.png',
-                x: this.gameWidth * 1.5,
-                y: 1900,
-            });
-            this.addChild(land);
-            land.zIndex = zIndex.pit1;
-            this.pits.push(land);
-            this.moveLand(this.pits[0], duration);
-            animate(this.monkey, {
-                y,
-                ease: 'inQuart',
-                duration,
-                onComplete: () => {
-                    this.isAlive = false;
-                    this.monkey.land();
-                    delayRunnable(3, () => {
-                        this.reset();
-                    });
-                },
-            });
+            this.fallToLand();
         }
+    }
+
+    private reJump(): void {
+        const y = Math.random() * 600 + 1200;
+        const duration = (y - monkeyPos.y) * DT;
+        const number = this.getNumber(y);
+
+        animate(this.monkey, {
+            y,
+            ease: 'inCubic',
+            duration,
+            onComplete: () => {
+                this.monkey.swingUp();
+                this.swingUp();
+            },
+        });
+
+        this.moveNumber(number, duration);
+    }
+
+    private fallToDie(): void {
+        // DIE
+        const y = 2400;
+        const duration = (y - monkeyPos.y) * DT;
+
+        const pit = makeSprite({
+            frame: 'ground_pit_1.png',
+            anchor: new Point(0.5, 1),
+            x: this.gameWidth * 1.5,
+            y: 1850,
+        });
+        this.addChild(pit);
+        pit.zIndex = zIndex.pit1;
+        this.pits.push(pit);
+
+        const pitFront = makeSprite({
+            frame: 'ground_pit_front_1.png',
+            anchor: new Point(0.5, 1),
+            x: this.gameWidth * 1.5,
+            y: 1870,
+        });
+        this.addChild(pitFront);
+        pitFront.zIndex = zIndex.pit2;
+        this.pits.push(pitFront);
+
+        this.movePit(this.pits, duration);
+        this.monkey.fall();
+        animate(this.monkey, {
+            y,
+            ease: 'inCubic',
+            duration,
+            onComplete: () => {
+                this.isAlive = false;
+                delayRunnable(2, () => {
+                    this.reset();
+                });
+            },
+        });
+    }
+
+    private fallToLand(): void {
+        // LAND
+
+        const y = 1870;
+        const duration = (y - monkeyPos.y) * DT;
+
+        const land = makeSprite({
+            frame: 'landing_platform.png',
+            x: this.gameWidth * 1.5,
+            y: 1900,
+        });
+        this.addChild(land);
+        land.zIndex = zIndex.pit1;
+        this.pits.push(land);
+        this.moveLand(this.pits[0], duration);
+        animate(this.monkey, {
+            y,
+            ease: 'inQuart',
+            duration,
+            onComplete: () => {
+                this.isAlive = false;
+                this.monkey.land();
+                delayRunnable(3, () => {
+                    this.reset();
+                });
+            },
+        });
     }
 
     private swingUp(): void {

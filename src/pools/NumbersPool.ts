@@ -4,6 +4,11 @@ import { Naipes } from '../views/Naipes';
 
 export type FunctionType = 'add' | 'multiply' | 'divide';
 
+export const getNumberText = (fn: FunctionType, value: number): string => {
+    const sign = fn === 'add' ? '+' : fn === 'divide' ? '/' : 'x';
+    return `${sign}${value}`;
+};
+
 export class Number extends Container {
     private _parentContainer: Container | null;
     private text: Text;
@@ -49,7 +54,7 @@ export class Number extends Container {
         this._fn = fn;
         this._value = value;
 
-        this.text.text = this.getText();
+        this.text.text = getNumberText(this._fn, this._value);
         this.updateTint();
         this.spin();
     }
@@ -92,11 +97,6 @@ export class Number extends Container {
             this.bkgNaipes.visible = true;
             this.bkgNaipes.updateSlot('spades');
         }
-    }
-
-    private getText(): string {
-        const sign = this._fn === 'add' ? '+' : this._fn === 'divide' ? '/' : 'x';
-        return `${sign}${this._value}`;
     }
 }
 

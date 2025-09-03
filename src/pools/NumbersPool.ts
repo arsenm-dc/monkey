@@ -1,6 +1,6 @@
-import { Container, Sprite, Text } from 'pixi.js';
-import { makeSprite } from '../configs/spriteConfig';
+import { Container, Text } from 'pixi.js';
 import { Chips } from '../views/Chips';
+import { Eagle } from '../views/Eagle';
 import { Naipes } from '../views/Naipes';
 
 export type FunctionType = 'add' | 'multiply' | 'divide';
@@ -15,7 +15,7 @@ export class Number extends Container {
     private text: Text;
     private bkgNaipes: Naipes;
     private bkgChips: Chips;
-    private bkgEagle: Sprite;
+    private bkgEagle: Eagle;
     private _fn: FunctionType;
     private _value: number;
 
@@ -76,7 +76,7 @@ export class Number extends Container {
         this.bkgChips.visible = false;
         this.addChild(this.bkgChips);
 
-        this.bkgEagle = makeSprite({ frame: 'eagle.png' });
+        this.bkgEagle = new Eagle();
         this.bkgEagle.visible = false;
         this.addChild(this.bkgEagle);
 
@@ -108,7 +108,7 @@ export class Number extends Container {
             this.bkgNaipes.visible = false;
             this.bkgEagle.visible = true;
             this.text.visible = false;
-            // this.bkgNaipes.updateSlot('spades');
+            this.bkgNaipes.updateSlot('spades');
         }
     }
 }

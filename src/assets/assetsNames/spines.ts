@@ -12,6 +12,12 @@ export const spines: SpineFiles[] = [
         preMultipliedAlpha: true,
     },
     {
+        key: 'easgle_spine',
+        jsonURL: 'assets/spines/easgle_spine/eagle_spine.json',
+        atlasURL: 'assets/spines/easgle_spine/eagle_spine.atlas',
+        preMultipliedAlpha: true,
+    },
+    {
         key: 'naipes',
         jsonURL: 'assets/spines/naipes/naipes.json',
         atlasURL: 'assets/spines/naipes/naipes.atlas',

@@ -34,16 +34,16 @@ class LargeTreesPool {
     private pool: LargeTree[] = [];
     private textures: string[] = ['tree_1_1.png', 'tree_1_2.png'];
 
-    public getTree(parentContainer): LargeTree {
-        const tree = this.pool.find((c) => !c.parentContainer);
-        if (tree) {
-            tree.get(parentContainer);
-            return tree;
+    public get(parentContainer): LargeTree {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         } else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newTree = new LargeTree(texture);
-            this.pool.push(newTree);
-            return newTree;
+            const newElement = new LargeTree(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
 

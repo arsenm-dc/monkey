@@ -116,17 +116,17 @@ export class Number extends Container {
 class NumberPool {
     private pool: Number[] = [];
 
-    public getNumber(parentContainer: Container, fn: FunctionType, value: number): Number {
-        const number = this.pool.find((n) => !n.parentContainer);
+    public get(parentContainer: Container, fn: FunctionType, value: number): Number {
+        const element = this.pool.find((n) => !n.parentContainer);
 
-        if (number) {
-            number.get(parentContainer, fn, value);
-            return number;
+        if (element) {
+            element.get(parentContainer, fn, value);
+            return element;
         } else {
-            const newNumber = new Number();
-            this.pool.push(newNumber);
-            newNumber.get(parentContainer, fn, value);
-            return newNumber;
+            const newElement = new Number();
+            this.pool.push(newElement);
+            newElement.get(parentContainer, fn, value);
+            return newElement;
         }
     }
 

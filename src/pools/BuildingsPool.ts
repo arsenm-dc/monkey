@@ -48,16 +48,16 @@ class BuildingsPool {
         'building_13.png',
     ];
 
-    public getBuilding(parentContainer): Building {
-        const building = this.pool.find((c) => !c.parentContainer);
-        if (building) {
-            building.get(parentContainer);
-            return building;
+    public get(parentContainer): Building {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         } else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newBuilding = new Building(texture);
-            this.pool.push(newBuilding);
-            return newBuilding;
+            const newElement = new Building(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
 

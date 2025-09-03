@@ -34,16 +34,16 @@ class SpikesPool {
     private pool: Spike[] = [];
     private textures: string[] = ['spikes.png'];
 
-    public getSpike(parentContainer): Spike {
-        const spike = this.pool.find((c) => !c.parentContainer);
-        if (spike) {
-            spike.get(parentContainer);
-            return spike;
+    public get(parentContainer): Spike {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         } else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newSpike = new Spike(texture);
-            this.pool.push(newSpike);
-            return newSpike;
+            const newElement = new Spike(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
 

@@ -8,6 +8,8 @@ import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
 import { FunctionType, Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { Spike, SpikePool } from '../pools/SpikesPool';
+import { VineBushPool } from '../pools/VineBushPool';
+import { Vine, VinePool } from '../pools/VinesPool';
 import { delayRunnable, getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
 
@@ -40,6 +42,7 @@ const zIndex = {
     smallTrees: 8,
     fog: 9,
     smallFrontTrees: 10,
+    vines: 80,
     ground: 90,
     number: 95,
     spikes: 99,
@@ -88,6 +91,8 @@ export class BoardView extends Container {
     private currentValue = 1;
     private counter: Text;
 
+    private vines: Vine[] = [];
+
     constructor() {
         super();
         this.sortableChildren = true;
@@ -99,6 +104,9 @@ export class BoardView extends Container {
         BuildingPool.init();
         NumbersPool.init();
         SpikePool.init();
+
+        VinePool.init();
+        VineBushPool.init();
     }
 
     public update(d: number): void {
@@ -136,6 +144,7 @@ export class BoardView extends Container {
         this.buildFog();
         this.buildSmallFrontTrees();
         this.buildSpikes();
+        this.buildVines();
 
         this.buildMonkey();
         this.buildButton();
@@ -160,7 +169,7 @@ export class BoardView extends Container {
             { x: 2300, y: 500 },
         ];
         positions.forEach(({ x, y }) => {
-            const cloud = CloudPool.getCloud(this);
+            const cloud = CloudPool.get(this);
             cloud.zIndex = zIndex.clouds;
             cloud.position.set(x, y);
             this.clouds.push(cloud);
@@ -193,7 +202,7 @@ export class BoardView extends Container {
             3090, 3230, 3330, 3480, 3670, 3820, 3970, 4100, 4330, 4550,
         ];
         positions.forEach((x) => {
-            const building = BuildingPool.getBuilding(this);
+            const building = BuildingPool.get(this);
             building.zIndex = zIndex.buildings;
             building.position.set(x, 1875);
             this.buildings.push(building);
@@ -203,7 +212,7 @@ export class BoardView extends Container {
     private buildLargeTrees(): void {
         const position = [-1200, 120, 1575, 2975, 4400, 5700];
         position.forEach((x) => {
-            const tree = LargeTreePool.getTree(this);
+            const tree = LargeTreePool.get(this);
             tree.zIndex = zIndex.largeTrees;
             tree.position.set(x, 2000);
             this.largeTrees.push(tree);
@@ -223,7 +232,7 @@ export class BoardView extends Container {
     private buildMediumTrees(): void {
         const positions = [-700, 270, 1275, 2275, 3275, 4275, 5300];
         positions.forEach((x) => {
-            const tree = MediumTreePool.getTree(this);
+            const tree = MediumTreePool.get(this);
             tree.zIndex = zIndex.mediumTrees;
             tree.position.set(x, 2000);
             this.mediumTrees.push(tree);
@@ -233,17 +242,30 @@ export class BoardView extends Container {
     private buildSmallTrees(): void {
         const positions = [-700, 0, 700, 1400, 2100, 2800, 3500, 4200];
         positions.forEach((x) => {
-            const tree = SmallTreePool.getTree(this);
+            const tree = SmallTreePool.get(this);
             tree.zIndex = zIndex.smallTrees;
             tree.position.set(x, 2000);
             this.smallTrees.push(tree);
         });
     }
 
+    private buildVines(): void {
+        const width = 300;
+        const startX = -1200;
+        const count = 20;
+        for (let i = 0; i < count; i++) {
+            const x = startX + i * width;
+            const vine = VinePool.get(this);
+            vine.zIndex = zIndex.vines;
+            vine.position.set(x, 0);
+            this.vines.push(vine);
+        }
+    }
+
     private buildSpikes(): void {
         const positions = [-720, 0, 720, 1440, 2160, 2880, 3600, 4320];
         positions.forEach((x) => {
-            const tree = SpikePool.getSpike(this);
+            const tree = SpikePool.get(this);
             tree.zIndex = zIndex.spikes;
             tree.position.set(x, 1850);
             this.spikes.push(tree);
@@ -255,7 +277,7 @@ export class BoardView extends Container {
         for (let i = 0; i < 8; i++) {
             x += Math.random() * 200 + 200;
             const { fn, number, y } = this.getRandomNumber();
-            const n = NumbersPool.getNumber(this, fn, number);
+            const n = NumbersPool.get(this, fn, number);
             n.zIndex = zIndex.number;
             n.position.set(x, y);
             this.randomNumbers.push(n);
@@ -338,7 +360,7 @@ export class BoardView extends Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.largeTrees.splice(i, 1);
                 c.remove();
-                const newTree = LargeTreePool.getTree(this);
+                const newTree = LargeTreePool.get(this);
                 newTree.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, 2000);
                 this.largeTrees.push(newTree);
             }
@@ -351,7 +373,7 @@ export class BoardView extends Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.buildings.splice(i, 1);
                 c.remove();
-                const newBuilding = BuildingPool.getBuilding(this);
+                const newBuilding = BuildingPool.get(this);
                 newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150, 1875);
                 this.buildings.push(newBuilding);
             }
@@ -365,7 +387,7 @@ export class BoardView extends Container {
                 this.mediumTrees.splice(i, 1);
                 c.remove();
 
-                const newTree = MediumTreePool.getTree(this);
+                const newTree = MediumTreePool.get(this);
                 newTree.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, 2000);
                 this.mediumTrees.push(newTree);
             }
@@ -378,7 +400,7 @@ export class BoardView extends Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.smallTrees.splice(i, 1);
                 c.remove();
-                const newTree = SmallTreePool.getTree(this);
+                const newTree = SmallTreePool.get(this);
                 newTree.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, 2000);
                 this.smallTrees.push(newTree);
             }
@@ -391,7 +413,7 @@ export class BoardView extends Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.spikes.splice(i, 1);
                 c.remove();
-                const newSpike = SpikePool.getSpike(this);
+                const newSpike = SpikePool.get(this);
                 newSpike.position.set(this.spikes[this.spikes.length - 1].x + 720, 1850);
                 this.spikes.push(newSpike);
             }
@@ -404,7 +426,7 @@ export class BoardView extends Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.clouds.splice(i, 1);
                 c.remove();
-                const newCloud = CloudPool.getCloud(this);
+                const newCloud = CloudPool.get(this);
                 newCloud.position.set(
                     WIDTH + newCloud.width / 2 + Math.random() * 400,
                     randomInt(cloudYRange[0], cloudYRange[1]),
@@ -422,7 +444,7 @@ export class BoardView extends Container {
                 n.remove();
 
                 const { fn, number, y } = this.getRandomNumber();
-                const newNumber = NumbersPool.getNumber(this, fn, number);
+                const newNumber = NumbersPool.get(this, fn, number);
                 newNumber.scale.set(1 + Math.random() * 0.2);
                 newNumber.position.set(this.gameWidth * 1.2 + Math.random() * 400, y);
                 this.randomNumbers.push(newNumber);
@@ -608,7 +630,7 @@ export class BoardView extends Container {
         const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
         const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
 
-        const number = NumbersPool.getNumber(this, fn, n);
+        const number = NumbersPool.get(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = zIndex.number;
         this.numbers.push(number);

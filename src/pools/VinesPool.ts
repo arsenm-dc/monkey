@@ -1,7 +1,7 @@
 import { Container, Sprite } from 'pixi.js';
 import { makeSprite } from '../configs/spriteConfig';
 
-export class Cloud extends Container {
+export class Vine extends Container {
     private _parentContainer: Container | null;
     private sprite: Sprite;
 
@@ -30,28 +30,28 @@ export class Cloud extends Container {
     }
 }
 
-class CloudsPool {
-    private pool: Cloud[] = [];
-    private textures: string[] = ['cloud_1_1.png', 'cloud_1_2.png', 'cloud_1_3.png'];
+class VinesPool {
+    private pool: Vine[] = [];
+    private textures: string[] = ['vine_1.png', 'vine_2.png'];
 
-    public get(parentContainer): Cloud {
-        const cloud = this.pool.find((c) => !c.parentContainer);
-        if (cloud) {
-            cloud.get(parentContainer);
-            return cloud;
+    public get(parentContainer): Vine {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         } else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newCloud = new Cloud(texture);
-            this.pool.push(newCloud);
-            return newCloud;
+            const newElement = new Vine(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
 
     public init(): void {
-        for (let i = 0; i < 3; i++) {
-            this.textures.forEach((t) => this.pool.push(new Cloud(t)));
+        for (let i = 0; i < 7; i++) {
+            this.textures.forEach((t) => this.pool.push(new Vine(t)));
         }
     }
 }
 
-export const CloudPool = new CloudsPool();
+export const VinePool = new VinesPool();

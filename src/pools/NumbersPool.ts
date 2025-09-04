@@ -86,9 +86,9 @@ export class Number extends Container {
             fontSize: 42,
         });
         this.text.anchor.set(0.5, 0.5);
-        this.text.y = -50;
+        this.bkgNaipes.y = 70;
+        this.bkgChips.y = 50;
         this.addChild(this.text);
-        this.scale.set(1.5);
     }
 
     private updateTint(): void {

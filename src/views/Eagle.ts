@@ -25,6 +25,7 @@ export class Eagle extends Container {
         this.spine = new Spine(data);
         this.spine.skeleton.setSkinByName('default');
         this.spine.state.setAnimation(0, 'Idle_fly', true);
+        this.spine.state.timeScale = 2;
         // 'Idle_fly'
         this.spine.scale.set(0.124);
         this.addChild(this.spine);

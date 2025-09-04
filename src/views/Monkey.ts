@@ -33,6 +33,10 @@ export class Monkey extends Container {
         this.spine.state.timeScale = value ? 1.5 : 0;
     }
 
+    public spikeDeath(): void {
+        this.spine.state.setAnimation(0, 'spike death', false);
+    }
+
     public swingUp(): void {
         this.spine.state.setAnimation(0, 'Swing', false);
     }
@@ -89,6 +93,7 @@ export class Monkey extends Container {
         // 'spike death'
 
         this.spine.state.data.setMix('Falling', 'Falling for death', 1);
+        this.spine.state.data.setMix('Falling for death', 'spike death', 1);
         this.spine.state.data.setMix('Falling', 'Landing', 1);
         this.spine.state.setAnimation(0, 'Swing', true);
         this.spine.scale.set(0.15);

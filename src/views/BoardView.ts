@@ -1,5 +1,5 @@
 import { animate } from 'animejs';
-import { Container, Point, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
+import { Container, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
 import {
     BUILDINGS_Y,
     cloudYRange,
@@ -441,7 +441,10 @@ export class BoardView extends Container {
                 this.vineBushes.splice(i, 1);
                 c.remove();
                 const newElement = VineBushPool.get(this);
-                newElement.position.set(this.vineBushes[this.vineBushes.length - 1].x + 600, VINE_BUSHES_Y);
+                newElement.position.set(
+                    this.vineBushes[this.vineBushes.length - 1].x + 2000 + Math.random() * 200,
+                    VINE_BUSHES_Y,
+                );
                 this.vineBushes.push(newElement);
             }
         });
@@ -491,7 +494,7 @@ export class BoardView extends Container {
     private reJump(): void {
         const y = Math.random() * 600 + 1200;
         const duration = (y - monkeyPos.y) * DT;
-        const number = this.getNumber(y);
+        const number = this.getNumber(y + 30);
 
         animate(this.monkey, {
             y,
@@ -510,30 +513,9 @@ export class BoardView extends Container {
 
     private fallToDie(): void {
         // DIE
-        const y = 2400;
+        const y = 1800;
         const duration = ((y - monkeyPos.y) * DT) / 3;
 
-        const pit = makeSprite({
-            frame: 'ground_pit_1.png',
-            anchor: new Point(0.5, 1),
-            x: this.gameWidth * 1.5,
-            y: 1850,
-        });
-        this.addChild(pit);
-        pit.zIndex = zIndex.pit1;
-        this.pits.push(pit);
-
-        const pitFront = makeSprite({
-            frame: 'ground_pit_front_1.png',
-            anchor: new Point(0.5, 1),
-            x: this.gameWidth * 1.5,
-            y: 1870,
-        });
-        this.addChild(pitFront);
-        pitFront.zIndex = zIndex.pit2;
-        this.pits.push(pitFront);
-
-        this.movePit(this.pits, duration);
         this.monkey.fall();
         animate(this.monkey, {
             y,
@@ -541,6 +523,7 @@ export class BoardView extends Container {
             duration,
             onComplete: () => {
                 this.isAlive = false;
+                this.monkey.spikeDeath();
                 delayRunnable(2, () => {
                     this.reset();
                 });
@@ -551,13 +534,13 @@ export class BoardView extends Container {
     private fallToLand(): void {
         // LAND
 
-        const y = 1870;
+        const y = 1800;
         const duration = (y - monkeyPos.y) * DT;
 
         const land = makeSprite({
             frame: 'landing_platform.png',
             x: this.gameWidth * 1.5,
-            y: 1900,
+            y: 1850,
         });
         this.addChild(land);
         land.zIndex = zIndex.pit1;

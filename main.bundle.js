@@ -64137,6 +64137,7 @@ class Eagle extends Container_Container {
         this.spine = new loader_uni_lib_Spine_Spine(data);
         this.spine.skeleton.setSkinByName('default');
         this.spine.state.setAnimation(0, 'Idle_fly', true);
+        this.spine.state.timeScale = 2;
         // 'Idle_fly'
         this.spine.scale.set(0.124);
         this.addChild(this.spine);
@@ -64242,9 +64243,9 @@ class NumbersPool_Number extends Container_Container {
             fontSize: 42,
         });
         this.text.anchor.set(0.5, 0.5);
-        this.text.y = -50;
+        this.bkgNaipes.y = 70;
+        this.bkgChips.y = 50;
         this.addChild(this.text);
-        this.scale.set(1.5);
     }
     updateTint() {
         if (this._fn === 'add') {
@@ -65288,9 +65289,7 @@ const assets = [
     { name: 'bkgBuildings.png', path: 'assets/uncompressed/bkgBuildings.png' },
     { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
     { name: 'bush.png', path: 'assets/uncompressed/bush.png' },
-    { name: 'eagle.png', path: 'assets/uncompressed/eagle.png' },
     { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
-    { name: 'ground.png', path: 'assets/uncompressed/ground.png' },
     { name: 'play.png', path: 'assets/uncompressed/play.png' },
     { name: 'sky.png', path: 'assets/uncompressed/sky.png' },
     { name: 'tree_1_1.png', path: 'assets/uncompressed/tree_1_1.png' },

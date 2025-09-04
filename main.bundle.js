@@ -39448,6 +39448,58 @@ const stagger = (val, params = {}) => {
 
 
 
+;// CONCATENATED MODULE: ./src/configs/boardConfigs.ts
+const VINE_Y = 1050;
+const VINE_BUSHES_Y = 650;
+const getVineY = () => VINE_Y + Math.random() * 150;
+const BUILDINGS_Y = 1875;
+const TREE_Y = 2000;
+const SPIKES_Y = 1850;
+const speeds = {
+    sky: 0.1,
+    clouds: 0.2,
+    bkgBuildings: 0.3,
+    bkgTrees: 0.5,
+    buildings: 0.8,
+    largeTrees: 1,
+    smallForegroundTrees: 1.3,
+    mediumTrees: 2,
+    smallTrees: 2.3,
+    number: 2.8,
+    fog: 1.6,
+    ground: 2.5,
+    smallFrontTrees: 3,
+};
+const cloudYRange = [120, 800];
+const boardConfigs_zIndex = {
+    sky: 0,
+    clouds: 1,
+    bkgBuildings: 2,
+    bkgTrees: 3,
+    buildings: 4,
+    largeTrees: 5,
+    smallForegroundTrees: 6,
+    mediumTrees: 7,
+    smallTrees: 8,
+    fog: 9,
+    smallFrontTrees: 10,
+    vines: 80,
+    ground: 90,
+    number: 95,
+    spikes: 99,
+    pit1: 100,
+    monkey: 101,
+    pit2: 102,
+    button: 1000,
+};
+const monkeyPos = {
+    x: 500,
+    y: 900,
+};
+const WIDTH = 2048;
+const HEIGHT = 1890;
+const DT = 2;
+
 ;// CONCATENATED MODULE: ./src/configs/spriteConfig.ts
 
 const makeSprite = (config) => {
@@ -64185,6 +64237,7 @@ class Naipes extends Container_Container {
 
 
 
+const DEFAULT_FONT = 'RubikBold';
 const getNumberText = (fn, value) => {
     const sign = fn === 'add' ? '+' : fn === 'divide' ? '/' : 'x';
     return `${sign}${value}`;
@@ -64203,9 +64256,6 @@ class NumbersPool_Number extends Container_Container {
     get numberValue() {
         return this._value;
     }
-    get speed() {
-        return this._speed;
-    }
     spin() {
         this.bkgChips.visible && this.bkgChips.spin();
         this.bkgNaipes.visible && this.bkgNaipes.spin();
@@ -64214,7 +64264,6 @@ class NumbersPool_Number extends Container_Container {
         var _a;
         this._parentContainer = parentContainer;
         (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
-        this._speed = Math.random() + 3;
         this._fn = fn;
         this._value = value;
         this.text.text = getNumberText(this._fn, this._value);
@@ -64241,10 +64290,12 @@ class NumbersPool_Number extends Container_Container {
             fill: 0xffffff,
             fontWeight: '900',
             fontSize: 42,
+            fontFamily: DEFAULT_FONT,
         });
         this.text.anchor.set(0.5, 0.5);
         this.bkgNaipes.y = 70;
         this.bkgChips.y = 50;
+        this.bkgEagle.y = 120;
         this.addChild(this.text);
     }
     updateTint() {
@@ -64531,7 +64582,10 @@ class Monkey extends Container_Container {
         });
     }
     setActive(value) {
-        this.spine.state.timeScale = value ? 1 : 0;
+        this.spine.state.timeScale = value ? 1.5 : 0;
+    }
+    spikeDeath() {
+        this.spine.state.setAnimation(0, 'spike death', false);
     }
     swingUp() {
         this.spine.state.setAnimation(0, 'Swing', false);
@@ -64543,7 +64597,7 @@ class Monkey extends Container_Container {
         this.spine.state.setAnimation(0, 'Landing', false);
     }
     drop() {
-        this.spine.state.setAnimation(0, 'Falling', false);
+        this.spine.state.setAnimation(0, 'Falling', true);
     }
     build() {
         this.buildSpine();
@@ -64554,6 +64608,7 @@ class Monkey extends Container_Container {
             fill: 0xffffff,
             fontWeight: '900',
             fontSize: 48,
+            fontFamily: DEFAULT_FONT,
         });
         this.number.anchor.set(0.5, 0.5);
         this.number.position.set(-40, -270);
@@ -64582,6 +64637,7 @@ class Monkey extends Container_Container {
         // 'Swing'
         // 'spike death'
         this.spine.state.data.setMix('Falling', 'Falling for death', 1);
+        this.spine.state.data.setMix('Falling for death', 'spike death', 1);
         this.spine.state.data.setMix('Falling', 'Landing', 1);
         this.spine.state.setAnimation(0, 'Swing', true);
         this.spine.scale.set(0.15);
@@ -64604,55 +64660,7 @@ class Monkey extends Container_Container {
 
 
 
-const VINE_Y = 1050;
-const VINE_BUSHES_Y = 650;
-const getVineY = () => VINE_Y + Math.random() * 150;
-const BUILDINGS_Y = 1875;
-const TREE_Y = 2000;
-const SPIKES_Y = 1850;
-const speeds = {
-    sky: 0.1,
-    clouds: 0.2,
-    bkgBuildings: 0.3,
-    bkgTrees: 0.5,
-    buildings: 0.8,
-    largeTrees: 1,
-    smallForegroundTrees: 1.3,
-    mediumTrees: 2,
-    smallTrees: 2.3,
-    fog: 1.6,
-    ground: 2.5,
-    smallFrontTrees: 3,
-};
-const cloudYRange = [120, 800];
-const BoardView_zIndex = {
-    sky: 0,
-    clouds: 1,
-    bkgBuildings: 2,
-    bkgTrees: 3,
-    buildings: 4,
-    largeTrees: 5,
-    smallForegroundTrees: 6,
-    mediumTrees: 7,
-    smallTrees: 8,
-    fog: 9,
-    smallFrontTrees: 10,
-    vines: 80,
-    ground: 90,
-    number: 95,
-    spikes: 99,
-    pit1: 100,
-    monkey: 101,
-    pit2: 102,
-    button: 1000,
-};
-const monkeyPos = {
-    x: 700,
-    y: 750,
-};
-const WIDTH = 2048;
-const HEIGHT = 1890;
-const DT = 2;
+
 class BoardView extends Container_Container {
     constructor() {
         super();
@@ -64696,7 +64704,7 @@ class BoardView extends Container_Container {
         this.updateTileSprites(dt);
     }
     getBounds(skipUpdate, rect) {
-        return new Rectangle(400, 400, 900, 1450);
+        return new Rectangle(300, 400, 1100, 1450);
     }
     build() {
         const { width } = getGameBounds();
@@ -64725,7 +64733,7 @@ class BoardView extends Container_Container {
         const texture = Texture.from('sky.png');
         this.sky = new TilingSprite(texture, this.gameWidth * 2, texture.height);
         this.sky.x = -this.gameWidth / 2;
-        this.sky.zIndex = BoardView_zIndex.sky;
+        this.sky.zIndex = boardConfigs_zIndex.sky;
         this.addChild(this.sky);
     }
     buildClouds() {
@@ -64738,7 +64746,7 @@ class BoardView extends Container_Container {
         ];
         positions.forEach(({ x, y }) => {
             const cloud = CloudPool.get(this);
-            cloud.zIndex = BoardView_zIndex.clouds;
+            cloud.zIndex = boardConfigs_zIndex.clouds;
             cloud.position.set(x, y);
             this.clouds.push(cloud);
         });
@@ -64749,7 +64757,7 @@ class BoardView extends Container_Container {
         this.bkgBuildings.x = -this.gameWidth / 2;
         this.bkgBuildings.y = HEIGHT - this.bkgBuildings.height;
         this.bkgBuildings.name = 'bkgBuildings';
-        this.bkgBuildings.zIndex = BoardView_zIndex.bkgBuildings;
+        this.bkgBuildings.zIndex = boardConfigs_zIndex.bkgBuildings;
         this.addChild(this.bkgBuildings);
     }
     buildBkgTrees() {
@@ -64758,7 +64766,7 @@ class BoardView extends Container_Container {
         this.bkgTrees.x = -this.gameWidth / 2;
         this.bkgTrees.y = HEIGHT - this.bkgTrees.height;
         this.bkgTrees.name = 'bkgTrees';
-        this.bkgTrees.zIndex = BoardView_zIndex.bkgTrees;
+        this.bkgTrees.zIndex = boardConfigs_zIndex.bkgTrees;
         this.addChild(this.bkgTrees);
     }
     buildBuildings() {
@@ -64768,7 +64776,7 @@ class BoardView extends Container_Container {
         ];
         positions.forEach((x) => {
             const building = BuildingPool.get(this);
-            building.zIndex = BoardView_zIndex.buildings;
+            building.zIndex = boardConfigs_zIndex.buildings;
             building.position.set(x, BUILDINGS_Y);
             this.buildings.push(building);
         });
@@ -64777,7 +64785,7 @@ class BoardView extends Container_Container {
         const position = [-1200, 120, 1575, 2975, 4400, 5700];
         position.forEach((x) => {
             const tree = LargeTreePool.get(this);
-            tree.zIndex = BoardView_zIndex.largeTrees;
+            tree.zIndex = boardConfigs_zIndex.largeTrees;
             tree.position.set(x, TREE_Y);
             this.largeTrees.push(tree);
         });
@@ -64788,14 +64796,14 @@ class BoardView extends Container_Container {
         this.smallForegroundTrees.x = -this.gameWidth / 2;
         this.smallForegroundTrees.y = HEIGHT - this.smallForegroundTrees.height;
         this.smallForegroundTrees.name = 'smallForegroundTrees';
-        this.smallForegroundTrees.zIndex = BoardView_zIndex.smallForegroundTrees;
+        this.smallForegroundTrees.zIndex = boardConfigs_zIndex.smallForegroundTrees;
         this.addChild(this.smallForegroundTrees);
     }
     buildMediumTrees() {
         const positions = [-700, 270, 1275, 2275, 3275, 4275, 5300];
         positions.forEach((x) => {
             const tree = MediumTreePool.get(this);
-            tree.zIndex = BoardView_zIndex.mediumTrees;
+            tree.zIndex = boardConfigs_zIndex.mediumTrees;
             tree.position.set(x, TREE_Y);
             this.mediumTrees.push(tree);
         });
@@ -64804,7 +64812,7 @@ class BoardView extends Container_Container {
         const positions = [-700, 0, 700, 1400, 2100, 2800, 3500, 4200];
         positions.forEach((x) => {
             const tree = SmallTreePool.get(this);
-            tree.zIndex = BoardView_zIndex.smallTrees;
+            tree.zIndex = boardConfigs_zIndex.smallTrees;
             tree.position.set(x, TREE_Y);
             this.smallTrees.push(tree);
         });
@@ -64816,7 +64824,7 @@ class BoardView extends Container_Container {
         for (let i = 0; i < count; i++) {
             const x = startX + i * width;
             const vine = VinePool.get(this);
-            vine.zIndex = BoardView_zIndex.vines;
+            vine.zIndex = boardConfigs_zIndex.vines;
             vine.position.set(x, getVineY());
             this.vines.push(vine);
         }
@@ -64825,7 +64833,7 @@ class BoardView extends Container_Container {
         const positions = [-1000, 1000, 3000, 5000];
         positions.forEach((x) => {
             const bush = VineBushPool.get(this);
-            bush.zIndex = BoardView_zIndex.vines;
+            bush.zIndex = boardConfigs_zIndex.vines;
             bush.position.set(x, VINE_BUSHES_Y);
             this.vineBushes.push(bush);
         });
@@ -64834,7 +64842,7 @@ class BoardView extends Container_Container {
         const positions = [-720, 0, 720, 1440, 2160, 2880, 3600, 4320];
         positions.forEach((x) => {
             const tree = SpikePool.get(this);
-            tree.zIndex = BoardView_zIndex.spikes;
+            tree.zIndex = boardConfigs_zIndex.spikes;
             tree.position.set(x, SPIKES_Y);
             this.spikes.push(tree);
         });
@@ -64845,7 +64853,7 @@ class BoardView extends Container_Container {
             x += Math.random() * 200 + 200;
             const { fn, number, y } = this.getRandomNumber();
             const n = NumbersPool.get(this, fn, number);
-            n.zIndex = BoardView_zIndex.number;
+            n.zIndex = boardConfigs_zIndex.number;
             n.position.set(x, y);
             this.randomNumbers.push(n);
         }
@@ -64856,7 +64864,7 @@ class BoardView extends Container_Container {
         this.fog.x = -this.gameWidth / 2;
         this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
-        this.fog.zIndex = BoardView_zIndex.fog;
+        this.fog.zIndex = boardConfigs_zIndex.fog;
         this.addChild(this.fog);
     }
     buildGround() {
@@ -64865,7 +64873,7 @@ class BoardView extends Container_Container {
         this.fog.x = -this.gameWidth / 2;
         this.ground.y = HEIGHT - this.ground.height;
         this.ground.name = 'ground';
-        this.ground.zIndex = BoardView_zIndex.ground;
+        this.ground.zIndex = boardConfigs_zIndex.ground;
         this.addChild(this.ground);
     }
     buildSmallFrontTrees() {
@@ -64874,14 +64882,14 @@ class BoardView extends Container_Container {
         this.smallFrontTrees.x = -this.gameWidth / 2;
         this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
-        this.smallFrontTrees.zIndex = BoardView_zIndex.smallFrontTrees;
+        this.smallFrontTrees.zIndex = boardConfigs_zIndex.smallFrontTrees;
         this.addChild(this.smallFrontTrees);
     }
     buildMonkey() {
         this.monkey = new Monkey();
         this.monkey.name = 'monkey';
         this.monkey.position.set(monkeyPos.x, monkeyPos.y);
-        this.monkey.zIndex = BoardView_zIndex.monkey;
+        this.monkey.zIndex = boardConfigs_zIndex.monkey;
         this.monkey.setActive(false);
         this.addChild(this.monkey);
     }
@@ -64892,7 +64900,7 @@ class BoardView extends Container_Container {
             x: 850,
             y: 1700,
         });
-        this.playButton.zIndex = BoardView_zIndex.button;
+        this.playButton.zIndex = boardConfigs_zIndex.button;
         this.playButton.eventMode = 'static';
         this.playButton.on('pointerdown', () => {
             this.isAlive = true;
@@ -64908,9 +64916,10 @@ class BoardView extends Container_Container {
             fill: 0xffffff,
             fontWeight: '900',
             fontSize: 48,
+            fontFamily: DEFAULT_FONT,
         });
         this.counter.position.set(1100, 1680);
-        this.counter.zIndex = BoardView_zIndex.button;
+        this.counter.zIndex = boardConfigs_zIndex.button;
         this.addChild(this.counter);
     }
     updateLargeTrees(dt) {
@@ -65004,14 +65013,14 @@ class BoardView extends Container_Container {
                 this.vineBushes.splice(i, 1);
                 c.remove();
                 const newElement = VineBushPool.get(this);
-                newElement.position.set(this.vineBushes[this.vineBushes.length - 1].x + 600, VINE_BUSHES_Y);
+                newElement.position.set(this.vineBushes[this.vineBushes.length - 1].x + 2000 + Math.random() * 200, VINE_BUSHES_Y);
                 this.vineBushes.push(newElement);
             }
         });
     }
     updateRandomNumbers(dt) {
         this.randomNumbers.forEach((n, i) => {
-            n.x -= n.speed * dt;
+            n.x -= speeds.number * dt;
             if (n.x + n.width / 2 <= this.targetX) {
                 this.randomNumbers.splice(i, 1);
                 n.remove();
@@ -65050,7 +65059,7 @@ class BoardView extends Container_Container {
     reJump() {
         const y = Math.random() * 600 + 1200;
         const duration = (y - monkeyPos.y) * DT;
-        const number = this.getNumber(y);
+        const number = this.getNumber(y + 30);
         animate(this.monkey, {
             y,
             ease: 'inCubic',
@@ -65066,27 +65075,8 @@ class BoardView extends Container_Container {
     }
     fallToDie() {
         // DIE
-        const y = 2400;
-        const duration = (y - monkeyPos.y) * DT;
-        const pit = makeSprite({
-            frame: 'ground_pit_1.png',
-            anchor: new Point_Point(0.5, 1),
-            x: this.gameWidth * 1.5,
-            y: 1850,
-        });
-        this.addChild(pit);
-        pit.zIndex = BoardView_zIndex.pit1;
-        this.pits.push(pit);
-        const pitFront = makeSprite({
-            frame: 'ground_pit_front_1.png',
-            anchor: new Point_Point(0.5, 1),
-            x: this.gameWidth * 1.5,
-            y: 1870,
-        });
-        this.addChild(pitFront);
-        pitFront.zIndex = BoardView_zIndex.pit2;
-        this.pits.push(pitFront);
-        this.movePit(this.pits, duration);
+        const y = 1800;
+        const duration = ((y - monkeyPos.y) * DT) / 3;
         this.monkey.fall();
         animate(this.monkey, {
             y,
@@ -65094,6 +65084,7 @@ class BoardView extends Container_Container {
             duration,
             onComplete: () => {
                 this.isAlive = false;
+                this.monkey.spikeDeath();
                 delayRunnable(2, () => {
                     this.reset();
                 });
@@ -65102,15 +65093,15 @@ class BoardView extends Container_Container {
     }
     fallToLand() {
         // LAND
-        const y = 1870;
+        const y = 1800;
         const duration = (y - monkeyPos.y) * DT;
         const land = makeSprite({
             frame: 'landing_platform.png',
             x: this.gameWidth * 1.5,
-            y: 1900,
+            y: 1850,
         });
         this.addChild(land);
-        land.zIndex = BoardView_zIndex.pit1;
+        land.zIndex = boardConfigs_zIndex.pit1;
         this.pits.push(land);
         this.moveLand(this.pits[0], duration);
         animate(this.monkey, {
@@ -65185,7 +65176,7 @@ class BoardView extends Container_Container {
         const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
         const number = NumbersPool.get(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);
-        number.zIndex = BoardView_zIndex.number;
+        number.zIndex = boardConfigs_zIndex.number;
         this.numbers.push(number);
         return number;
     }

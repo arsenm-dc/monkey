@@ -1,57 +1,9 @@
 {
   "frames": {
-    "ground_pit_front_1.png": {
-      "frame": {
-        "x": 3,
-        "y": 3,
-        "w": 818,
-        "h": 76
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 818,
-        "h": 76
-      },
-      "sourceSize": {
-        "w": 818,
-        "h": 76
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "ground_pit_1.png": {
-      "frame": {
-        "x": 3,
-        "y": 85,
-        "w": 793,
-        "h": 79
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 793,
-        "h": 79
-      },
-      "sourceSize": {
-        "w": 793,
-        "h": 79
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "spikes.png": {
       "frame": {
         "x": 3,
-        "y": 170,
+        "y": 3,
         "w": 720,
         "h": 205
       },
@@ -75,7 +27,7 @@
     "landing_platform.png": {
       "frame": {
         "x": 3,
-        "y": 381,
+        "y": 214,
         "w": 643,
         "h": 186
       },
@@ -90,102 +42,6 @@
       "sourceSize": {
         "w": 643,
         "h": 186
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "ground_pit_front_2.png": {
-      "frame": {
-        "x": 3,
-        "y": 573,
-        "w": 555,
-        "h": 142
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 555,
-        "h": 142
-      },
-      "sourceSize": {
-        "w": 555,
-        "h": 142
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "ground_pit_2.png": {
-      "frame": {
-        "x": 3,
-        "y": 721,
-        "w": 492,
-        "h": 113
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 492,
-        "h": 113
-      },
-      "sourceSize": {
-        "w": 492,
-        "h": 113
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "ground_pit_front_3.png": {
-      "frame": {
-        "x": 501,
-        "y": 721,
-        "w": 192,
-        "h": 73
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 192,
-        "h": 73
-      },
-      "sourceSize": {
-        "w": 192,
-        "h": 73
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "ground_pit_3.png": {
-      "frame": {
-        "x": 564,
-        "y": 573,
-        "w": 172,
-        "h": 71
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 172,
-        "h": 71
-      },
-      "sourceSize": {
-        "w": 172,
-        "h": 71
       },
       "pivot": {
         "x": 0.5,
@@ -199,8 +55,8 @@
     "image": "pits.png",
     "format": "RGBA8888",
     "size": {
-      "w": 824,
-      "h": 837
+      "w": 726,
+      "h": 403
     },
     "scale": 1
   }

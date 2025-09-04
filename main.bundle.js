@@ -39517,17 +39517,17 @@ class BuildingsPool {
             'building_13.png',
         ];
     }
-    getBuilding(parentContainer) {
-        const building = this.pool.find((c) => !c.parentContainer);
-        if (building) {
-            building.get(parentContainer);
-            return building;
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         }
         else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newBuilding = new Building(texture);
-            this.pool.push(newBuilding);
-            return newBuilding;
+            const newElement = new Building(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
     init() {
@@ -39570,17 +39570,17 @@ class CloudsPool {
         this.pool = [];
         this.textures = ['cloud_1_1.png', 'cloud_1_2.png', 'cloud_1_3.png'];
     }
-    getCloud(parentContainer) {
-        const cloud = this.pool.find((c) => !c.parentContainer);
-        if (cloud) {
-            cloud.get(parentContainer);
-            return cloud;
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         }
         else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newCloud = new Cloud(texture);
-            this.pool.push(newCloud);
-            return newCloud;
+            const newElement = new Cloud(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
     init() {
@@ -39623,17 +39623,17 @@ class LargeTreesPool {
         this.pool = [];
         this.textures = ['tree_1_1.png', 'tree_1_2.png'];
     }
-    getTree(parentContainer) {
-        const tree = this.pool.find((c) => !c.parentContainer);
-        if (tree) {
-            tree.get(parentContainer);
-            return tree;
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         }
         else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newTree = new LargeTree(texture);
-            this.pool.push(newTree);
-            return newTree;
+            const newElement = new LargeTree(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
     init() {
@@ -39676,17 +39676,17 @@ class MediumTreesPool {
         this.pool = [];
         this.textures = ['tree_3_1.png', 'tree_3_2.png', 'tree_3_3.png'];
     }
-    getTree(parentContainer) {
-        const tree = this.pool.find((c) => !c.parentContainer);
-        if (tree) {
-            tree.get(parentContainer);
-            return tree;
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         }
         else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newTree = new MediumTree(texture);
-            this.pool.push(newTree);
-            return newTree;
+            const newElement = new MediumTree(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
     init() {
@@ -64064,6 +64064,12 @@ const spines = [
         preMultipliedAlpha: true,
     },
     {
+        key: 'easgle_spine',
+        jsonURL: 'assets/spines/easgle_spine/eagle_spine.json',
+        atlasURL: 'assets/spines/easgle_spine/eagle_spine.atlas',
+        preMultipliedAlpha: true,
+    },
+    {
         key: 'naipes',
         jsonURL: 'assets/spines/naipes/naipes.json',
         atlasURL: 'assets/spines/naipes/naipes.atlas',
@@ -64103,6 +64109,36 @@ class Chips extends Container_Container {
         this.spine = new loader_uni_lib_Spine_Spine(data);
         // 'Chip_Spin'
         this.spine.scale.set(0.15);
+        this.addChild(this.spine);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/views/Eagle.ts
+
+
+
+class Eagle extends Container_Container {
+    constructor() {
+        super();
+        this.build();
+    }
+    spin() {
+        //
+    }
+    build() {
+        this.buildSpine();
+    }
+    buildSpine() {
+        var _a;
+        const json = (_a = spines.find((d) => d.key === 'easgle_spine')) === null || _a === void 0 ? void 0 : _a.jsonURL;
+        if (!json)
+            return;
+        const data = Assets.cache.get(json).spineData;
+        this.spine = new loader_uni_lib_Spine_Spine(data);
+        this.spine.skeleton.setSkinByName('default');
+        this.spine.state.setAnimation(0, 'Idle_fly', true);
+        // 'Idle_fly'
+        this.spine.scale.set(0.124);
         this.addChild(this.spine);
     }
 }
@@ -64197,7 +64233,7 @@ class NumbersPool_Number extends Container_Container {
         this.bkgChips = new Chips();
         this.bkgChips.visible = false;
         this.addChild(this.bkgChips);
-        this.bkgEagle = makeSprite({ frame: 'eagle.png' });
+        this.bkgEagle = new Eagle();
         this.bkgEagle.visible = false;
         this.addChild(this.bkgEagle);
         this.text = new Text('', {
@@ -64229,7 +64265,7 @@ class NumbersPool_Number extends Container_Container {
             this.bkgNaipes.visible = false;
             this.bkgEagle.visible = true;
             this.text.visible = false;
-            // this.bkgNaipes.updateSlot('spades');
+            this.bkgNaipes.updateSlot('spades');
         }
     }
 }
@@ -64237,17 +64273,17 @@ class NumberPool {
     constructor() {
         this.pool = [];
     }
-    getNumber(parentContainer, fn, value) {
-        const number = this.pool.find((n) => !n.parentContainer);
-        if (number) {
-            number.get(parentContainer, fn, value);
-            return number;
+    get(parentContainer, fn, value) {
+        const element = this.pool.find((n) => !n.parentContainer);
+        if (element) {
+            element.get(parentContainer, fn, value);
+            return element;
         }
         else {
-            const newNumber = new NumbersPool_Number();
-            this.pool.push(newNumber);
-            newNumber.get(parentContainer, fn, value);
-            return newNumber;
+            const newElement = new NumbersPool_Number();
+            this.pool.push(newElement);
+            newElement.get(parentContainer, fn, value);
+            return newElement;
         }
     }
     init() {
@@ -64290,17 +64326,17 @@ class SmallTreesPool {
         this.pool = [];
         this.textures = ['tree_4_1.png', 'tree_4_2.png', 'tree_4_3.png', 'tree_4_4.png', 'tree_4_5.png'];
     }
-    getTree(parentContainer) {
-        const tree = this.pool.find((c) => !c.parentContainer);
-        if (tree) {
-            tree.get(parentContainer);
-            return tree;
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         }
         else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newTree = new SmallTree(texture);
-            this.pool.push(newTree);
-            return newTree;
+            const newElement = new SmallTree(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
     init() {
@@ -64343,17 +64379,17 @@ class SpikesPool {
         this.pool = [];
         this.textures = ['spikes.png'];
     }
-    getSpike(parentContainer) {
-        const spike = this.pool.find((c) => !c.parentContainer);
-        if (spike) {
-            spike.get(parentContainer);
-            return spike;
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
         }
         else {
             const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
-            const newSpike = new Spike(texture);
-            this.pool.push(newSpike);
-            return newSpike;
+            const newElement = new Spike(texture);
+            this.pool.push(newElement);
+            return newElement;
         }
     }
     init() {
@@ -64363,6 +64399,112 @@ class SpikesPool {
     }
 }
 const SpikePool = new SpikesPool();
+
+;// CONCATENATED MODULE: ./src/pools/VineBushPool.ts
+
+
+class VineBush extends Container_Container {
+    constructor(textureName) {
+        super();
+        this.textureName = textureName;
+        this.build();
+    }
+    get parentContainer() {
+        return this._parentContainer;
+    }
+    get(parentContainer) {
+        var _a;
+        this._parentContainer = parentContainer;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+    }
+    remove() {
+        var _a;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        this._parentContainer = null;
+    }
+    build() {
+        this.sprite = makeSprite({ frame: this.textureName });
+        this.addChild(this.sprite);
+    }
+}
+class VineBushesPool {
+    constructor() {
+        this.pool = [];
+        this.textures = ['bush.png'];
+    }
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
+        }
+        else {
+            const texture = this.textures[0];
+            const newElement = new VineBush(texture);
+            this.pool.push(newElement);
+            return newElement;
+        }
+    }
+    init() {
+        for (let i = 0; i < 7; i++) {
+            this.textures.forEach((t) => this.pool.push(new VineBush(t)));
+        }
+    }
+}
+const VineBushPool = new VineBushesPool();
+
+;// CONCATENATED MODULE: ./src/pools/VinesPool.ts
+
+
+class Vine extends Container_Container {
+    constructor(textureName) {
+        super();
+        this.textureName = textureName;
+        this.build();
+    }
+    get parentContainer() {
+        return this._parentContainer;
+    }
+    get(parentContainer) {
+        var _a;
+        this._parentContainer = parentContainer;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.addChild(this);
+    }
+    remove() {
+        var _a;
+        (_a = this._parentContainer) === null || _a === void 0 ? void 0 : _a.removeChild(this);
+        this._parentContainer = null;
+    }
+    build() {
+        this.sprite = makeSprite({ frame: this.textureName });
+        this.addChild(this.sprite);
+    }
+}
+class VinesPool {
+    constructor() {
+        this.pool = [];
+        this.textures = ['vine_1.png', 'vine_2.png'];
+    }
+    get(parentContainer) {
+        const element = this.pool.find((c) => !c.parentContainer);
+        if (element) {
+            element.get(parentContainer);
+            return element;
+        }
+        else {
+            const texture = this.textures[Math.floor(Math.random() * this.textures.length)];
+            const newElement = new Vine(texture);
+            this.pool.push(newElement);
+            return newElement;
+        }
+    }
+    init() {
+        for (let i = 0; i < 7; i++) {
+            this.textures.forEach((t) => this.pool.push(new Vine(t)));
+        }
+    }
+}
+const VinePool = new VinesPool();
 
 ;// CONCATENATED MODULE: ./src/views/Monkey.ts
 
@@ -64459,6 +64601,14 @@ class Monkey extends Container_Container {
 
 
 
+
+
+const VINE_Y = 1050;
+const VINE_BUSHES_Y = 650;
+const getVineY = () => VINE_Y + Math.random() * 150;
+const BUILDINGS_Y = 1875;
+const TREE_Y = 2000;
+const SPIKES_Y = 1850;
 const speeds = {
     sky: 0.1,
     clouds: 0.2,
@@ -64486,6 +64636,7 @@ const BoardView_zIndex = {
     smallTrees: 8,
     fog: 9,
     smallFrontTrees: 10,
+    vines: 80,
     ground: 90,
     number: 95,
     spikes: 99,
@@ -64515,6 +64666,8 @@ class BoardView extends Container_Container {
         this.randomNumbers = [];
         this.isAlive = false;
         this.currentValue = 1;
+        this.vines = [];
+        this.vineBushes = [];
         this.sortableChildren = true;
         CloudPool.init();
         LargeTreePool.init();
@@ -64523,6 +64676,8 @@ class BoardView extends Container_Container {
         BuildingPool.init();
         NumbersPool.init();
         SpikePool.init();
+        VinePool.init();
+        VineBushPool.init();
     }
     update(d) {
         if (!this.isAlive)
@@ -64535,6 +64690,8 @@ class BoardView extends Container_Container {
         this.updateSmallTrees(dt);
         this.updateRandomNumbers(dt);
         this.updateSpikes(dt);
+        this.updateVines(dt);
+        this.updateVineBushes(dt);
         this.updateTileSprites(dt);
     }
     getBounds(skipUpdate, rect) {
@@ -64556,6 +64713,8 @@ class BoardView extends Container_Container {
         this.buildFog();
         this.buildSmallFrontTrees();
         this.buildSpikes();
+        this.buildVines();
+        this.buildVineBushes();
         this.buildMonkey();
         this.buildButton();
         this.buildCounter();
@@ -64577,7 +64736,7 @@ class BoardView extends Container_Container {
             { x: 2300, y: 500 },
         ];
         positions.forEach(({ x, y }) => {
-            const cloud = CloudPool.getCloud(this);
+            const cloud = CloudPool.get(this);
             cloud.zIndex = BoardView_zIndex.clouds;
             cloud.position.set(x, y);
             this.clouds.push(cloud);
@@ -64607,18 +64766,18 @@ class BoardView extends Container_Container {
             3090, 3230, 3330, 3480, 3670, 3820, 3970, 4100, 4330, 4550,
         ];
         positions.forEach((x) => {
-            const building = BuildingPool.getBuilding(this);
+            const building = BuildingPool.get(this);
             building.zIndex = BoardView_zIndex.buildings;
-            building.position.set(x, 1875);
+            building.position.set(x, BUILDINGS_Y);
             this.buildings.push(building);
         });
     }
     buildLargeTrees() {
         const position = [-1200, 120, 1575, 2975, 4400, 5700];
         position.forEach((x) => {
-            const tree = LargeTreePool.getTree(this);
+            const tree = LargeTreePool.get(this);
             tree.zIndex = BoardView_zIndex.largeTrees;
-            tree.position.set(x, 2000);
+            tree.position.set(x, TREE_Y);
             this.largeTrees.push(tree);
         });
     }
@@ -64634,27 +64793,48 @@ class BoardView extends Container_Container {
     buildMediumTrees() {
         const positions = [-700, 270, 1275, 2275, 3275, 4275, 5300];
         positions.forEach((x) => {
-            const tree = MediumTreePool.getTree(this);
+            const tree = MediumTreePool.get(this);
             tree.zIndex = BoardView_zIndex.mediumTrees;
-            tree.position.set(x, 2000);
+            tree.position.set(x, TREE_Y);
             this.mediumTrees.push(tree);
         });
     }
     buildSmallTrees() {
         const positions = [-700, 0, 700, 1400, 2100, 2800, 3500, 4200];
         positions.forEach((x) => {
-            const tree = SmallTreePool.getTree(this);
+            const tree = SmallTreePool.get(this);
             tree.zIndex = BoardView_zIndex.smallTrees;
-            tree.position.set(x, 2000);
+            tree.position.set(x, TREE_Y);
             this.smallTrees.push(tree);
+        });
+    }
+    buildVines() {
+        const width = 600;
+        const startX = -1200;
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+            const x = startX + i * width;
+            const vine = VinePool.get(this);
+            vine.zIndex = BoardView_zIndex.vines;
+            vine.position.set(x, getVineY());
+            this.vines.push(vine);
+        }
+    }
+    buildVineBushes() {
+        const positions = [-1000, 1000, 3000, 5000];
+        positions.forEach((x) => {
+            const bush = VineBushPool.get(this);
+            bush.zIndex = BoardView_zIndex.vines;
+            bush.position.set(x, VINE_BUSHES_Y);
+            this.vineBushes.push(bush);
         });
     }
     buildSpikes() {
         const positions = [-720, 0, 720, 1440, 2160, 2880, 3600, 4320];
         positions.forEach((x) => {
-            const tree = SpikePool.getSpike(this);
+            const tree = SpikePool.get(this);
             tree.zIndex = BoardView_zIndex.spikes;
-            tree.position.set(x, 1850);
+            tree.position.set(x, SPIKES_Y);
             this.spikes.push(tree);
         });
     }
@@ -64663,7 +64843,7 @@ class BoardView extends Container_Container {
         for (let i = 0; i < 8; i++) {
             x += Math.random() * 200 + 200;
             const { fn, number, y } = this.getRandomNumber();
-            const n = NumbersPool.getNumber(this, fn, number);
+            const n = NumbersPool.get(this, fn, number);
             n.zIndex = BoardView_zIndex.number;
             n.position.set(x, y);
             this.randomNumbers.push(n);
@@ -64671,8 +64851,8 @@ class BoardView extends Container_Container {
     }
     buildFog() {
         const texture = Texture.from('fog.png');
-        this.fog = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.fog.x = -this.gameWidth / 4;
+        this.fog = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.fog.x = -this.gameWidth / 2;
         this.fog.y = HEIGHT - this.fog.height - 40;
         this.fog.name = 'fog';
         this.fog.zIndex = BoardView_zIndex.fog;
@@ -64680,8 +64860,8 @@ class BoardView extends Container_Container {
     }
     buildGround() {
         const texture = Texture.from('ground.png');
-        this.ground = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.fog.x = -this.gameWidth / 4;
+        this.ground = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.fog.x = -this.gameWidth / 2;
         this.ground.y = HEIGHT - this.ground.height;
         this.ground.name = 'ground';
         this.ground.zIndex = BoardView_zIndex.ground;
@@ -64689,8 +64869,8 @@ class BoardView extends Container_Container {
     }
     buildSmallFrontTrees() {
         const texture = Texture.from('tree_5_1.png');
-        this.smallFrontTrees = new TilingSprite(texture, this.gameWidth, texture.height);
-        // this.smallFrontTrees.x = -this.gameWidth / 4;
+        this.smallFrontTrees = new TilingSprite(texture, this.gameWidth * 2, texture.height);
+        this.smallFrontTrees.x = -this.gameWidth / 2;
         this.smallFrontTrees.y = HEIGHT - this.smallFrontTrees.height;
         this.smallFrontTrees.name = 'smallFrontTrees';
         this.smallFrontTrees.zIndex = BoardView_zIndex.smallFrontTrees;
@@ -64738,9 +64918,9 @@ class BoardView extends Container_Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.largeTrees.splice(i, 1);
                 c.remove();
-                const newTree = LargeTreePool.getTree(this);
-                newTree.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, 2000);
-                this.largeTrees.push(newTree);
+                const newElement = LargeTreePool.get(this);
+                newElement.position.set(this.largeTrees[this.largeTrees.length - 1].x + 1400, TREE_Y);
+                this.largeTrees.push(newElement);
             }
         });
     }
@@ -64750,9 +64930,9 @@ class BoardView extends Container_Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.buildings.splice(i, 1);
                 c.remove();
-                const newBuilding = BuildingPool.getBuilding(this);
-                newBuilding.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150, 1875);
-                this.buildings.push(newBuilding);
+                const newElement = BuildingPool.get(this);
+                newElement.position.set(this.buildings[this.buildings.length - 1].x + Math.random() * 50 + 150, BUILDINGS_Y);
+                this.buildings.push(newElement);
             }
         });
     }
@@ -64762,9 +64942,9 @@ class BoardView extends Container_Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.mediumTrees.splice(i, 1);
                 c.remove();
-                const newTree = MediumTreePool.getTree(this);
-                newTree.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, 2000);
-                this.mediumTrees.push(newTree);
+                const newElement = MediumTreePool.get(this);
+                newElement.position.set(this.mediumTrees[this.mediumTrees.length - 1].x + 1000, TREE_Y);
+                this.mediumTrees.push(newElement);
             }
         });
     }
@@ -64774,9 +64954,9 @@ class BoardView extends Container_Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.smallTrees.splice(i, 1);
                 c.remove();
-                const newTree = SmallTreePool.getTree(this);
-                newTree.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, 2000);
-                this.smallTrees.push(newTree);
+                const newElement = SmallTreePool.get(this);
+                newElement.position.set(this.smallTrees[this.smallTrees.length - 1].x + 1000, TREE_Y);
+                this.smallTrees.push(newElement);
             }
         });
     }
@@ -64786,9 +64966,9 @@ class BoardView extends Container_Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.spikes.splice(i, 1);
                 c.remove();
-                const newSpike = SpikePool.getSpike(this);
-                newSpike.position.set(this.spikes[this.spikes.length - 1].x + 720, 1850);
-                this.spikes.push(newSpike);
+                const newElement = SpikePool.get(this);
+                newElement.position.set(this.spikes[this.spikes.length - 1].x + 720, SPIKES_Y);
+                this.spikes.push(newElement);
             }
         });
     }
@@ -64798,9 +64978,33 @@ class BoardView extends Container_Container {
             if (c.x + c.width / 2 <= this.targetX) {
                 this.clouds.splice(i, 1);
                 c.remove();
-                const newCloud = CloudPool.getCloud(this);
-                newCloud.position.set(WIDTH + newCloud.width / 2 + Math.random() * 400, randomInt(cloudYRange[0], cloudYRange[1]));
-                this.clouds.push(newCloud);
+                const newElement = CloudPool.get(this);
+                newElement.position.set(WIDTH + newElement.width / 2 + Math.random() * 400, randomInt(cloudYRange[0], cloudYRange[1]));
+                this.clouds.push(newElement);
+            }
+        });
+    }
+    updateVines(dt) {
+        this.vines.forEach((c, i) => {
+            c.x -= speeds.ground * dt;
+            if (c.x + c.width / 2 <= this.targetX) {
+                this.vines.splice(i, 1);
+                c.remove();
+                const newElement = VinePool.get(this);
+                newElement.position.set(this.vines[this.vines.length - 1].x + 600, getVineY());
+                this.vines.push(newElement);
+            }
+        });
+    }
+    updateVineBushes(dt) {
+        this.vineBushes.forEach((c, i) => {
+            c.x -= speeds.ground * dt;
+            if (c.x + c.width / 2 <= this.targetX) {
+                this.vineBushes.splice(i, 1);
+                c.remove();
+                const newElement = VineBushPool.get(this);
+                newElement.position.set(this.vineBushes[this.vineBushes.length - 1].x + 600, VINE_BUSHES_Y);
+                this.vineBushes.push(newElement);
             }
         });
     }
@@ -64811,7 +65015,7 @@ class BoardView extends Container_Container {
                 this.randomNumbers.splice(i, 1);
                 n.remove();
                 const { fn, number, y } = this.getRandomNumber();
-                const newNumber = NumbersPool.getNumber(this, fn, number);
+                const newNumber = NumbersPool.get(this, fn, number);
                 newNumber.scale.set(1 + Math.random() * 0.2);
                 newNumber.position.set(this.gameWidth * 1.2 + Math.random() * 400, y);
                 this.randomNumbers.push(newNumber);
@@ -64978,7 +65182,7 @@ class BoardView extends Container_Container {
     getNumber(y) {
         const fn = this.currentValue === 1 ? sample(['add', 'multiply']) : sample(['add', 'divide', 'multiply']);
         const n = fn === 'add' ? randomInt(1, 10) : fn === 'divide' ? 2 : sample([2, 3, 4, 5]);
-        const number = NumbersPool.getNumber(this, fn, n);
+        const number = NumbersPool.get(this, fn, n);
         number.position.set(WIDTH + 200, y - this.monkey.height);
         number.zIndex = BoardView_zIndex.number;
         this.numbers.push(number);
@@ -65083,6 +65287,7 @@ class PixiStage extends Container_Container {
 const assets = [
     { name: 'bkgBuildings.png', path: 'assets/uncompressed/bkgBuildings.png' },
     { name: 'bkgTrees.png', path: 'assets/uncompressed/bkgTrees.png' },
+    { name: 'bush.png', path: 'assets/uncompressed/bush.png' },
     { name: 'eagle.png', path: 'assets/uncompressed/eagle.png' },
     { name: 'fog.png', path: 'assets/uncompressed/fog.png' },
     { name: 'ground.png', path: 'assets/uncompressed/ground.png' },
@@ -65107,6 +65312,7 @@ const atlases = [
     { name: 'buildings', json: 'assets/atlas/buildings@1.png.json', png: 'assets/atlas/buildings.png' },
     { name: 'clouds', json: 'assets/atlas/clouds@1.png.json', png: 'assets/atlas/clouds.png' },
     { name: 'pits', json: 'assets/atlas/pits@1.png.json', png: 'assets/atlas/pits.png' },
+    { name: 'vines', json: 'assets/atlas/vines@1.png.json', png: 'assets/atlas/vines.png' },
 ];
 
 ;// CONCATENATED MODULE: ./src/configs/ScreenSizeConfig.ts

@@ -1,0 +1,63 @@
+{
+  "frames": {
+    "vine_1.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 250,
+        "h": 1511
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 1511
+      },
+      "sourceSize": {
+        "w": 250,
+        "h": 1511
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "vine_2.png": {
+      "frame": {
+        "x": 259,
+        "y": 3,
+        "w": 289,
+        "h": 1476
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 289,
+        "h": 1476
+      },
+      "sourceSize": {
+        "w": 289,
+        "h": 1476
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "vines.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 551,
+      "h": 1517
+    },
+    "scale": 1
+  }
+}

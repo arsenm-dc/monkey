@@ -1,0 +1,76 @@
+
+eagle_spine.png
+size: 1782,1808
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Eagle_Feathers_down_left
+  rotate: true
+  xy: 2, 70
+  size: 616, 459
+  orig: 616, 459
+  offset: 0, 0
+  index: -1
+Eagle_Feathers_down_right
+  rotate: false
+  xy: 1198, 1350
+  size: 575, 456
+  orig: 575, 456
+  offset: 0, 0
+  index: -1
+Eagle_Feathers_up_left
+  rotate: true
+  xy: 463, 70
+  size: 616, 459
+  orig: 616, 459
+  offset: 0, 0
+  index: -1
+Eagle_Feathers_up_right
+  rotate: false
+  xy: 1198, 892
+  size: 575, 456
+  orig: 575, 456
+  offset: 0, 0
+  index: -1
+Eagle_body
+  rotate: true
+  xy: 664, 841
+  size: 965, 532
+  orig: 965, 532
+  offset: 0, 0
+  index: -1
+Eagle_collar
+  rotate: true
+  xy: 1447, 234
+  size: 311, 333
+  orig: 311, 333
+  offset: 0, 0
+  index: -1
+Eagle_head
+  rotate: false
+  xy: 1198, 547
+  size: 560, 343
+  orig: 560, 343
+  offset: 0, 0
+  index: -1
+Eagle_left_wing
+  rotate: false
+  xy: 924, 2
+  size: 521, 543
+  orig: 521, 543
+  offset: 0, 0
+  index: -1
+Eagle_mouth
+  rotate: false
+  xy: 664, 703
+  size: 202, 136
+  orig: 202, 136
+  offset: 0, 0
+  index: -1
+Eagle_right_wing
+  rotate: true
+  xy: 2, 688
+  size: 1118, 660
+  orig: 1118, 660
+  offset: 0, 0
+  index: -1

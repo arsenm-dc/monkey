@@ -88,6 +88,7 @@ export class Number extends Container {
         this.text.anchor.set(0.5, 0.5);
         this.bkgNaipes.y = 70;
         this.bkgChips.y = 50;
+        this.bkgEagle.y = 120;
         this.addChild(this.text);
     }
 

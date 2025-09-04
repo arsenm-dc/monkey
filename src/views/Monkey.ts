@@ -30,7 +30,7 @@ export class Monkey extends Container {
     }
 
     public setActive(value: boolean): void {
-        this.spine.state.timeScale = value ? 1 : 0;
+        this.spine.state.timeScale = value ? 1.5 : 0;
     }
 
     public swingUp(): void {
@@ -46,7 +46,7 @@ export class Monkey extends Container {
     }
 
     public drop(): void {
-        this.spine.state.setAnimation(0, 'Falling', false);
+        this.spine.state.setAnimation(0, 'Falling', true);
     }
 
     private build(): void {

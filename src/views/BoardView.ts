@@ -552,7 +552,7 @@ export class BoardView extends Container {
     private fallToDie(): void {
         // DIE
         const y = 2400;
-        const duration = (y - monkeyPos.y) * DT;
+        const duration = ((y - monkeyPos.y) * DT) / 3;
 
         const pit = makeSprite({
             frame: 'ground_pit_1.png',

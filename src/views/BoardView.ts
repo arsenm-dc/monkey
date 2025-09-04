@@ -449,7 +449,7 @@ export class BoardView extends Container {
 
     private updateRandomNumbers(dt: number): void {
         this.randomNumbers.forEach((n, i) => {
-            n.x -= n.speed * dt;
+            n.x -= speeds.number * dt;
             if (n.x + n.width / 2 <= this.targetX) {
                 this.randomNumbers.splice(i, 1);
                 n.remove();

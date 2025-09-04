@@ -16,6 +16,7 @@ export const speeds = {
     smallForegroundTrees: 1.3,
     mediumTrees: 2,
     smallTrees: 2.3,
+    number: 2.8,
     fog: 1.6,
     ground: 2.5,
     smallFrontTrees: 3,

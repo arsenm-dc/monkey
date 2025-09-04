@@ -94,7 +94,7 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean, rect?: Rectangle): Rectangle {
-        return new Rectangle(400, 400, 900, 1450);
+        return new Rectangle(300, 400, 1100, 1450);
     }
 
     public build(): void {

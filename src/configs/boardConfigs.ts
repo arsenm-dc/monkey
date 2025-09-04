@@ -46,8 +46,8 @@ export const zIndex = {
 };
 
 export const monkeyPos = {
-    x: 700,
-    y: 750,
+    x: 500,
+    y: 900,
 };
 export const WIDTH = 2048;
 export const HEIGHT = 1890;

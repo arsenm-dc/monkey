@@ -1,5 +1,19 @@
 import { animate } from 'animejs';
 import { Container, Point, Rectangle, Sprite, Text, Texture, TilingSprite } from 'pixi.js';
+import {
+    BUILDINGS_Y,
+    cloudYRange,
+    DT,
+    getVineY,
+    HEIGHT,
+    monkeyPos,
+    speeds,
+    SPIKES_Y,
+    TREE_Y,
+    VINE_BUSHES_Y,
+    WIDTH,
+    zIndex,
+} from '../configs/boardConfigs';
 import { makeSprite } from '../configs/spriteConfig';
 import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
@@ -12,62 +26,6 @@ import { VineBush, VineBushPool } from '../pools/VineBushPool';
 import { Vine, VinePool } from '../pools/VinesPool';
 import { delayRunnable, getGameBounds, randomInt, sample } from '../Utils';
 import { Monkey } from './Monkey';
-
-const VINE_Y = 1050;
-const VINE_BUSHES_Y = 650;
-const getVineY = () => VINE_Y + Math.random() * 150;
-
-const BUILDINGS_Y = 1875;
-const TREE_Y = 2000;
-const SPIKES_Y = 1850;
-
-const speeds = {
-    sky: 0.1,
-    clouds: 0.2,
-    bkgBuildings: 0.3,
-    bkgTrees: 0.5,
-    buildings: 0.8,
-    largeTrees: 1,
-    smallForegroundTrees: 1.3,
-    mediumTrees: 2,
-    smallTrees: 2.3,
-    fog: 1.6,
-    ground: 2.5,
-    smallFrontTrees: 3,
-};
-
-const cloudYRange = [120, 800];
-
-const zIndex = {
-    sky: 0,
-    clouds: 1,
-    bkgBuildings: 2,
-    bkgTrees: 3,
-    buildings: 4,
-    largeTrees: 5,
-    smallForegroundTrees: 6,
-    mediumTrees: 7,
-    smallTrees: 8,
-    fog: 9,
-    smallFrontTrees: 10,
-    vines: 80,
-    ground: 90,
-    number: 95,
-    spikes: 99,
-    pit1: 100,
-    monkey: 101,
-    pit2: 102,
-    button: 1000,
-};
-
-const monkeyPos = {
-    x: 700,
-    y: 750,
-};
-const WIDTH = 2048;
-const HEIGHT = 1890;
-
-const DT = 2;
 
 export class BoardView extends Container {
     private sky: TilingSprite;

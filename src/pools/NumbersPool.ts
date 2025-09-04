@@ -3,6 +3,8 @@ import { Chips } from '../views/Chips';
 import { Eagle } from '../views/Eagle';
 import { Naipes } from '../views/Naipes';
 
+export const DEFAULT_FONT = 'RubikBold';
+
 export type FunctionType = 'add' | 'multiply' | 'divide';
 
 export const getNumberText = (fn: FunctionType, value: number): string => {
@@ -84,6 +86,7 @@ export class Number extends Container {
             fill: 0xffffff,
             fontWeight: '900',
             fontSize: 42,
+            fontFamily: DEFAULT_FONT,
         });
         this.text.anchor.set(0.5, 0.5);
         this.bkgNaipes.y = 70;

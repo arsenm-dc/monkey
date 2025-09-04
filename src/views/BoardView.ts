@@ -19,7 +19,7 @@ import { Building, BuildingPool } from '../pools/BuildingsPool';
 import { Cloud, CloudPool } from '../pools/CloudsPool';
 import { LargeTree, LargeTreePool } from '../pools/LargeTreesPool';
 import { MediumTree, MediumTreePool } from '../pools/MediumTreesPool';
-import { FunctionType, Number, NumbersPool } from '../pools/NumbersPool';
+import { DEFAULT_FONT, FunctionType, Number, NumbersPool } from '../pools/NumbersPool';
 import { SmallTree, SmallTreePool } from '../pools/SmallTreesPool';
 import { Spike, SpikePool } from '../pools/SpikesPool';
 import { VineBush, VineBushPool } from '../pools/VineBushPool';
@@ -329,6 +329,7 @@ export class BoardView extends Container {
             fill: 0xffffff,
             fontWeight: '900',
             fontSize: 48,
+            fontFamily: DEFAULT_FONT,
         });
         this.counter.position.set(1100, 1680);
         this.counter.zIndex = zIndex.button;

@@ -2,7 +2,7 @@ import { animate } from 'animejs';
 import { Spine } from 'pixi-spine';
 import { Assets, Container, Text } from 'pixi.js';
 import { spines } from '../assets/assetsNames/spines';
-import { FunctionType, getNumberText } from '../pools/NumbersPool';
+import { DEFAULT_FONT, FunctionType, getNumberText } from '../pools/NumbersPool';
 
 export class Monkey extends Container {
     private spine: Spine;
@@ -59,6 +59,7 @@ export class Monkey extends Container {
             fill: 0xffffff,
             fontWeight: '900',
             fontSize: 48,
+            fontFamily: DEFAULT_FONT,
         });
         this.number.anchor.set(0.5, 0.5);
         this.number.position.set(-40, -270);
